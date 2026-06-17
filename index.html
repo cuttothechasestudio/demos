@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,744 +5,629 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cut to the Chase Studio — Live Demos</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
 
-  :root {
-    --ink: #0D0F12;
-    --ink-mid: #1C2026;
-    --slate: #2C3340;
-    --steel: #4A5568;
-    --mist: #8896AA;
-    --cloud: #E8ECF0;
-    --white: #FFFFFF;
-    --off: #F6F8FA;
-    --cut: #00C2FF;
-    --cut-dim: rgba(0,194,255,0.12);
-    --cut-glow: rgba(0,194,255,0.25);
-  }
+:root {
+--ink: #0D0F12;
+--ink-mid: #1C2026;
+--slate: #2C3340;
+--steel: #4A5568;
+--mist: #8896AA;
+--cloud: #E8ECF0;
+--white: #FFFFFF;
+--off: #F6F8FA;
+--cut: #00C2FF;
+--cut-dim: rgba(0,194,255,0.12);
+--cut-glow: rgba(0,194,255,0.25);
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: 'Barlow', sans-serif;
-    background: var(--ink);
-    color: var(--white);
-    min-height: 100vh;
-  }
+body {
+font-family: 'Barlow', sans-serif;
+background: var(--ink);
+color: var(--white);
+min-height: 100vh;
+}
 
-  /* ── HEADER ── */
-  header {
-    padding: 28px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
+/* ── HEADER ── */
+header {
+padding: 28px 48px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 1px solid rgba(255,255,255,0.06);
+}
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
+.logo {
+display: flex;
+align-items: center;
+gap: 14px;
+}
 
-  .logo-mark {
-    width: 40px;
-    height: 40px;
-    background: var(--cut);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 20px;
-    color: var(--ink);
-    letter-spacing: -0.02em;
-    flex-shrink: 0;
-  }
+.logo-mark {
+width: 40px;
+height: 40px;
+background: var(--cut);
+border-radius: 8px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 900;
+font-size: 20px;
+color: var(--ink);
+letter-spacing: -0.02em;
+flex-shrink: 0;
+}
 
-  .logo-text {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: 18px;
-    color: var(--white);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    line-height: 1;
-  }
+.logo-text {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 800;
+font-size: 18px;
+color: var(--white);
+letter-spacing: 0.04em;
+text-transform: uppercase;
+line-height: 1;
+}
 
-  .logo-text span {
-    display: block;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    color: var(--mist);
-    margin-top: 3px;
-  }
+.logo-text span {
+display: block;
+font-size: 10px;
+font-weight: 600;
+letter-spacing: 0.2em;
+color: var(--mist);
+margin-top: 3px;
+}
 
-  .header-cta {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--cut);
-    text-decoration: none;
-    border: 1.5px solid var(--cut);
-    padding: 8px 18px;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
+.header-cta {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 700;
+font-size: 13px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--cut);
+text-decoration: none;
+border: 1.5px solid var(--cut);
+padding: 8px 18px;
+border-radius: 6px;
+transition: all 0.2s;
+}
 
-  .header-cta:hover {
-    background: var(--cut);
-    color: var(--ink);
-  }
+.header-cta:hover {
+background: var(--cut);
+color: var(--ink);
+}
 
-  /* ── HERO ── */
-  .hero {
-    padding: 80px 48px 60px;
-    max-width: 900px;
-  }
+/* ── HERO ── */
+.hero {
+padding: 80px 48px 60px;
+max-width: 900px;
+}
 
-  .hero-eyebrow {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--cut);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+.hero-eyebrow {
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(--cut);
+margin-bottom: 20px;
+display: flex;
+align-items: center;
+gap: 10px;
+}
 
-  .hero-eyebrow::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 1px;
-    background: var(--cut);
-    opacity: 0.5;
-  }
+.hero-eyebrow::after {
+content: '';
+display: block;
+width: 40px;
+height: 1px;
+background: var(--cut);
+opacity: 0.5;
+}
 
-  .hero-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: clamp(48px, 7vw, 84px);
-    line-height: 0.92;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    color: var(--white);
-    margin-bottom: 28px;
-  }
+.hero-title {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 900;
+font-size: clamp(48px, 7vw, 84px);
+line-height: 0.92;
+letter-spacing: -0.01em;
+text-transform: uppercase;
+color: var(--white);
+margin-bottom: 28px;
+}
 
-  .hero-title em {
-    font-style: normal;
-    color: var(--cut);
-  }
+.hero-title em {
+font-style: normal;
+color: var(--cut);
+}
 
-  .hero-body {
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--mist);
-    max-width: 580px;
-    font-weight: 400;
-  }
+.hero-body {
+font-size: 17px;
+line-height: 1.65;
+color: var(--mist);
+max-width: 580px;
+font-weight: 400;
+}
 
-  .hero-body strong {
-    color: var(--white);
-    font-weight: 600;
-  }
+.hero-body strong {
+color: var(--white);
+font-weight: 600;
+}
 
-  /* ── DIVIDER ── */
-  .divider {
-    height: 1px;
-    background: linear-gradient(90deg, var(--cut) 0%, rgba(0,194,255,0.1) 60%, transparent 100%);
-    margin: 0 48px;
-  }
+/* ── DIVIDER ── */
+.divider {
+height: 1px;
+background: linear-gradient(90deg, var(--cut) 0%, rgba(0,194,255,0.1) 60%, transparent 100%);
+margin: 0 48px;
+}
 
-  /* ── DEMOS SECTION ── */
-  .demos-section {
-    padding: 60px 48px;
-  }
+/* ── DEMOS SECTION ── */
+.demos-section {
+padding: 60px 48px;
+}
 
-  .section-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--mist);
-    margin-bottom: 32px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+.section-label {
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(--mist);
+margin-bottom: 32px;
+display: flex;
+align-items: center;
+gap: 12px;
+}
 
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(255,255,255,0.08);
-  }
+.section-label::after {
+content: '';
+flex: 1;
+height: 1px;
+background: rgba(255,255,255,0.08);
+}
 
-  /* ── DEMO CARDS ── */
-  .demo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 24px;
-  }
+/* ── DEMO CARDS ── */
+.demo-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+gap: 24px;
+}
 
-  .demo-card {
-    background: var(--ink-mid);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 14px;
-    overflow: hidden;
-    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-    text-decoration: none;
-    display: block;
-  }
+.demo-card {
+background: var(--ink-mid);
+border: 1px solid rgba(255,255,255,0.07);
+border-radius: 14px;
+overflow: hidden;
+transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+text-decoration: none;
+display: block;
+}
 
-  .demo-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--cut);
-    box-shadow: 0 0 40px var(--cut-glow);
-  }
+.demo-card:hover {
+transform: translateY(-4px);
+border-color: var(--cut);
+box-shadow: 0 0 40px var(--cut-glow);
+}
 
-  .demo-card-preview {
-    height: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
+.demo-card-preview {
+height: 180px;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+overflow: hidden;
+}
 
-  .demo-card-preview svg {
-    width: 100%;
-    height: 100%;
-  }
+.demo-card-preview svg {
+width: 100%;
+height: 100%;
+}
 
-  .demo-card-body {
-    padding: 22px 24px;
-  }
+.demo-card-body {
+padding: 22px 24px;
+}
 
-  .demo-card-tag {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 10px;
-  }
+.demo-card-tag {
+font-family: 'Barlow Condensed', sans-serif;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+padding: 3px 8px;
+border-radius: 4px;
+display: inline-block;
+margin-bottom: 10px;
+}
 
-  .tag-beverage { background: rgba(91,200,216,0.15); color: #5BC8D8; }
-  .tag-coming { background: rgba(255,255,255,0.06); color: var(--mist); }
+.tag-beverage { background: rgba(91,200,216,0.15); color: #5BC8D8; }
+.tag-coming { background: rgba(255,255,255,0.06); color: var(--mist); }
 
-  .demo-card-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: 22px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--white);
-    margin-bottom: 6px;
-    line-height: 1;
-  }
+.demo-card-title {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 800;
+font-size: 22px;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+color: var(--white);
+margin-bottom: 6px;
+line-height: 1;
+}
 
-  .demo-card-desc {
-    font-size: 13px;
-    color: var(--mist);
-    line-height: 1.55;
-    margin-bottom: 20px;
-  }
+.demo-card-desc {
+font-size: 13px;
+color: var(--mist);
+line-height: 1.55;
+margin-bottom: 20px;
+}
 
-  .demo-card-features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 20px;
-  }
+.demo-card-features {
+display: flex;
+flex-wrap: wrap;
+gap: 6px;
+margin-bottom: 20px;
+}
 
-  .feature-pill {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--mist);
-    background: rgba(255,255,255,0.05);
-    padding: 3px 9px;
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
+.feature-pill {
+font-size: 11px;
+font-weight: 600;
+color: var(--mist);
+background: rgba(255,255,255,0.05);
+padding: 3px 9px;
+border-radius: 20px;
+border: 1px solid rgba(255,255,255,0.08);
+}
 
-  .demo-card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
+.demo-card-footer {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding-top: 16px;
+border-top: 1px solid rgba(255,255,255,0.06);
+}
 
-  .demo-link {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--cut);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+.demo-link {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 700;
+font-size: 13px;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: var(--cut);
+display: flex;
+align-items: center;
+gap: 6px;
+}
 
-  .demo-arrow {
-    font-size: 16px;
-    transition: transform 0.2s;
-  }
+.demo-arrow {
+font-size: 16px;
+transition: transform 0.2s;
+}
 
-  .demo-card:hover .demo-arrow { transform: translateX(4px); }
+.demo-card:hover .demo-arrow { transform: translateX(4px); }
 
-  .demo-card-status {
-    font-size: 11px;
-    color: var(--mist);
-    font-weight: 500;
-  }
+.demo-card-status {
+font-size: 11px;
+color: var(--mist);
+font-weight: 500;
+}
 
-  /* Coming soon card */
-  .demo-card.coming-soon {
-    opacity: 0.5;
-    pointer-events: none;
-  }
+/* Coming soon card */
+.demo-card.coming-soon {
+opacity: 0.5;
+pointer-events: none;
+}
 
-  /* ── HOW IT WORKS ── */
-  .how-section {
-    padding: 60px 48px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
+/* ── CLIENT LINK ── */
+.client-link-bar {
+margin-top: 40px;
+padding-top: 32px;
+border-top: 1px solid rgba(255,255,255,0.06);
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
 
-  .how-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    margin-top: 40px;
-  }
+.client-link-bar p {
+font-size: 13px;
+color: var(--mist);
+}
 
-  .how-item {}
+.client-link-bar a {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 700;
+font-size: 13px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--cut);
+text-decoration: none;
+display: flex;
+align-items: center;
+gap: 6px;
+transition: opacity 0.2s;
+}
 
-  .how-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 64px;
-    color: var(--cut-dim);
-    line-height: 1;
-    margin-bottom: 12px;
-    border-bottom: 2px solid var(--cut);
-    display: inline-block;
-    padding-bottom: 8px;
-  }
+.client-link-bar a:hover { opacity: 0.75; }
 
-  .how-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--white);
-    margin-bottom: 10px;
-  }
+/* ── HOW IT WORKS ── */
+.how-section {
+padding: 60px 48px;
+border-top: 1px solid rgba(255,255,255,0.06);
+}
 
-  .how-body {
-    font-size: 13px;
-    color: var(--mist);
-    line-height: 1.6;
-  }
+.how-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 40px;
+margin-top: 40px;
+}
 
-  /* ── FOOTER ── */
-  footer {
-    padding: 32px 48px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+.how-item {}
 
-  .footer-brand {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--mist);
-  }
+.how-num {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 900;
+font-size: 64px;
+color: var(--cut-dim);
+line-height: 1;
+margin-bottom: 12px;
+border-bottom: 2px solid var(--cut);
+display: inline-block;
+padding-bottom: 8px;
+}
 
-  .footer-brand strong { color: var(--cut); }
+.how-title {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 800;
+font-size: 20px;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+color: var(--white);
+margin-bottom: 10px;
+}
 
-  .footer-note {
-    font-size: 12px;
-    color: var(--steel);
-  }
+.how-body {
+font-size: 13px;
+color: var(--mist);
+line-height: 1.6;
+}
 
-  @media (max-width: 768px) {
-    header, .hero, .demos-section, .how-section, footer { padding-left: 24px; padding-right: 24px; }
-    .divider { margin: 0 24px; }
-    .how-grid { grid-template-columns: 1fr; gap: 32px; }
-    .demo-grid { grid-template-columns: 1fr; }
-    .hero { padding-top: 48px; }
-  }
+/* ── FOOTER ── */
+footer {
+padding: 32px 48px;
+border-top: 1px solid rgba(255,255,255,0.06);
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.footer-brand {
+font-family: 'Barlow Condensed', sans-serif;
+font-weight: 700;
+font-size: 14px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--mist);
+}
+
+.footer-brand strong { color: var(--cut); }
+
+.footer-note {
+font-size: 12px;
+color: var(--steel);
+}
+
+@media (max-width: 768px) {
+header, .hero, .demos-section, .how-section, footer { padding-left: 24px; padding-right: 24px; }
+.divider { margin: 0 24px; }
+.how-grid { grid-template-columns: 1fr; gap: 32px; }
+.demo-grid { grid-template-columns: 1fr; }
+.hero { padding-top: 48px; }
+.client-link-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <header>
-  <div class="logo">
-    <div class="logo-mark">CC</div>
-    <div class="logo-text">
-      Cut to the Chase
-      <span>Studio · Live Demos</span>
-    </div>
-  </div>
-  <a href="mailto:hello@cuttothechase.co" class="header-cta">Work With Us</a>
+<div class="logo">
+<div class="logo-mark">CC</div>
+<div class="logo-text">
+Cut to the Chase
+<span>Studio · Live Demos</span>
+</div>
+</div>
+<a href="mailto:hello@cuttothechase.co" class="header-cta">Work With Us</a>
 </header>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-eyebrow">Live Dashboard Demos</div>
-  <h1 class="hero-title">Your business.<br><em>Actually</em> visible.</h1>
-  <p class="hero-body">
-    We build <strong>custom command centers</strong> for small businesses — branded, live-synced, and built around how you actually operate. No spreadsheet chaos. No generic software that sort of fits. <strong>A dashboard that's yours.</strong>
-  </p>
+<div class="hero-eyebrow">Live Dashboard Demos</div>
+<h1 class="hero-title">Your business.<br><em>Actually</em> visible.</h1>
+<p class="hero-body">
+We build <strong>custom command centers</strong> for small businesses — branded, live-synced, and built around how you actually operate. No spreadsheet chaos. No generic software that sort of fits. <strong>A dashboard that's yours.</strong>
+</p>
 </div>
 
 <div class="divider"></div>
 
 <!-- DEMOS -->
 <div class="demos-section">
-  <div class="section-label">Live Client Demos — Click to explore</div>
+<div class="section-label">Live Client Demos — Click to explore</div>
 
-  <div class="demo-grid">
+<div class="demo-grid">
 
-    <!-- Crest Water Co. — Anonymized -->
-    <a href="crest-water/index.html" class="demo-card">
-      <div class="demo-card-preview" style="background:linear-gradient(135deg,#111d33 0%,#1B2A4A 60%,#243660 100%)">
-        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-          <rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(91,200,216,0.2)" stroke-width="1"/>
-          <rect x="16" y="16" width="308" height="28" rx="8" fill="#111d33"/>
-          <rect x="16" y="36" width="308" height="8" fill="#111d33"/>
-          <circle cx="34" cy="30" r="8" fill="#5BC8D8" opacity="0.8"/>
-          <rect x="50" y="26" width="80" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
-          <rect x="270" y="26" width="40" height="8" rx="2" fill="rgba(91,200,216,0.3)"/>
-          <rect x="24" y="54" width="66" height="36" rx="4" fill="rgba(91,200,216,0.1)" stroke="rgba(91,200,216,0.2)" stroke-width="0.5"/>
-          <rect x="98" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
-          <rect x="172" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
-          <rect x="246" y="54" width="66" height="36" rx="4" fill="rgba(46,204,138,0.1)" stroke="rgba(46,204,138,0.2)" stroke-width="0.5"/>
-          <rect x="30" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="30" y="68" width="44" height="10" rx="2" fill="#5BC8D8" opacity="0.9"/>
-          <rect x="104" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="104" y="68" width="36" height="10" rx="2" fill="rgba(255,255,255,0.6)"/>
-          <rect x="178" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="178" y="68" width="36" height="10" rx="2" fill="rgba(245,166,35,0.8)"/>
-          <rect x="252" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="252" y="68" width="36" height="10" rx="2" fill="rgba(46,204,138,0.9)"/>
-          <rect x="24" y="100" width="288" height="56" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
-          <rect x="24" y="100" width="288" height="14" rx="4" fill="#1B2A4A"/>
-          <rect x="30" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="90" y="104" width="40" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="160" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="220" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="30" y="120" width="50" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="90" y="120" width="60" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="160" y="119" width="28" height="7" rx="3" fill="rgba(46,204,138,0.3)"/>
-          <rect x="220" y="120" width="40" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="30" y="132" width="50" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="90" y="132" width="60" height="5" rx="1" fill="rgba(255,255,255,0.15)"/>
-          <rect x="160" y="131" width="28" height="7" rx="3" fill="rgba(91,200,216,0.25)"/>
-          <rect x="220" y="132" width="40" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(91,200,216,0.4)" text-anchor="middle" letter-spacing="3">CREST WATER CO.</text>
-        </svg>
-      </div>
-      <div class="demo-card-body">
-        <div class="demo-card-tag tag-beverage">Canned Beverage · Anonymized</div>
-        <div class="demo-card-title">Crest Water Co.</div>
-        <div class="demo-card-desc">Canned spring water startup. B2B canvassing operation with account tracking, route logging, production planning, and live margin calculations. All data is fictional.</div>
-        <div class="demo-card-features">
-          <span class="feature-pill">Sales & Revenue</span>
-          <span class="feature-pill">Account CRM</span>
-          <span class="feature-pill">Route Log</span>
-          <span class="feature-pill">Inventory</span>
-          <span class="feature-pill">Production</span>
-          <span class="feature-pill">Margin Calc</span>
-        </div>
-        <div class="demo-card-footer">
-          <span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
-          <span class="demo-card-status">⚡ Sample Data</span>
-        </div>
-      </div>
-    </a>
+<!-- Crest Water Co. — Anonymized -->
+<a href="crest-water/index.html" class="demo-card">
+<div class="demo-card-preview" style="background:linear-gradient(135deg,#111d33 0%,#1B2A4A 60%,#243660 100%)">
+<svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+<rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(91,200,216,0.2)" stroke-width="1"/>
+<rect x="16" y="16" width="308" height="28" rx="8" fill="#111d33"/>
+<rect x="16" y="36" width="308" height="8" fill="#111d33"/>
+<circle cx="34" cy="30" r="8" fill="#5BC8D8" opacity="0.8"/>
+<rect x="50" y="26" width="80" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+<rect x="270" y="26" width="40" height="8" rx="2" fill="rgba(91,200,216,0.3)"/>
+<rect x="24" y="54" width="66" height="36" rx="4" fill="rgba(91,200,216,0.1)" stroke="rgba(91,200,216,0.2)" stroke-width="0.5"/>
+<rect x="98" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+<rect x="172" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+<rect x="246" y="54" width="66" height="36" rx="4" fill="rgba(46,204,138,0.1)" stroke="rgba(46,204,138,0.2)" stroke-width="0.5"/>
+<rect x="30" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="30" y="68" width="44" height="10" rx="2" fill="#5BC8D8" opacity="0.9"/>
+<rect x="104" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="104" y="68" width="36" height="10" rx="2" fill="rgba(255,255,255,0.6)"/>
+<rect x="178" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="178" y="68" width="36" height="10" rx="2" fill="rgba(245,166,35,0.8)"/>
+<rect x="252" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="252" y="68" width="36" height="10" rx="2" fill="rgba(46,204,138,0.9)"/>
+<rect x="24" y="100" width="288" height="56" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+<rect x="24" y="100" width="288" height="14" rx="4" fill="#1B2A4A"/>
+<rect x="30" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
+<rect x="90" y="104" width="40" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
+<rect x="160" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
+<rect x="220" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
+<rect x="30" y="120" width="50" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
+<rect x="90" y="120" width="60" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="160" y="119" width="28" height="7" rx="3" fill="rgba(46,204,138,0.3)"/>
+<rect x="220" y="120" width="40" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
+<rect x="30" y="132" width="50" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="90" y="132" width="60" height="5" rx="1" fill="rgba(255,255,255,0.15)"/>
+<rect x="160" y="131" width="28" height="7" rx="3" fill="rgba(91,200,216,0.25)"/>
+<rect x="220" y="132" width="40" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
+<text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(91,200,216,0.4)" text-anchor="middle" letter-spacing="3">CREST WATER CO.</text>
+</svg>
+</div>
+<div class="demo-card-body">
+<div class="demo-card-tag tag-beverage">Canned Beverage · Anonymized</div>
+<div class="demo-card-title">Crest Water Co.</div>
+<div class="demo-card-desc">Canned spring water startup. B2B canvassing operation with account tracking, route logging, production planning, and live margin calculations. All data is fictional.</div>
+<div class="demo-card-features">
+<span class="feature-pill">Sales & Revenue</span>
+<span class="feature-pill">Account CRM</span>
+<span class="feature-pill">Route Log</span>
+<span class="feature-pill">Inventory</span>
+<span class="feature-pill">Production</span>
+<span class="feature-pill">Margin Calc</span>
+</div>
+<div class="demo-card-footer">
+<span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
+<span class="demo-card-status">⚡ Sample Data</span>
+</div>
+</div>
+</a>
 
-    <!-- Champ Water — Full Brand -->
-    <a href="champ-water/index.html" class="demo-card">
-      <div class="demo-card-preview" style="background:linear-gradient(135deg,#0a1628 0%,#1B2A4A 50%,#0d3d4a 100%)">
-        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-          <rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(91,200,216,0.3)" stroke-width="1.5"/>
-          <rect x="16" y="16" width="308" height="28" rx="8" fill="#0a1628"/>
-          <rect x="16" y="36" width="308" height="8" fill="#0a1628"/>
-          <circle cx="34" cy="30" r="8" fill="#5BC8D8"/>
-          <rect x="50" y="24" width="90" height="5" rx="2" fill="rgba(255,255,255,0.5)"/>
-          <rect x="50" y="32" width="60" height="4" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="24" y="54" width="66" height="36" rx="4" fill="rgba(91,200,216,0.15)" stroke="rgba(91,200,216,0.4)" stroke-width="1"/>
-          <rect x="98" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
-          <rect x="172" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
-          <rect x="246" y="54" width="66" height="36" rx="4" fill="rgba(46,204,138,0.12)" stroke="rgba(46,204,138,0.3)" stroke-width="1"/>
-          <rect x="30" y="60" width="32" height="4" rx="1" fill="rgba(91,200,216,0.5)"/>
-          <rect x="30" y="68" width="48" height="10" rx="2" fill="#5BC8D8"/>
-          <rect x="104" y="60" width="32" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="104" y="68" width="38" height="10" rx="2" fill="rgba(255,255,255,0.7)"/>
-          <rect x="178" y="60" width="32" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="178" y="68" width="38" height="10" rx="2" fill="rgba(245,166,35,0.9)"/>
-          <rect x="252" y="60" width="32" height="4" rx="1" fill="rgba(46,204,138,0.5)"/>
-          <rect x="252" y="68" width="38" height="10" rx="2" fill="rgba(46,204,138,0.9)"/>
-          <rect x="24" y="100" width="288" height="56" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(91,200,216,0.15)" stroke-width="0.5"/>
-          <rect x="24" y="100" width="288" height="14" rx="4" fill="#1B2A4A"/>
-          <rect x="30" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.5)"/>
-          <rect x="90" y="104" width="40" height="6" rx="1" fill="rgba(91,200,216,0.5)"/>
-          <rect x="160" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.5)"/>
-          <rect x="220" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.5)"/>
-          <rect x="30" y="120" width="55" height="5" rx="1" fill="rgba(255,255,255,0.4)"/>
-          <rect x="90" y="120" width="65" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="160" y="119" width="30" height="7" rx="3" fill="rgba(46,204,138,0.4)"/>
-          <rect x="220" y="120" width="45" height="5" rx="1" fill="rgba(255,255,255,0.4)"/>
-          <rect x="30" y="132" width="55" height="5" rx="1" fill="rgba(255,255,255,0.25)"/>
-          <rect x="90" y="132" width="65" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="160" y="131" width="30" height="7" rx="3" fill="rgba(91,200,216,0.3)"/>
-          <rect x="220" y="132" width="45" height="5" rx="1" fill="rgba(255,255,255,0.25)"/>
-          <text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(91,200,216,0.5)" text-anchor="middle" letter-spacing="3">CHAMP WATER · VERMONT</text>
-        </svg>
-      </div>
-      <div class="demo-card-body">
-        <div class="demo-card-tag tag-beverage">Canned Beverage · Full Brand</div>
-        <div class="demo-card-title">Champ Water</div>
-        <div class="demo-card-desc">Vermont spring water brand — full branded experience showing the art of the possible. Real colors, real voice, and operational depth a live client gets.</div>
-        <div class="demo-card-features">
-          <span class="feature-pill">Full Branding</span>
-          <span class="feature-pill">Sales & Revenue</span>
-          <span class="feature-pill">Account CRM</span>
-          <span class="feature-pill">Route Log</span>
-          <span class="feature-pill">Production</span>
-          <span class="feature-pill">Margin Calc</span>
-        </div>
-        <div class="demo-card-footer">
-          <span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
-          <span class="demo-card-status">⚡ Sample Data</span>
-        </div>
-      </div>
-    </a>
+<!-- Stone & Grain Bakery — Anonymized -->
+<a href="sourdough/index.html" class="demo-card">
+<div class="demo-card-preview" style="background:linear-gradient(135deg,#2C2116 0%,#4a3520 60%,#2C2116 100%)">
+<svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+<rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.3)" stroke-width="1"/>
+<rect x="16" y="16" width="308" height="28" rx="8" fill="#2C2116"/>
+<rect x="16" y="36" width="308" height="8" fill="#2C2116"/>
+<text x="34" y="34" font-family="Arial" font-size="16">🍞</text>
+<rect x="58" y="24" width="100" height="6" rx="2" fill="rgba(232,185,122,0.6)"/>
+<rect x="58" y="33" width="70" height="4" rx="1" fill="rgba(181,160,138,0.4)"/>
+<rect x="24" y="54" width="66" height="36" rx="4" fill="rgba(196,135,74,0.15)" stroke="rgba(196,135,74,0.3)" stroke-width="0.5"/>
+<rect x="98" y="54" width="66" height="36" rx="4" fill="rgba(90,122,82,0.15)" stroke="rgba(90,122,82,0.3)" stroke-width="0.5"/>
+<rect x="172" y="54" width="66" height="36" rx="4" fill="rgba(58,110,168,0.15)" stroke="rgba(58,110,168,0.3)" stroke-width="0.5"/>
+<rect x="246" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+<rect x="30" y="60" width="32" height="4" rx="1" fill="rgba(196,135,74,0.5)"/>
+<rect x="30" y="68" width="44" height="10" rx="2" fill="rgba(196,135,74,0.9)"/>
+<rect x="104" y="60" width="32" height="4" rx="1" fill="rgba(90,122,82,0.5)"/>
+<rect x="104" y="68" width="36" height="10" rx="2" fill="rgba(90,122,82,0.9)"/>
+<rect x="178" y="60" width="32" height="4" rx="1" fill="rgba(58,110,168,0.5)"/>
+<rect x="178" y="68" width="36" height="10" rx="2" fill="rgba(58,110,168,0.9)"/>
+<rect x="252" y="60" width="32" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
+<rect x="252" y="68" width="36" height="10" rx="2" fill="rgba(255,255,255,0.5)"/>
+<rect x="24" y="100" width="288" height="20" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.15)" stroke-width="0.5"/>
+<rect x="30" y="106" width="60" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="30" y="113" width="260" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
+<rect x="30" y="113" width="180" height="4" rx="2" fill="rgba(196,135,74,0.7)"/>
+<rect x="24" y="128" width="288" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.1)" stroke-width="0.5"/>
+<rect x="30" y="134" width="80" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
+<rect x="30" y="143" width="50" height="5" rx="1" fill="rgba(255,255,255,0.15)"/>
+<rect x="260" y="133" width="40" height="7" rx="3" fill="rgba(90,122,82,0.4)"/>
+<text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(196,135,74,0.5)" text-anchor="middle" letter-spacing="3">STONE & GRAIN BAKERY</text>
+</svg>
+</div>
+<div class="demo-card-body">
+<div class="demo-card-tag" style="background:rgba(196,135,74,0.15);color:#C4874A">Farmers Market · Anonymized</div>
+<div class="demo-card-title">Stone & Grain Bakery</div>
+<div class="demo-card-desc">Artisan sourdough baker at the farmers market. Tracks pricing, bake logs, market performance, revenue, regulars, and Instagram content prompts. All data is fictional.</div>
+<div class="demo-card-features">
+<span class="feature-pill">Pricing Calc</span>
+<span class="feature-pill">Market Tracker</span>
+<span class="feature-pill">Bake Log</span>
+<span class="feature-pill">Revenue</span>
+<span class="feature-pill">Regulars CRM</span>
+<span class="feature-pill">IG Prompts</span>
+</div>
+<div class="demo-card-footer">
+<span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
+<span class="demo-card-status">⚡ Sample Data</span>
+</div>
+</div>
+</a>
 
-    <!-- Stone & Grain Bakery — Anonymized -->
-    <a href="sourdough/index.html" class="demo-card">
-      <div class="demo-card-preview" style="background:linear-gradient(135deg,#2C2116 0%,#4a3520 60%,#2C2116 100%)">
-        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-          <rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.3)" stroke-width="1"/>
-          <rect x="16" y="16" width="308" height="28" rx="8" fill="#2C2116"/>
-          <rect x="16" y="36" width="308" height="8" fill="#2C2116"/>
-          <text x="34" y="34" font-family="Arial" font-size="16">🍞</text>
-          <rect x="58" y="24" width="100" height="6" rx="2" fill="rgba(232,185,122,0.6)"/>
-          <rect x="58" y="33" width="70" height="4" rx="1" fill="rgba(181,160,138,0.4)"/>
-          <!-- Stat cards -->
-          <rect x="24" y="54" width="66" height="36" rx="4" fill="rgba(196,135,74,0.15)" stroke="rgba(196,135,74,0.3)" stroke-width="0.5"/>
-          <rect x="98" y="54" width="66" height="36" rx="4" fill="rgba(90,122,82,0.15)" stroke="rgba(90,122,82,0.3)" stroke-width="0.5"/>
-          <rect x="172" y="54" width="66" height="36" rx="4" fill="rgba(58,110,168,0.15)" stroke="rgba(58,110,168,0.3)" stroke-width="0.5"/>
-          <rect x="246" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
-          <rect x="30" y="60" width="32" height="4" rx="1" fill="rgba(196,135,74,0.5)"/>
-          <rect x="30" y="68" width="44" height="10" rx="2" fill="rgba(196,135,74,0.9)"/>
-          <rect x="104" y="60" width="32" height="4" rx="1" fill="rgba(90,122,82,0.5)"/>
-          <rect x="104" y="68" width="36" height="10" rx="2" fill="rgba(90,122,82,0.9)"/>
-          <rect x="178" y="60" width="32" height="4" rx="1" fill="rgba(58,110,168,0.5)"/>
-          <rect x="178" y="68" width="36" height="10" rx="2" fill="rgba(58,110,168,0.9)"/>
-          <rect x="252" y="60" width="32" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="252" y="68" width="36" height="10" rx="2" fill="rgba(255,255,255,0.5)"/>
-          <!-- Goal bar -->
-          <rect x="24" y="100" width="288" height="20" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.15)" stroke-width="0.5"/>
-          <rect x="30" y="106" width="60" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="30" y="113" width="260" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
-          <rect x="30" y="113" width="180" height="4" rx="2" fill="rgba(196,135,74,0.7)"/>
-          <!-- Bake list -->
-          <rect x="24" y="128" width="288" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.1)" stroke-width="0.5"/>
-          <rect x="30" y="134" width="80" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="30" y="143" width="50" height="5" rx="1" fill="rgba(255,255,255,0.15)"/>
-          <rect x="260" y="133" width="40" height="7" rx="3" fill="rgba(90,122,82,0.4)"/>
-          <text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(196,135,74,0.5)" text-anchor="middle" letter-spacing="3">STONE & GRAIN BAKERY</text>
-        </svg>
-      </div>
-      <div class="demo-card-body">
-        <div class="demo-card-tag" style="background:rgba(196,135,74,0.15);color:#C4874A">Farmers Market · Anonymized</div>
-        <div class="demo-card-title">Stone & Grain Bakery</div>
-        <div class="demo-card-desc">Artisan sourdough baker at the farmers market. Tracks pricing, bake logs, market performance, revenue, regulars, and Instagram content prompts. All data is fictional.</div>
-        <div class="demo-card-features">
-          <span class="feature-pill">Pricing Calc</span>
-          <span class="feature-pill">Market Tracker</span>
-          <span class="feature-pill">Bake Log</span>
-          <span class="feature-pill">Revenue</span>
-          <span class="feature-pill">Regulars CRM</span>
-          <span class="feature-pill">IG Prompts</span>
-        </div>
-        <div class="demo-card-footer">
-          <span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
-          <span class="demo-card-status">⚡ Sample Data</span>
-        </div>
-      </div>
-    </a>
+<!-- Coming Soon -->
+<div class="demo-card coming-soon">
+<div class="demo-card-preview" style="background:linear-gradient(135deg,#1a1a2e,#2d1b4e)">
+<svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+<text x="170" y="95" font-family="Arial" font-size="14" fill="rgba(255,255,255,0.15)" text-anchor="middle">Coming Soon</text>
+</svg>
+</div>
+<div class="demo-card-body">
+<div class="demo-card-tag tag-coming">Coming Soon</div>
+<div class="demo-card-title">Your Industry Here</div>
+<div class="demo-card-desc">Every dashboard is custom built for your business. This slot is waiting for the next client.</div>
+<div class="demo-card-features">
+<span class="feature-pill">Custom Built</span>
+<span class="feature-pill">Your Branding</span>
+<span class="feature-pill">Your Metrics</span>
+</div>
+<div class="demo-card-footer">
+<span class="demo-link" style="color:var(--mist)">In Development</span>
+</div>
+</div>
+</div>
 
-    <!-- Mom's Sourdough — Full Brand -->
-    <a href="moms-sourdough/index.html" class="demo-card">
-      <div class="demo-card-preview" style="background:linear-gradient(135deg,#1a0f08 0%,#2C2116 50%,#3d2a18 100%)">
-        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-          <rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.4)" stroke-width="1.5"/>
-          <rect x="16" y="16" width="308" height="28" rx="8" fill="#1a0f08"/>
-          <rect x="16" y="36" width="308" height="8" fill="#1a0f08"/>
-          <text x="34" y="34" font-family="Arial" font-size="16">🍞</text>
-          <rect x="58" y="22" width="110" height="7" rx="2" fill="rgba(232,185,122,0.8)"/>
-          <rect x="58" y="32" width="80" height="4" rx="1" fill="rgba(181,160,138,0.5)"/>
-          <rect x="24" y="54" width="66" height="36" rx="4" fill="rgba(196,135,74,0.2)" stroke="rgba(196,135,74,0.5)" stroke-width="1"/>
-          <rect x="98" y="54" width="66" height="36" rx="4" fill="rgba(90,122,82,0.2)" stroke="rgba(90,122,82,0.4)" stroke-width="1"/>
-          <rect x="172" y="54" width="66" height="36" rx="4" fill="rgba(58,110,168,0.2)" stroke="rgba(58,110,168,0.4)" stroke-width="1"/>
-          <rect x="246" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
-          <rect x="30" y="60" width="32" height="4" rx="1" fill="rgba(196,135,74,0.6)"/>
-          <rect x="30" y="68" width="48" height="10" rx="2" fill="rgba(196,135,74,1)"/>
-          <rect x="104" y="60" width="32" height="4" rx="1" fill="rgba(90,122,82,0.6)"/>
-          <rect x="104" y="68" width="40" height="10" rx="2" fill="rgba(90,122,82,1)"/>
-          <rect x="178" y="60" width="32" height="4" rx="1" fill="rgba(58,110,168,0.6)"/>
-          <rect x="178" y="68" width="40" height="10" rx="2" fill="rgba(58,110,168,1)"/>
-          <rect x="252" y="60" width="32" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="252" y="68" width="40" height="10" rx="2" fill="rgba(255,255,255,0.6)"/>
-          <rect x="24" y="100" width="288" height="16" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.2)" stroke-width="0.5"/>
-          <rect x="30" y="106" width="55" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="30" y="113" width="260" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
-          <rect x="30" y="113" width="200" height="4" rx="2" fill="rgba(196,135,74,0.8)"/>
-          <rect x="24" y="124" width="288" height="32" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(196,135,74,0.15)" stroke-width="0.5"/>
-          <rect x="30" y="130" width="90" height="5" rx="1" fill="rgba(255,255,255,0.4)"/>
-          <rect x="30" y="139" width="60" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="255" y="129" width="45" height="8" rx="3" fill="rgba(90,122,82,0.5)"/>
-          <text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(196,135,74,0.6)" text-anchor="middle" letter-spacing="3">MOM'S SOURDOUGH</text>
-        </svg>
-      </div>
-      <div class="demo-card-body">
-        <div class="demo-card-tag" style="background:rgba(196,135,74,0.15);color:#C4874A">Farmers Market · Full Brand</div>
-        <div class="demo-card-title">Mom's Sourdough</div>
-        <div class="demo-card-desc">The full branded experience — showing the art of the possible for a farmers market baker. Real voice, warm branding, and the complete operational toolkit.</div>
-        <div class="demo-card-features">
-          <span class="feature-pill">Full Branding</span>
-          <span class="feature-pill">Pricing Calc</span>
-          <span class="feature-pill">Market Tracker</span>
-          <span class="feature-pill">Bake Log</span>
-          <span class="feature-pill">Revenue</span>
-          <span class="feature-pill">IG Prompts</span>
-        </div>
-        <div class="demo-card-footer">
-          <span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
-          <span class="demo-card-status">⚡ Sample Data</span>
-        </div>
-      </div>
-    </a>
+</div>
 
-    <!-- Coming Soon -->
-    <div class="demo-card coming-soon">
-      <div class="demo-card-preview" style="background:linear-gradient(135deg,#1a1a2e,#2d1b4e)">
-        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-          <text x="170" y="95" font-family="Arial" font-size="14" fill="rgba(255,255,255,0.15)" text-anchor="middle">Coming Soon</text>
-        </svg>
-      </div>
-      <div class="demo-card-body">
-        <div class="demo-card-tag tag-coming">Coming Soon</div>
-        <div class="demo-card-title">Your Industry Here</div>
-        <div class="demo-card-desc">Every dashboard is custom built for your business. This slot is waiting for the next client.</div>
-        <div class="demo-card-features">
-          <span class="feature-pill">Custom Built</span>
-          <span class="feature-pill">Your Branding</span>
-          <span class="feature-pill">Your Metrics</span>
-        </div>
-        <div class="demo-card-footer">
-          <span class="demo-link" style="color:var(--mist)">In Development</span>
-        </div>
-      </div>
-    </div>
-      <div class="demo-card-preview" style="background:linear-gradient(135deg,#111d33 0%,#1B2A4A 60%,#243660 100%)">
-        <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
-          <!-- Mini dashboard mockup -->
-          <rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(91,200,216,0.2)" stroke-width="1"/>
-          <!-- Top bar -->
-          <rect x="16" y="16" width="308" height="28" rx="8" fill="#111d33"/>
-          <rect x="16" y="36" width="308" height="8" fill="#111d33"/>
-          <circle cx="34" cy="30" r="8" fill="#5BC8D8" opacity="0.8"/>
-          <rect x="50" y="26" width="60" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
-          <rect x="270" y="26" width="40" height="8" rx="2" fill="rgba(91,200,216,0.3)"/>
-          <!-- Stats row -->
-          <rect x="24" y="54" width="66" height="36" rx="4" fill="rgba(91,200,216,0.1)" stroke="rgba(91,200,216,0.2)" stroke-width="0.5"/>
-          <rect x="98" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
-          <rect x="172" y="54" width="66" height="36" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
-          <rect x="246" y="54" width="66" height="36" rx="4" fill="rgba(46,204,138,0.1)" stroke="rgba(46,204,138,0.2)" stroke-width="0.5"/>
-          <rect x="30" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="30" y="68" width="44" height="10" rx="2" fill="#5BC8D8" opacity="0.9"/>
-          <rect x="104" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="104" y="68" width="36" height="10" rx="2" fill="rgba(255,255,255,0.6)"/>
-          <rect x="178" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="178" y="68" width="36" height="10" rx="2" fill="rgba(245,166,35,0.8)"/>
-          <rect x="252" y="60" width="30" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="252" y="68" width="36" height="10" rx="2" fill="rgba(46,204,138,0.9)"/>
-          <!-- Table -->
-          <rect x="24" y="100" width="288" height="56" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
-          <rect x="24" y="100" width="288" height="14" rx="4" fill="#1B2A4A"/>
-          <rect x="30" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="90" y="104" width="40" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="160" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="220" y="104" width="30" height="6" rx="1" fill="rgba(91,200,216,0.4)"/>
-          <rect x="30" y="120" width="50" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="90" y="120" width="60" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="160" y="119" width="28" height="7" rx="3" fill="rgba(46,204,138,0.3)"/>
-          <rect x="220" y="120" width="40" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
-          <rect x="30" y="132" width="50" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <rect x="90" y="132" width="60" height="5" rx="1" fill="rgba(255,255,255,0.15)"/>
-          <rect x="160" y="131" width="28" height="7" rx="3" fill="rgba(91,200,216,0.25)"/>
-          <rect x="220" y="132" width="40" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
-          <!-- Brand name -->
-          <text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(91,200,216,0.4)" text-anchor="middle" letter-spacing="3">CHAMP WATER</text>
-        </svg>
-      </div>
-  </div>
+<!-- LINK TO CLIENT SHOWCASES -->
+<div class="client-link-bar">
+<p>Want to see full branded client builds?</p>
+<a href="clients/">View Client Showcases →</a>
+</div>
+
 </div>
 
 <!-- HOW IT WORKS -->
 <div class="how-section">
-  <div class="section-label">How it works</div>
-  <div class="how-grid">
-    <div class="how-item">
-      <div class="how-num">01</div>
-      <div class="how-title">We learn your business</div>
-      <div class="how-body">One conversation about how you actually operate — what you track, what you ignore, what keeps you up at night. That becomes the blueprint.</div>
-    </div>
-    <div class="how-item">
-      <div class="how-num">02</div>
-      <div class="how-title">We build it your way</div>
-      <div class="how-body">Custom tabs, your brand colors, your metrics. Not a template with your logo slapped on — a tool built around how your specific business runs.</div>
-    </div>
-    <div class="how-item">
-      <div class="how-num">03</div>
-      <div class="how-title">You run it, we maintain it</div>
-      <div class="how-body">Live at a permanent URL. Data synced between your whole team. We handle updates, improvements, and support on a simple monthly retainer.</div>
-    </div>
-  </div>
+<div class="section-label">How it works</div>
+<div class="how-grid">
+<div class="how-item">
+<div class="how-num">01</div>
+<div class="how-title">We learn your business</div>
+<div class="how-body">One conversation about how you actually operate — what you track, what you ignore, what keeps you up at night. That becomes the blueprint.</div>
+</div>
+<div class="how-item">
+<div class="how-num">02</div>
+<div class="how-title">We build it your way</div>
+<div class="how-body">Custom tabs, your brand colors, your metrics. Not a template with your logo slapped on — a tool built around how your specific business runs.</div>
+</div>
+<div class="how-item">
+<div class="how-num">03</div>
+<div class="how-title">You run it, we maintain it</div>
+<div class="how-body">Live at a permanent URL. Data synced between your whole team. We handle updates, improvements, and support on a simple monthly retainer.</div>
+</div>
+</div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-brand">
-    <strong>Cut to the Chase</strong> Studio
-  </div>
-  <div class="footer-note">All demos use sample data. No real business information is displayed.</div>
+<div class="footer-brand">
+<strong>Cut to the Chase</strong> Studio
+</div>
+<div class="footer-note">All demos use sample data. No real business information is displayed.</div>
 </footer>
 
 </body>
