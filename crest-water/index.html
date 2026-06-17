@@ -1,0 +1,3114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crest Water Co. — Command Center Demo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@500;600&display=swap');
+
+  :root {
+    --navy: #1B2A4A;
+    --navy-deep: #111d33;
+    --navy-mid: #243660;
+    --aqua: #5BC8D8;
+    --aqua-light: #A8E6EF;
+    --aqua-pale: #E8F8FA;
+    --white: #FFFFFF;
+    --offwhite: #F4F8FA;
+    --gray-light: #E8EEF2;
+    --gray-mid: #9AACBA;
+    --gray-text: #5C7080;
+    --success: #2ECC8A;
+    --warning: #F5A623;
+    --danger: #E85D5D;
+    --text-dark: #1B2A4A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--offwhite);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--navy-deep);
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    border-bottom: 3px solid var(--aqua);
+    flex-shrink: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-wave {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .brand-text span {
+    color: var(--aqua);
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+  }
+
+  .topbar-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--aqua-light);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .topbar-date {
+    font-size: 13px;
+    color: var(--gray-mid);
+    font-weight: 500;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    background: var(--navy);
+    display: flex;
+    gap: 2px;
+    padding: 0 20px;
+    overflow-x: auto;
+    flex-shrink: 0;
+  }
+
+  .tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-mid);
+    padding: 12px 18px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab:hover { color: var(--aqua-light); }
+
+  .tab.active {
+    color: var(--aqua);
+    border-bottom-color: var(--aqua);
+    background: rgba(91,200,216,0.08);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    flex: 1;
+    padding: 24px 28px;
+    overflow-y: auto;
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ── STAT CARDS ── */
+  .stats-row {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stats-4 { grid-template-columns: repeat(4, 1fr); }
+  .stats-3 { grid-template-columns: repeat(3, 1fr); }
+  .stats-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .stat-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 18px 20px;
+    border-left: 4px solid var(--aqua);
+    box-shadow: 0 2px 8px rgba(27,42,74,0.07);
+  }
+
+  .stat-card.navy { border-left-color: var(--navy); }
+  .stat-card.success { border-left-color: var(--success); }
+  .stat-card.warning { border-left-color: var(--warning); }
+  .stat-card.danger { border-left-color: var(--danger); }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .stat-value.aqua { color: var(--aqua); }
+  .stat-value.success { color: var(--success); }
+  .stat-value.warning { color: var(--warning); }
+
+  .stat-note {
+    font-size: 12px;
+    color: var(--gray-mid);
+    margin-top: 4px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(27,42,74,0.07);
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  /* ── TABLES ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .data-table th {
+    background: var(--navy);
+    color: var(--aqua-light);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 12px;
+    text-align: left;
+  }
+
+  .data-table th:first-child { border-radius: 6px 0 0 0; }
+  .data-table th:last-child { border-radius: 0 6px 0 0; }
+
+  .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gray-light);
+    color: var(--text-dark);
+    font-weight: 500;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--aqua-pale); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .badge-sold { background: #d4f5e9; color: #1a7a4a; }
+  .badge-gifted { background: #ddeeff; color: #1a4a8a; }
+  .badge-followup { background: #fff3cc; color: #7a5500; }
+  .badge-declined { background: #ffe0e0; color: #8a1a1a; }
+  .badge-reorder { background: #e8f5e9; color: #2e7d32; }
+  .badge-scheduled { background: #e8eaf6; color: #283593; }
+  .badge-production { background: #fff8e1; color: #f57f17; }
+  .badge-completed { background: #e8f5e9; color: #2e7d32; }
+  .badge-low { background: #ffe0e0; color: #8a1a1a; }
+  .badge-ok { background: #e8f5e9; color: #2e7d32; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    background: var(--gray-light);
+    border-radius: 6px;
+    height: 10px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--aqua), var(--navy-mid));
+    border-radius: 6px;
+    transition: width 0.5s ease;
+  }
+
+  /* ── FORMS ── */
+  .form-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .form-row { display: grid; gap: 12px; }
+  .form-row-2 { grid-template-columns: 1fr 1fr; }
+  .form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .form-row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+  label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+  }
+
+  input, select, textarea {
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    padding: 9px 12px;
+    border: 1.5px solid var(--gray-light);
+    border-radius: 6px;
+    color: var(--text-dark);
+    background: var(--white);
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--aqua);
+    box-shadow: 0 0 0 3px rgba(91,200,216,0.15);
+  }
+
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary {
+    background: var(--navy);
+    color: var(--aqua);
+  }
+  .btn-primary:hover { background: var(--navy-mid); }
+
+  .btn-aqua {
+    background: var(--aqua);
+    color: var(--navy-deep);
+  }
+  .btn-aqua:hover { background: var(--aqua-light); }
+
+  .btn-sm { padding: 6px 12px; font-size: 11px; }
+  .btn-ghost {
+    background: transparent;
+    border: 1.5px solid var(--gray-light);
+    color: var(--gray-text);
+  }
+  .btn-ghost:hover { border-color: var(--aqua); color: var(--navy); }
+
+  .btn-export {
+    background: #1d6f42;
+    color: #fff;
+    border: none;
+  }
+  .btn-export:hover { background: #155230; }
+
+  /* ── GOAL WIDGET ── */
+  .goal-widget {
+    background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
+    border-radius: 10px;
+    padding: 20px 24px;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .goal-widget::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    bottom: -30px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(91,200,216,0.12);
+  }
+
+  .goal-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--aqua-light);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .goal-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .goal-sub {
+    font-size: 13px;
+    color: var(--aqua-light);
+    margin-top: 4px;
+  }
+
+  .goal-progress-wrap {
+    background: rgba(255,255,255,0.15);
+    border-radius: 6px;
+    height: 8px;
+    margin-top: 16px;
+    overflow: hidden;
+  }
+
+  .goal-progress-bar {
+    height: 100%;
+    background: var(--aqua);
+    border-radius: 6px;
+  }
+
+  /* ── WAVE DIVIDER ── */
+  .wave-accent {
+    height: 3px;
+    background: linear-gradient(90deg, var(--aqua), var(--navy), var(--aqua));
+    border-radius: 2px;
+    margin: 20px 0;
+  }
+
+  /* ── ALERTS ── */
+  .alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .alert-low {
+    background: #fff3e0;
+    border-left: 4px solid var(--warning);
+    color: #7a4700;
+  }
+
+  .alert-danger {
+    background: #fdecea;
+    border-left: 4px solid var(--danger);
+    color: #7a1a1a;
+  }
+
+  .alert-success {
+    background: #e8f5e9;
+    border-left: 4px solid var(--success);
+    color: #1a5e2a;
+  }
+
+  /* ── SCOREBOARD ── */
+  .scoreboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .score-item {
+    text-align: center;
+    padding: 20px;
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(27,42,74,0.07);
+  }
+
+  .score-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .score-num.aqua { color: var(--aqua); }
+  .score-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    margin-top: 4px;
+  }
+
+  /* delete btn */
+  .del-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--danger);
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .del-btn:hover { background: #fdecea; }
+
+  /* empty state */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray-mid);
+    font-size: 14px;
+  }
+
+  .empty-icon { font-size: 32px; margin-bottom: 8px; }
+
+  /* ── SYNC BADGE ── */
+  .sync-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .sync-live { background: rgba(46,204,138,0.15); color: #1a7a4a; border: 1.5px solid rgba(46,204,138,0.4); }
+  .sync-offline { background: rgba(245,166,35,0.15); color: #7a5500; border: 1.5px solid rgba(245,166,35,0.4); }
+  .sync-pending { background: rgba(91,200,216,0.15); color: var(--navy); border: 1.5px solid rgba(91,200,216,0.4); }
+  .sync-setup { background: rgba(232,93,93,0.15); color: #7a1a1a; border: 1.5px solid rgba(232,93,93,0.4); }
+  .sync-badge:hover { filter: brightness(0.92); }
+
+  /* ── SETUP MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(17,29,51,0.75);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 32px;
+    max-width: 640px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(17,29,51,0.3);
+  }
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .modal-sub {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .setup-step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: var(--navy);
+    color: var(--aqua);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-body { font-size: 13px; line-height: 1.6; color: var(--text-dark); }
+  .step-body strong { color: var(--navy); }
+  .step-body code {
+    background: var(--aqua-pale);
+    border: 1px solid var(--aqua-light);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: monospace;
+  }
+  .modal-divider {
+    height: 1px;
+    background: var(--gray-light);
+    margin: 20px 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .stats-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .scoreboard { grid-template-columns: repeat(2, 1fr); }
+    .form-row-4 { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">
+    <svg class="brand-wave" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="19" cy="19" r="19" fill="#243660"/>
+      <path d="M7 22c2-3 4-4 6-2s4 3 6 1 4-4 6-2" stroke="#5BC8D8" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M7 26c2-3 4-4 6-2s4 3 6 1 4-4 6-2" stroke="#5BC8D8" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
+      <path d="M14 10 Q19 6 24 10 Q26 14 19 18 Q12 14 14 10Z" fill="#5BC8D8"/>
+    </svg>
+    <div class="brand-text">
+      Crest Water Co.
+      <span>Command Center</span>
+    </div>
+  </div>
+  <div class="topbar-tagline">Pure. Simple. Refreshing.</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="background:var(--warning);color:var(--navy-deep);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.15em;padding:4px 12px;border-radius:20px;text-transform:uppercase">⚡ Demo Mode — Sample Data</div>
+    <div class="topbar-date" id="topbarDate"></div>
+  </div>
+</div>
+<div class="modal-overlay" id="setup-modal" onclick="if(event.target===this)closeSetupModal()">
+  <div class="modal">
+    <div class="modal-title">🔗 Connect Google Sheets</div>
+    <div class="modal-sub">Follow these steps once to enable live sync between both partners. Your data will save to a shared Google Sheet automatically.</div>
+
+    <div class="setup-step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Create a Google Sheet</strong> — go to sheets.google.com, create a new sheet named <code>Champ Water Data</code>, and share it with your partner.</div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Open Apps Script</strong> — in the Sheet, click <code>Extensions → Apps Script</code>. Delete the default code and paste in the script provided by your dashboard builder.</div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>Deploy the Script</strong> — click <code>Deploy → New Deployment → Web App</code>. Set "Who has access" to <strong>Anyone</strong>. Copy the deployment URL.</div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">4</div>
+      <div class="step-body"><strong>Paste the URL below</strong> — both partners do this once on their device. Your data will sync automatically going forward.</div>
+    </div>
+
+    <div class="modal-divider"></div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Google Apps Script Deployment URL</label>
+      <input type="text" id="script-url-input" placeholder="https://script.google.com/macros/s/..." style="margin-top:6px">
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button class="btn btn-aqua" onclick="saveScriptUrl()">Connect & Sync</button>
+      <button class="btn btn-ghost" onclick="closeSetupModal()">Cancel</button>
+      <span style="font-size:12px;color:var(--gray-mid);margin-left:auto">Data saved locally until connected</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('sales', this)">📊 Sales & Revenue</div>
+  <div class="tab" onclick="showTab('accounts', this)">🏢 Account Tracker</div>
+  <div class="tab" onclick="showTab('routes', this)">🗺️ Route & Visit Log</div>
+  <div class="tab" onclick="showTab('inventory', this)">📦 Inventory</div>
+  <div class="tab" onclick="showTab('production', this)">🏭 Production Planner</div>
+  <div class="tab" onclick="showTab('marketing', this)">📣 Marketing & Brand</div>
+  <div class="tab" onclick="showTab('goals', this)">🏆 Goals & Growth</div>
+  <div class="tab" onclick="showTab('margin', this)">💰 Margin Calculator</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ══ SALES & REVENUE ══ -->
+  <div id="page-sales" class="page active">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Sales & Revenue</div>
+        <div class="section-sub">Track what's sold, what's gifted, and how you're trending</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-export" onclick="exportSales()">⬇ Export .XLS</button>
+        <button class="btn btn-primary" onclick="openSalesForm()">+ Log Sale</button>
+      </div>
+    </div>
+
+    <div class="stats-row stats-4">
+      <div class="stat-card">
+        <div class="stat-label">Revenue This Month</div>
+        <div class="stat-value aqua" id="stat-revenue">$0</div>
+        <div class="stat-note">Cases sold × price</div>
+      </div>
+      <div class="stat-card navy">
+        <div class="stat-label">Cases Sold</div>
+        <div class="stat-value" id="stat-sold">0</div>
+        <div class="stat-note">This month</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">Cases Gifted</div>
+        <div class="stat-value warning" id="stat-gifted">0</div>
+        <div class="stat-note">Trial / marketing</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Avg Price / Case</div>
+        <div class="stat-value success" id="stat-avg-price">—</div>
+        <div class="stat-note">Sold cases only</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Monthly Revenue Goal
+          <span style="font-size:12px;color:var(--gray-text);font-weight:500" id="goal-pct-label">0%</span>
+        </div>
+        <div style="margin-bottom:8px">
+          <label>Monthly Goal ($)</label>
+          <input type="number" id="monthly-goal-input" placeholder="e.g. 2000" oninput="updateGoalBar()" style="margin-top:4px">
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar" id="goal-bar" style="width:0%"></div>
+        </div>
+        <div style="margin-top:10px;font-size:13px;color:var(--gray-text)">
+          <span id="goal-earned">$0</span> of <span id="goal-target">$0</span> goal
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Gifted Case ROI</div>
+        <div class="stats-row stats-2" style="margin-bottom:0">
+          <div>
+            <div class="stat-label">Gifted → Converted</div>
+            <div class="stat-value success" id="stat-converted">0</div>
+            <div class="stat-note">Became paying accounts</div>
+          </div>
+          <div>
+            <div class="stat-label">Conversion Rate</div>
+            <div class="stat-value" id="stat-roi">—</div>
+            <div class="stat-note">Gifted to paid</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Log form -->
+    <div class="card" id="sales-form-card" style="display:none">
+      <div class="card-title">Log a Sale or Gift</div>
+      <div class="form-grid">
+        <div class="form-row form-row-3">
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" id="sale-biz" placeholder="e.g. Green Street Gym">
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select id="sale-type">
+              <option value="sold">Sold</option>
+              <option value="gifted">Gifted (Trial)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Cases</label>
+            <input type="number" id="sale-cases" min="1" placeholder="# of cases">
+          </div>
+        </div>
+        <div class="form-row form-row-3">
+          <div class="form-group">
+            <label>Price Per Case ($)</label>
+            <input type="number" id="sale-price" placeholder="e.g. 24.00">
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="sale-date">
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <input type="text" id="sale-notes" placeholder="Optional notes">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-aqua" onclick="logSale()">Save Entry</button>
+          <button class="btn btn-ghost" onclick="closeSalesForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Transaction Log</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Business</th>
+            <th>Type</th>
+            <th>Cases</th>
+            <th>Price/Case</th>
+            <th>Total</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="sales-tbody">
+          <tr><td colspan="8" class="empty"><div class="empty-icon">💧</div>No transactions yet. Log your first sale above.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ ACCOUNT TRACKER ══ -->
+  <div id="page-accounts" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Account Tracker</div>
+        <div class="section-sub">Every business you've touched — your B2B CRM</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-export" onclick="exportAccounts()">⬇ Export .XLS</button>
+        <button class="btn btn-primary" onclick="openAcctForm()">+ Add Account</button>
+      </div>
+    </div>
+
+    <div class="stats-row stats-4">
+      <div class="stat-card">
+        <div class="stat-label">Total Accounts</div>
+        <div class="stat-value aqua" id="acct-total">0</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Active (Sold)</div>
+        <div class="stat-value success" id="acct-sold">0</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">Gifted / Trial</div>
+        <div class="stat-value warning" id="acct-gifted">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Follow-Up Needed</div>
+        <div class="stat-value" id="acct-followup">0</div>
+      </div>
+    </div>
+
+    <div class="card" id="acct-form-card" style="display:none">
+      <div class="card-title">Add / Edit Account</div>
+      <div class="form-grid">
+        <div class="form-row form-row-3">
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" id="acct-name" placeholder="e.g. Champion Fitness">
+          </div>
+          <div class="form-group">
+            <label>Business Type</label>
+            <select id="acct-biztype">
+              <option>Gym / Fitness</option>
+              <option>Restaurant / Café</option>
+              <option>Hotel / Hospitality</option>
+              <option>Office / Corporate</option>
+              <option>Retail / Convenience</option>
+              <option>Yoga / Wellness</option>
+              <option>Sports Venue</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Contact Name</label>
+            <input type="text" id="acct-contact" placeholder="First & last name">
+          </div>
+        </div>
+        <div class="form-row form-row-4">
+          <div class="form-group">
+            <label>Phone / Email</label>
+            <input type="text" id="acct-phone" placeholder="Contact info">
+          </div>
+          <div class="form-group">
+            <label>Date First Visited</label>
+            <input type="date" id="acct-date">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="acct-status">
+              <option value="sold">Sold</option>
+              <option value="gifted">Gifted (Trial)</option>
+              <option value="followup">Follow-Up Needed</option>
+              <option value="declined">Declined</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Reorder?</label>
+            <select id="acct-reorder">
+              <option value="no">No</option>
+              <option value="yes">Yes — Reordered</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row form-row-2">
+          <div class="form-group">
+            <label>Cases Placed</label>
+            <input type="number" id="acct-cases" placeholder="# of cases">
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <input type="text" id="acct-notes" placeholder="Decision maker, preferences, best time to call...">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-aqua" onclick="saveAccount()">Save Account</button>
+          <button class="btn btn-ghost" onclick="closeAcctForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        All Accounts
+        <div style="display:flex;gap:8px">
+          <select onchange="filterAccounts(this.value)" style="font-size:12px;padding:5px 8px;width:auto">
+            <option value="">All Statuses</option>
+            <option value="sold">Sold</option>
+            <option value="gifted">Gifted</option>
+            <option value="followup">Follow-Up</option>
+            <option value="declined">Declined</option>
+          </select>
+        </div>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Business</th>
+            <th>Type</th>
+            <th>Contact</th>
+            <th>First Visit</th>
+            <th>Status</th>
+            <th>Cases</th>
+            <th>Reorder</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="accounts-tbody">
+          <tr><td colspan="9" class="empty"><div class="empty-icon">🏢</div>No accounts yet. Add your first one above.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ ROUTE & VISIT LOG ══ -->
+  <div id="page-routes" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Route & Visit Log</div>
+        <div class="section-sub">Daily canvassing sessions — doors knocked, conversions tracked</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-export" onclick="exportRoutes()">⬇ Export .XLS</button>
+        <button class="btn btn-primary" onclick="openRouteForm()">+ Log Session</button>
+      </div>
+    </div>
+
+    <div class="stats-row stats-4">
+      <div class="stat-card">
+        <div class="stat-label">Total Doors Knocked</div>
+        <div class="stat-value aqua" id="route-doors">0</div>
+      </div>
+      <div class="stat-card navy">
+        <div class="stat-label">Businesses Visited</div>
+        <div class="stat-value" id="route-visited">0</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Cases Placed</div>
+        <div class="stat-value success" id="route-placed">0</div>
+        <div class="stat-note">Sold + gifted</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">Avg Conversion Rate</div>
+        <div class="stat-value warning" id="route-conv">—</div>
+        <div class="stat-note">Pitched → placed</div>
+      </div>
+    </div>
+
+    <div class="card" id="route-form-card" style="display:none">
+      <div class="card-title">Log Canvassing Session</div>
+      <div class="form-grid">
+        <div class="form-row form-row-4">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="route-date">
+          </div>
+          <div class="form-group">
+            <label>Area / Neighborhood</label>
+            <input type="text" id="route-area" placeholder="e.g. Downtown Burlington">
+          </div>
+          <div class="form-group">
+            <label>Doors Knocked</label>
+            <input type="number" id="route-doors-in" placeholder="Total stops">
+          </div>
+          <div class="form-group">
+            <label>Businesses Entered</label>
+            <input type="number" id="route-entered" placeholder="Actually pitched">
+          </div>
+        </div>
+        <div class="form-row form-row-4">
+          <div class="form-group">
+            <label>Cases Sold</label>
+            <input type="number" id="route-sold-in" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>Cases Gifted</label>
+            <input type="number" id="route-gifted-in" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>Follow-Ups Set</label>
+            <input type="number" id="route-followup-in" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>Revenue Collected ($)</label>
+            <input type="number" id="route-rev-in" placeholder="0.00">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes / Best Prospects</label>
+          <textarea id="route-notes" placeholder="Who showed the most interest? Any standout conversations?"></textarea>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-aqua" onclick="saveRoute()">Save Session</button>
+          <button class="btn btn-ghost" onclick="closeRouteForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Session History</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Area</th>
+            <th>Doors</th>
+            <th>Entered</th>
+            <th>Sold</th>
+            <th>Gifted</th>
+            <th>Follow-Ups</th>
+            <th>Revenue</th>
+            <th>Conv %</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="routes-tbody">
+          <tr><td colspan="11" class="empty"><div class="empty-icon">🗺️</div>No sessions logged yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ INVENTORY ══ -->
+  <div id="page-inventory" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Inventory Tracker</div>
+        <div class="section-sub">Cases on hand, movement, and reorder alerts</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-export" onclick="exportInventory()">⬇ Export .XLS</button>
+        <button class="btn btn-primary" onclick="openInvForm()">+ Adjust Inventory</button>
+      </div>
+    </div>
+
+    <div id="inv-alerts"></div>
+
+    <div class="stats-row stats-4">
+      <div class="stat-card" id="inv-card-onhand">
+        <div class="stat-label">Cases On Hand</div>
+        <div class="stat-value aqua" id="inv-onhand">0</div>
+        <div class="stat-note">Current stock</div>
+      </div>
+      <div class="stat-card navy">
+        <div class="stat-label">Cases Sold (All Time)</div>
+        <div class="stat-value" id="inv-sold-total">0</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">Cases Gifted (All Time)</div>
+        <div class="stat-value warning" id="inv-gifted-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Reorder Point</div>
+        <div class="stat-value" id="inv-reorder-point">—</div>
+        <div class="stat-note">Alert threshold</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Inventory Settings</div>
+        <div class="form-grid">
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label>Cans Per Case</label>
+              <input type="number" id="inv-cans-per-case" value="24" placeholder="24">
+            </div>
+            <div class="form-group">
+              <label>Reorder Alert (Cases)</label>
+              <input type="number" id="inv-reorder-threshold" placeholder="e.g. 20" oninput="updateInvStats()">
+            </div>
+          </div>
+          <button class="btn btn-aqua btn-sm" onclick="updateInvStats()">Save Settings</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Log Adjustment</div>
+        <div id="inv-form-inner" style="display:none">
+          <div class="form-grid">
+            <div class="form-row form-row-3">
+              <div class="form-group">
+                <label>Type</label>
+                <select id="inv-adj-type">
+                  <option value="receive">Receive Stock</option>
+                  <option value="sell">Sell</option>
+                  <option value="gift">Gift</option>
+                  <option value="adjust">Manual Adjust</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Cases</label>
+                <input type="number" id="inv-adj-cases" placeholder="# of cases">
+              </div>
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="inv-adj-date">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Notes</label>
+              <input type="text" id="inv-adj-notes" placeholder="Optional">
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-aqua btn-sm" onclick="saveInvAdj()">Save</button>
+              <button class="btn btn-ghost btn-sm" onclick="closeInvForm()">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <div id="inv-form-prompt" style="color:var(--gray-text);font-size:13px">
+          Click <strong>+ Adjust Inventory</strong> above to log stock movement.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Stock Movement Log</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Date</th><th>Type</th><th>Cases</th><th>Running Total</th><th>Notes</th><th></th></tr>
+        </thead>
+        <tbody id="inv-tbody">
+          <tr><td colspan="6" class="empty"><div class="empty-icon">📦</div>No inventory movements logged.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ PRODUCTION PLANNER ══ -->
+  <div id="page-production" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Production Planner</div>
+        <div class="section-sub">Batch runs, costs, timelines — never get caught short</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-export" onclick="exportProduction()">⬇ Export .XLS</button>
+        <button class="btn btn-primary" onclick="openProdForm()">+ Add Batch Run</button>
+      </div>
+    </div>
+
+    <div class="stats-row stats-4">
+      <div class="stat-card">
+        <div class="stat-label">Total Batches</div>
+        <div class="stat-value aqua" id="prod-total">0</div>
+      </div>
+      <div class="stat-card navy">
+        <div class="stat-label">Cases Planned (Upcoming)</div>
+        <div class="stat-value" id="prod-planned">0</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">Upcoming Spend</div>
+        <div class="stat-value warning" id="prod-spend">$0</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Avg Cost / Case</div>
+        <div class="stat-value success" id="prod-avg-cost">—</div>
+      </div>
+    </div>
+
+    <div class="card" id="prod-form-card" style="display:none">
+      <div class="card-title">New Batch Run</div>
+      <div class="form-grid">
+        <div class="form-row form-row-3">
+          <div class="form-group">
+            <label>Batch / Run Name</label>
+            <input type="text" id="prod-name" placeholder="e.g. Run #3 — Summer Stock">
+          </div>
+          <div class="form-group">
+            <label>Production Date</label>
+            <input type="date" id="prod-date">
+          </div>
+          <div class="form-group">
+            <label>Expected Ready Date</label>
+            <input type="date" id="prod-ready">
+          </div>
+        </div>
+        <div class="form-row form-row-4">
+          <div class="form-group">
+            <label>Cases Planned</label>
+            <input type="number" id="prod-cases" placeholder="# cases" oninput="calcProdCostPerCase()">
+          </div>
+          <div class="form-group">
+            <label>Total Run Cost ($)</label>
+            <input type="number" id="prod-cost" placeholder="0.00" oninput="calcProdCostPerCase()">
+          </div>
+          <div class="form-group">
+            <label>Cost Per Case</label>
+            <input type="text" id="prod-cpc" placeholder="Auto-calculated" readonly style="background:var(--aqua-pale)">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="prod-status">
+              <option value="scheduled">Scheduled</option>
+              <option value="production">In Production</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row form-row-2">
+          <div class="form-group">
+            <label>Supplier / Facility</label>
+            <input type="text" id="prod-supplier" placeholder="Co-packer or facility name">
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <input type="text" id="prod-notes" placeholder="Label changes, SKU notes, etc.">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-aqua" onclick="saveProd()">Save Batch</button>
+          <button class="btn btn-ghost" onclick="closeProdForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Batch Run Schedule</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Production Date</th>
+            <th>Ready Date</th>
+            <th>Cases</th>
+            <th>Total Cost</th>
+            <th>Cost / Case</th>
+            <th>Supplier</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="prod-tbody">
+          <tr><td colspan="10" class="empty"><div class="empty-icon">🏭</div>No batch runs planned yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ MARKETING & BRAND ══ -->
+  <div id="page-marketing" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Marketing & Brand</div>
+        <div class="section-sub">Social performance, influencer gifting, and events</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-export" onclick="exportMarketing()">⬇ Export .XLS</button>
+        <button class="btn btn-primary" onclick="openMktForm()">+ Log Entry</button>
+      </div>
+    </div>
+
+    <div class="stats-row stats-4">
+      <div class="stat-card">
+        <div class="stat-label">Instagram Followers</div>
+        <div class="stat-value aqua" id="mkt-ig">—</div>
+      </div>
+      <div class="stat-card navy">
+        <div class="stat-label">TikTok Followers</div>
+        <div class="stat-value" id="mkt-tt">—</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">Cases Gifted (Influencers)</div>
+        <div class="stat-value warning" id="mkt-inf-cases">0</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Events Attended</div>
+        <div class="stat-value success" id="mkt-events">0</div>
+      </div>
+    </div>
+
+    <!-- Social Snapshot -->
+    <div class="card" id="mkt-form-card" style="display:none">
+      <div class="card-title">Log Marketing Entry</div>
+      <div class="form-grid">
+        <div class="form-row form-row-2">
+          <div class="form-group">
+            <label>Entry Type</label>
+            <select id="mkt-type" onchange="toggleMktFields()">
+              <option value="social">Social Update</option>
+              <option value="influencer">Influencer Gift</option>
+              <option value="event">Event / Activation</option>
+              <option value="press">Press / Feature</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="mkt-date">
+          </div>
+        </div>
+
+        <div id="mkt-social-fields">
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label>Instagram Followers</label>
+              <input type="number" id="mkt-ig-in" placeholder="Current count">
+            </div>
+            <div class="form-group">
+              <label>TikTok Followers</label>
+              <input type="number" id="mkt-tt-in" placeholder="Current count">
+            </div>
+            <div class="form-group">
+              <label>Engagement Rate %</label>
+              <input type="number" id="mkt-eng" placeholder="e.g. 4.2" step="0.1">
+            </div>
+          </div>
+        </div>
+
+        <div id="mkt-inf-fields" style="display:none">
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label>Influencer / Creator</label>
+              <input type="text" id="mkt-inf-name" placeholder="Handle or name">
+            </div>
+            <div class="form-group">
+              <label>Cases Gifted</label>
+              <input type="number" id="mkt-inf-cases-in" placeholder="0">
+            </div>
+            <div class="form-group">
+              <label>Platform</label>
+              <select id="mkt-inf-platform">
+                <option>Instagram</option>
+                <option>TikTok</option>
+                <option>Both</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="mkt-event-fields" style="display:none">
+          <div class="form-row form-row-3">
+            <div class="form-group">
+              <label>Event Name</label>
+              <input type="text" id="mkt-event-name" placeholder="e.g. Burlington Farmers Market">
+            </div>
+            <div class="form-group">
+              <label>Cases Brought</label>
+              <input type="number" id="mkt-event-brought" placeholder="0">
+            </div>
+            <div class="form-group">
+              <label>Cases Sold / Given</label>
+              <input type="number" id="mkt-event-sold" placeholder="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" id="mkt-notes" placeholder="Outcomes, highlights, reach...">
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-aqua" onclick="saveMkt()">Save Entry</button>
+          <button class="btn btn-ghost" onclick="closeMktForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Marketing Log</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Date</th><th>Type</th><th>Detail</th><th>Notes</th><th></th></tr>
+        </thead>
+        <tbody id="mkt-tbody">
+          <tr><td colspan="5" class="empty"><div class="empty-icon">📣</div>No marketing entries yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ GOALS & GROWTH ══ -->
+  <div id="page-goals" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Goals & Growth</div>
+        <div class="section-sub">Weekly scoreboard and progress toward key milestones</div>
+      </div>
+      <button class="btn btn-export" onclick="exportGoals()">⬇ Export .XLS</button>
+    </div>
+
+    <!-- Hero scoreboard -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+      <div class="goal-widget">
+        <div class="goal-label">Revenue This Month</div>
+        <div class="goal-value" id="g-revenue">$0</div>
+        <div class="goal-sub" id="g-revenue-sub">vs. $<span id="g-goal-show">—</span> goal</div>
+        <div class="goal-progress-wrap">
+          <div class="goal-progress-bar" id="g-goal-bar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="goal-widget" style="background:linear-gradient(135deg,#0d7a8a,#1B6A6A)">
+        <div class="goal-label">Active Accounts</div>
+        <div class="goal-value" id="g-accounts">0</div>
+        <div class="goal-sub">Paying customers</div>
+        <div class="goal-progress-wrap">
+          <div class="goal-progress-bar" id="g-acct-bar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scoreboard" style="margin-bottom:24px">
+      <div class="score-item">
+        <div class="score-num" id="g-doors">0</div>
+        <div class="score-label">Total Doors Knocked</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num aqua" id="g-cases-moved">0</div>
+        <div class="score-label">Total Cases Moved</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num" id="g-conv-rate">—</div>
+        <div class="score-label">Overall Conversion Rate</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Set Your Goals</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Monthly Revenue Goal ($)</label>
+            <input type="number" id="g-rev-goal" placeholder="e.g. 2000" oninput="syncGoals()">
+          </div>
+          <div class="form-group">
+            <label>Active Account Goal</label>
+            <input type="number" id="g-acct-goal" placeholder="e.g. 25 accounts" oninput="syncGoals()">
+          </div>
+          <div class="form-group">
+            <label>Weekly Cases Goal</label>
+            <input type="number" id="g-weekly-cases" placeholder="e.g. 30 cases/week" oninput="syncGoals()">
+          </div>
+          <button class="btn btn-aqua" onclick="syncGoals()">Update Goals</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Gifted Case ROI</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div>
+            <div class="stat-label">Total Gifted</div>
+            <div class="stat-value warning" id="g-gifted">0</div>
+            <div class="stat-note">cases given for trial</div>
+          </div>
+          <div>
+            <div class="stat-label">Converted to Paid</div>
+            <div class="stat-value success" id="g-converted">0</div>
+            <div class="stat-note">gifted → became customer</div>
+          </div>
+        </div>
+        <div class="stat-label">Gift Conversion Rate</div>
+        <div class="progress-wrap">
+          <div class="progress-bar" id="g-roi-bar" style="width:0%"></div>
+        </div>
+        <div style="font-size:13px;color:var(--gray-text);margin-top:6px" id="g-roi-label">Track accounts by status to calculate</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Milestone Tracker</div>
+      <div id="milestones-list" style="display:grid;gap:12px">
+        <!-- Generated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MARGIN CALCULATOR ══ -->
+  <div id="page-margin" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Margin Calculator</div>
+        <div class="section-sub">Know your numbers — cost, price, profit, and margin on every scenario</div>
+      </div>
+      <button class="btn btn-export" onclick="exportMargin()">⬇ Export .XLS</button>
+    </div>
+
+    <!-- Key margin stats -->
+    <div class="stats-row stats-4">
+      <div class="stat-card">
+        <div class="stat-label">Gross Margin Per Case</div>
+        <div class="stat-value aqua" id="m-margin-per-case">—</div>
+        <div class="stat-note">Revenue − COGS per case</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Margin %</div>
+        <div class="stat-value success" id="m-margin-pct">—</div>
+        <div class="stat-note">vs. your goal: <span id="m-goal-label">—</span></div>
+      </div>
+      <div class="stat-card navy">
+        <div class="stat-label">Profit Per Can</div>
+        <div class="stat-value" id="m-profit-can">—</div>
+        <div class="stat-note">After all costs</div>
+      </div>
+      <div class="stat-card" id="m-goal-card">
+        <div class="stat-label">Goal Status</div>
+        <div class="stat-value" id="m-goal-status">—</div>
+        <div class="stat-note" id="m-goal-note">Enter your inputs below</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <!-- ── INPUTS ── -->
+      <div class="card">
+        <div class="card-title">Your Cost Inputs</div>
+        <div class="form-grid">
+
+          <div style="background:var(--aqua-pale);border-radius:8px;padding:14px 16px;margin-bottom:4px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--navy);margin-bottom:10px">Production Costs (Per Can)</div>
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label>Cost Per Can ($)</label>
+                <input type="number" id="m-cost-can" placeholder="e.g. 0.45" step="0.01" oninput="calcMargin()">
+              </div>
+              <div class="form-group">
+                <label>Cans Per Case</label>
+                <input type="number" id="m-cans-case" placeholder="e.g. 24" oninput="calcMargin()">
+              </div>
+            </div>
+          </div>
+
+          <div style="background:var(--aqua-pale);border-radius:8px;padding:14px 16px;margin-bottom:4px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--navy);margin-bottom:10px">Additional Costs (Per Case)</div>
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label>Shipping / Delivery ($)</label>
+                <input type="number" id="m-shipping" placeholder="e.g. 1.50" step="0.01" oninput="calcMargin()">
+              </div>
+              <div class="form-group">
+                <label>Packaging / Labels ($)</label>
+                <input type="number" id="m-packaging" placeholder="e.g. 0.50" step="0.01" oninput="calcMargin()">
+              </div>
+            </div>
+            <div class="form-row form-row-2" style="margin-top:10px">
+              <div class="form-group">
+                <label>Sales Commission ($)</label>
+                <input type="number" id="m-commission" placeholder="e.g. 0.00" step="0.01" oninput="calcMargin()">
+              </div>
+              <div class="form-group">
+                <label>Other Costs ($)</label>
+                <input type="number" id="m-other" placeholder="e.g. 0.00" step="0.01" oninput="calcMargin()">
+              </div>
+            </div>
+          </div>
+
+          <div style="background:var(--aqua-pale);border-radius:8px;padding:14px 16px;margin-bottom:4px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--navy);margin-bottom:10px">Pricing & Goals</div>
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label>Selling Price Per Case ($)</label>
+                <input type="number" id="m-sell-price" placeholder="e.g. 24.00" step="0.01" oninput="calcMargin()">
+              </div>
+              <div class="form-group">
+                <label>Margin Goal (%)</label>
+                <input type="number" id="m-margin-goal" placeholder="e.g. 40" step="1" oninput="calcMargin()">
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-aqua" onclick="saveMarginInputs()">💾 Save These Numbers</button>
+        </div>
+      </div>
+
+      <!-- ── BREAKDOWN ── -->
+      <div>
+        <!-- P&L Per Case -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-title">P&L Breakdown — Per Case</div>
+          <div id="m-breakdown">
+            <div style="text-align:center;padding:20px;color:var(--gray-mid);font-size:13px">Enter your inputs on the left to see the breakdown</div>
+          </div>
+        </div>
+
+        <!-- Volume Scenarios -->
+        <div class="card">
+          <div class="card-title">Volume Profit Scenarios</div>
+          <table class="data-table" id="m-scenarios-table">
+            <thead>
+              <tr>
+                <th>Cases Sold</th>
+                <th>Revenue</th>
+                <th>Total COGS</th>
+                <th>Gross Profit</th>
+                <th>Margin %</th>
+              </tr>
+            </thead>
+            <tbody id="m-scenarios-tbody">
+              <tr><td colspan="5" class="empty"><div class="empty-icon">💰</div>Enter inputs to see projections</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price to hit margin goal -->
+    <div class="card">
+      <div class="card-title">Price Sensitivity — What Do I Need to Charge?</div>
+      <div class="grid-3" id="m-sensitivity">
+        <div style="text-align:center;padding:20px;color:var(--gray-mid);font-size:13px;grid-column:1/-1">Enter your cost inputs and margin goal to see target pricing</div>
+      </div>
+    </div>
+
+    <!-- Gifted case cost -->
+    <div class="card">
+      <div class="card-title">Gifted Case Cost Tracker</div>
+      <div style="font-size:13px;color:var(--gray-text);margin-bottom:16px">Every gifted case has a real cost. Track what you're investing in trial placements.</div>
+      <div class="stats-row stats-3">
+        <div class="stat-card warning">
+          <div class="stat-label">Total Cases Gifted</div>
+          <div class="stat-value warning" id="m-gifted-cases">0</div>
+          <div class="stat-note">From your sales log</div>
+        </div>
+        <div class="stat-card warning">
+          <div class="stat-label">Total COGS Invested</div>
+          <div class="stat-value warning" id="m-gifted-cogs">—</div>
+          <div class="stat-note">Cost of gifted inventory</div>
+        </div>
+        <div class="stat-card success">
+          <div class="stat-label">Gifted → Converted</div>
+          <div class="stat-value success" id="m-gifted-converted">0</div>
+          <div class="stat-note">Accounts that became paying</div>
+        </div>
+      </div>
+      <div id="m-gifted-roi" style="margin-top:16px;padding:14px 16px;background:var(--aqua-pale);border-radius:8px;font-size:13px;color:var(--navy)">
+        Enter your cost per can and cans per case above to calculate your gifted case investment.
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ══════════════════════════════════════════
+// DATA STORE
+// ══════════════════════════════════════════
+let data = {
+  sales: [],
+  accounts: [],
+  routes: [],
+  inventory: [],
+  production: [],
+  marketing: [],
+  goals: { revenue: 0, accounts: 0, weeklyCases: 0 },
+  invSettings: { cansPerCase: 24, reorderThreshold: 0 },
+  monthlyGoal: 0,
+  margin: null
+};
+
+// ══════════════════════════════════════════
+// GOOGLE SHEETS SYNC
+// ══════════════════════════════════════════
+let SCRIPT_URL = localStorage.getItem('champwater_script_url') || '';
+let syncPending = false;
+let isOnline = navigator.onLine;
+let lastSyncTime = localStorage.getItem('champwater_last_sync') || null;
+
+window.addEventListener('online', () => {
+  isOnline = true;
+  updateSyncBadge();
+  if (syncPending) pushToSheets();
+});
+window.addEventListener('offline', () => {
+  isOnline = false;
+  updateSyncBadge();
+});
+
+function updateSyncBadge() {
+  const badge = document.getElementById('sync-badge');
+  const text = document.getElementById('sync-text');
+  if (!SCRIPT_URL) {
+    badge.className = 'sync-badge sync-setup';
+    text.textContent = '⚙️ Setup Required';
+    return;
+  }
+  if (!isOnline) {
+    badge.className = 'sync-badge sync-offline';
+    text.textContent = '🟡 Offline — Saved Locally';
+    return;
+  }
+  if (syncPending) {
+    badge.className = 'sync-badge sync-pending';
+    text.textContent = '🔄 Syncing...';
+    return;
+  }
+  const t = lastSyncTime ? new Date(lastSyncTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : 'never';
+  badge.className = 'sync-badge sync-live';
+  text.textContent = '🟢 Synced · ' + t;
+}
+
+async function pushToSheets() {
+  if (!SCRIPT_URL || !isOnline) return;
+  syncPending = true;
+  updateSyncBadge();
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save', payload: data })
+    });
+    lastSyncTime = new Date().toISOString();
+    localStorage.setItem('champwater_last_sync', lastSyncTime);
+    syncPending = false;
+    updateSyncBadge();
+  } catch(e) {
+    syncPending = false;
+    updateSyncBadge();
+  }
+}
+
+async function pullFromSheets() {
+  if (!SCRIPT_URL || !isOnline) return;
+  const badge = document.getElementById('sync-badge');
+  const text = document.getElementById('sync-text');
+  badge.className = 'sync-badge sync-pending';
+  text.textContent = '🔄 Loading from Google Sheets...';
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=load', { mode: 'cors' });
+    const json = await res.json();
+    if (json && json.data) {
+      data = { ...data, ...json.data };
+      saveLocal();
+      lastSyncTime = new Date().toISOString();
+      localStorage.setItem('champwater_last_sync', lastSyncTime);
+      renderAll();
+    }
+  } catch(e) {
+    console.warn('Pull failed, using local data');
+  }
+  updateSyncBadge();
+}
+
+function saveScriptUrl() {
+  const url = document.getElementById('script-url-input').value.trim();
+  if (!url || !url.includes('script.google.com')) {
+    alert('Please paste a valid Google Apps Script URL.');
+    return;
+  }
+  SCRIPT_URL = url;
+  localStorage.setItem('champwater_script_url', url);
+  closeSetupModal();
+  updateSyncBadge();
+  pullFromSheets();
+}
+
+function openSetupModal() {
+  document.getElementById('setup-modal').style.display = 'flex';
+  if (SCRIPT_URL) document.getElementById('script-url-input').value = SCRIPT_URL;
+}
+
+function closeSetupModal() {
+  document.getElementById('setup-modal').style.display = 'none';
+}
+
+// ── Local save/load (always runs, Sheets is additive) ──
+function save() {
+  saveLocal();
+  if (SCRIPT_URL && isOnline) {
+    pushToSheets();
+  } else if (SCRIPT_URL && !isOnline) {
+    syncPending = true;
+    updateSyncBadge();
+  }
+}
+
+function saveLocal() {
+  localStorage.setItem('champwater_v1', JSON.stringify(data));
+}
+
+function load() {
+  const d = localStorage.getItem('champwater_v1');
+  if (d) try { data = JSON.parse(d); } catch(e){}
+}
+
+// ══════════════════════════════════════════
+// DEMO DATA
+// ══════════════════════════════════════════
+function loadDemoData() {
+  data = {
+    monthlyGoal: 3500,
+    goals: { revenue: 3500, accounts: 30, weeklyCases: 40 },
+    invSettings: { cansPerCase: 24, reorderThreshold: 20 },
+    margin: { costCan: 0.38, cansCase: 24, shipping: 1.20, packaging: 0.40, commission: 0, other: 0.25, sellPrice: 28.00, marginGoal: 40 },
+    accounts: [
+      { id: 1, name: 'Ironside CrossFit', biztype: 'Gym / Fitness', contact: 'J. Mercer', phone: '555-010-0121', date: '2026-05-02', status: 'sold', reorder: 'yes', cases: 3, notes: 'Loves the 16oz tallboy. Reorders every 2 weeks.' },
+      { id: 2, name: 'Ember & Oak Café', biztype: 'Restaurant / Café', contact: 'R. Valdez', phone: '555-010-0134', date: '2026-05-05', status: 'sold', reorder: 'yes', cases: 2, notes: 'Sells well at the counter. Wants a display stand.' },
+      { id: 3, name: 'The Ridgeline Hotel', biztype: 'Hotel / Hospitality', contact: 'T. Calloway', phone: '555-010-0188', date: '2026-05-08', status: 'gifted', reorder: 'pending', cases: 2, notes: 'Left 2 cases for staff trial. Follow up June 1.' },
+      { id: 4, name: 'Apex Flow Yoga', biztype: 'Yoga / Wellness', contact: 'M. Donovan', phone: '555-010-0199', date: '2026-05-10', status: 'sold', reorder: 'yes', cases: 2, notes: 'Very aligned with the brand mission.' },
+      { id: 5, name: 'Lakeside Athletic Club', biztype: 'Gym / Fitness', contact: 'B. Harmon', phone: '555-010-0211', date: '2026-05-12', status: 'sold', reorder: 'yes', cases: 4, notes: 'Largest account. Has a retail section.' },
+      { id: 6, name: 'Crestwood Inn & Suites', biztype: 'Hotel / Hospitality', contact: 'K. Ellison', phone: '555-010-0244', date: '2026-05-14', status: 'gifted', reorder: 'pending', cases: 3, notes: 'Interested in bulk ordering for room service.' },
+      { id: 7, name: 'Fuel & Form Nutrition', biztype: 'Retail / Convenience', contact: 'D. Okafor', phone: '555-010-0255', date: '2026-05-15', status: 'sold', reorder: 'yes', cases: 2, notes: 'End cap display. Selling well.' },
+      { id: 8, name: 'Westpark Office Complex', biztype: 'Office / Corporate', contact: 'S. Nguyen', phone: '555-010-0267', date: '2026-05-17', status: 'followup', reorder: 'no', cases: 1, notes: 'Gifted 1 case. Decision maker on vacation. Call back June 10.' },
+      { id: 9, name: 'Harborview Fitness', biztype: 'Gym / Fitness', contact: 'C. Rowland', phone: '555-010-0278', date: '2026-05-18', status: 'sold', reorder: 'yes', cases: 2, notes: 'Stocks in the smoothie bar fridge.' },
+      { id: 10, name: 'Millstone Market', biztype: 'Retail / Convenience', contact: 'P. Whitfield', phone: '555-010-0289', date: '2026-05-20', status: 'sold', reorder: 'pending', cases: 2, notes: 'Great foot traffic. Owner loves the local angle.' },
+      { id: 11, name: 'Summit Ridge Ski Resort', biztype: 'Sports Venue', contact: 'A. Bouchard', phone: '555-010-0301', date: '2026-05-21', status: 'gifted', reorder: 'pending', cases: 2, notes: 'Left cases with food & bev manager. Big opportunity.' },
+      { id: 12, name: 'Centertown Co-op', biztype: 'Retail / Convenience', contact: 'L. Yamamoto', phone: '555-010-0312', date: '2026-05-22', status: 'followup', reorder: 'no', cases: 0, notes: 'Needs to go through buying committee. Submit form online.' },
+      { id: 13, name: 'Studio Pulse Pilates', biztype: 'Yoga / Wellness', contact: 'N. Castillo', phone: '555-010-0323', date: '2026-05-24', status: 'sold', reorder: 'yes', cases: 1, notes: 'Small studio but very loyal clientele.' },
+      { id: 14, name: 'Northgate CrossFit', biztype: 'Gym / Fitness', contact: 'W. Briggs', phone: '555-010-0334', date: '2026-05-26', status: 'sold', reorder: 'yes', cases: 3, notes: 'Two locations interested. Working on second account.' },
+      { id: 15, name: 'The Bayview Lodge', biztype: 'Hotel / Hospitality', contact: 'F. Sterling', phone: '555-010-0345', date: '2026-05-28', status: 'declined', reorder: 'no', cases: 0, notes: 'Already locked in with a national water brand.' },
+      { id: 16, name: 'Roots Community Garden', biztype: 'Other', contact: 'G. Haines', phone: '555-010-0356', date: '2026-05-29', status: 'gifted', reorder: 'pending', cases: 1, notes: 'Great community visibility. Farmers market events.' },
+      { id: 17, name: 'Midtown Medical Group', biztype: 'Office / Corporate', contact: 'Dr. V. Morton', phone: '555-010-0367', date: '2026-05-30', status: 'followup', reorder: 'no', cases: 1, notes: 'Left case in break room. Follow up with office manager.' },
+      { id: 18, name: 'The Griddle House', biztype: 'Restaurant / Café', contact: 'O. Reeves', phone: '555-010-0378', date: '2026-06-02', status: 'sold', reorder: 'yes', cases: 2, notes: 'High volume lunch spot. Great brand fit.' },
+      { id: 19, name: 'Black Bear Coffee Co.', biztype: 'Restaurant / Café', contact: 'I. Soren', phone: '555-010-0389', date: '2026-06-04', status: 'sold', reorder: 'pending', cases: 1, notes: 'New account. First reorder expected this week.' },
+      { id: 20, name: 'Motion & Recovery Studio', biztype: 'Yoga / Wellness', contact: 'Dr. E. Cross', phone: '555-010-0390', date: '2026-06-06', status: 'gifted', reorder: 'pending', cases: 1, notes: 'PT clinic. Perfect fit for recovery hydration angle.' },
+    ],
+    sales: [
+      { id: 101, biz: 'Ironside CrossFit', type: 'sold', cases: 3, price: 28, date: '2026-06-01', notes: 'Reorder' },
+      { id: 102, biz: 'Ember & Oak Café', type: 'sold', cases: 2, price: 28, date: '2026-06-01', notes: '' },
+      { id: 103, biz: 'Apex Flow Yoga', type: 'sold', cases: 2, price: 28, date: '2026-06-02', notes: '' },
+      { id: 104, biz: 'Lakeside Athletic Club', type: 'sold', cases: 4, price: 26, date: '2026-06-02', notes: 'Volume discount' },
+      { id: 105, biz: 'The Ridgeline Hotel', type: 'gifted', cases: 2, price: 0, date: '2026-06-03', notes: 'Trial placement' },
+      { id: 106, biz: 'Fuel & Form Nutrition', type: 'sold', cases: 2, price: 28, date: '2026-06-03', notes: '' },
+      { id: 107, biz: 'Harborview Fitness', type: 'sold', cases: 2, price: 28, date: '2026-06-04', notes: 'Reorder' },
+      { id: 108, biz: 'Crestwood Inn & Suites', type: 'gifted', cases: 3, price: 0, date: '2026-06-05', notes: 'Trial for room service decision' },
+      { id: 109, biz: 'Studio Pulse Pilates', type: 'sold', cases: 1, price: 28, date: '2026-06-06', notes: '' },
+      { id: 110, biz: 'Northgate CrossFit', type: 'sold', cases: 3, price: 28, date: '2026-06-07', notes: '' },
+      { id: 111, biz: 'The Griddle House', type: 'sold', cases: 2, price: 28, date: '2026-06-08', notes: '' },
+      { id: 112, biz: 'Millstone Market', type: 'sold', cases: 2, price: 27, date: '2026-06-09', notes: 'Slight discount for delivery' },
+      { id: 113, biz: 'Roots Community Garden', type: 'gifted', cases: 1, price: 0, date: '2026-06-10', notes: 'Community event' },
+      { id: 114, biz: 'Black Bear Coffee Co.', type: 'sold', cases: 1, price: 28, date: '2026-06-11', notes: 'New account first order' },
+      { id: 115, biz: 'Motion & Recovery Studio', type: 'gifted', cases: 1, price: 0, date: '2026-06-12', notes: 'PT clinic trial' },
+      { id: 116, biz: 'Ironside CrossFit', type: 'sold', cases: 3, price: 28, date: '2026-06-13', notes: 'Second reorder this month' },
+      { id: 117, biz: 'Lakeside Athletic Club', type: 'sold', cases: 4, price: 26, date: '2026-06-14', notes: 'Monthly bulk order' },
+      { id: 118, biz: 'The Fieldhouse Bar & Grill', type: 'sold', cases: 2, price: 28, date: '2026-06-15', notes: 'New account' },
+    ],
+    routes: [
+      { id: 201, date: '2026-06-01', area: 'Main Street / Downtown District', doors: 18, entered: 14, sold: 4, gifted: 2, followup: 3, rev: 196, notes: 'Strong reception. Gyms and cafes most receptive.' },
+      { id: 202, date: '2026-06-03', area: 'South Side / Commerce Blvd', doors: 22, entered: 17, sold: 3, gifted: 3, followup: 4, rev: 140, notes: 'More corporate offices. Longer decision cycles.' },
+      { id: 203, date: '2026-06-05', area: 'Uptown Village', doors: 15, entered: 12, sold: 2, gifted: 4, followup: 2, rev: 84, notes: 'Tourist season starting. Hotels very interested.' },
+      { id: 204, date: '2026-06-08', area: 'Eastside & Northgate', doors: 20, entered: 16, sold: 5, gifted: 2, followup: 3, rev: 252, notes: 'Best day yet. CrossFit and yoga studios converting well.' },
+      { id: 205, date: '2026-06-10', area: 'Midtown Business District', doors: 16, entered: 13, sold: 3, gifted: 2, followup: 4, rev: 140, notes: 'Co-op meeting scheduled. Good leads on local businesses.' },
+      { id: 206, date: '2026-06-12', area: 'Westfield & Lakeview', doors: 14, entered: 11, sold: 3, gifted: 1, followup: 2, rev: 168, notes: 'Upscale area. Premium price point accepted well.' },
+      { id: 207, date: '2026-06-14', area: 'Riverside & Harbor District', doors: 19, entered: 15, sold: 4, gifted: 2, followup: 3, rev: 196, notes: 'Suburban gyms and nutrition stores. Great fit.' },
+    ],
+    inventory: [
+      { id: 301, type: 'receive', cases: 150, date: '2026-05-01', notes: 'Initial production run — Run #1' },
+      { id: 302, type: 'sell', cases: 12, date: '2026-05-15', notes: 'First week sales' },
+      { id: 303, type: 'gift', cases: 8, date: '2026-05-20', notes: 'Trial placements — launch week' },
+      { id: 304, type: 'receive', cases: 200, date: '2026-06-01', notes: 'Run #2 delivery' },
+      { id: 305, type: 'sell', cases: 31, date: '2026-06-08', notes: 'Week 1 June sales' },
+      { id: 306, type: 'gift', cases: 9, date: '2026-06-10', notes: 'New account trials' },
+      { id: 307, type: 'sell', cases: 18, date: '2026-06-15', notes: 'Week 2 June sales' },
+    ],
+    production: [
+      { id: 401, name: 'Run #1 — Launch Stock', date: '2026-04-20', ready: '2026-05-01', cases: 150, cost: 1710, cpc: 11.40, status: 'completed', supplier: 'Apex Beverage Co-Pack', notes: 'Initial launch run. 16oz tallboy.' },
+      { id: 402, name: 'Run #2 — Summer Restock', date: '2026-05-28', ready: '2026-06-01', cases: 200, cost: 2200, cpc: 11.00, status: 'completed', supplier: 'Apex Beverage Co-Pack', notes: 'Negotiated slightly better rate.' },
+      { id: 403, name: 'Run #3 — July Build', date: '2026-06-25', ready: '2026-07-05', cases: 300, cost: 3150, cpc: 10.50, status: 'scheduled', supplier: 'Apex Beverage Co-Pack', notes: 'Larger run for summer peak. New label version.' },
+      { id: 404, name: 'Run #4 — Fall Stock', date: '2026-08-15', ready: '2026-08-25', cases: 400, cost: 4000, cpc: 10.00, status: 'scheduled', supplier: 'Apex Beverage Co-Pack', notes: 'Planning for fall gym season push.' },
+    ],
+    marketing: [
+      { id: 501, type: 'social', date: '2026-06-01', ig: 1240, tt: 890, eng: 4.8, notes: 'Launch week spike in followers' },
+      { id: 502, type: 'influencer', date: '2026-06-03', inf: '@fitlifedaily', infCases: 2, platform: 'Instagram', notes: '8.2k followers. Strong engagement on reel.' },
+      { id: 503, type: 'event', date: '2026-06-07', eventName: 'Downtown Farmers Market', brought: 10, eventSold: 9, notes: 'Nearly sold out. Great brand visibility.' },
+      { id: 504, type: 'influencer', date: '2026-06-10', inf: '@runwithus', infCases: 2, platform: 'TikTok', notes: '12k followers. Running community perfect fit.' },
+      { id: 505, type: 'social', date: '2026-06-14', ig: 1580, tt: 1240, eng: 5.2, notes: 'Influencer posts driving follower growth' },
+      { id: 506, type: 'event', date: '2026-06-14', eventName: 'City Triathlon Expo', brought: 15, eventSold: 13, notes: 'Athletes loved the product. 6 new leads.' },
+      { id: 507, type: 'press', date: '2026-06-10', notes: 'Featured in local lifestyle publication — "10 Brands to Watch This Summer"' },
+    ],
+  };
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+window.onload = function() {
+  loadDemoData();
+  setDate();
+  renderAll();
+  setTodayDates();
+  updateSyncBadge();
+};
+
+function setDate() {
+  const now = new Date();
+  document.getElementById('topbarDate').textContent = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+}
+
+function setTodayDates() {
+  const today = new Date().toISOString().split('T')[0];
+  document.querySelectorAll('input[type="date"]').forEach(el => { if(!el.value) el.value = today; });
+}
+
+function renderAll() {
+  renderSales();
+  renderAccounts();
+  renderRoutes();
+  renderInventory();
+  renderProduction();
+  renderMarketing();
+  renderGoals();
+  loadMarginInputs();
+  calcMargin();
+}
+
+function loadMarginInputs() {
+  if (!data.margin) return;
+  const m = data.margin;
+  const fields = {
+    'm-cost-can': m.costCan, 'm-cans-case': m.cansCase,
+    'm-shipping': m.shipping, 'm-packaging': m.packaging,
+    'm-commission': m.commission, 'm-other': m.other,
+    'm-sell-price': m.sellPrice, 'm-margin-goal': m.marginGoal
+  };
+  Object.entries(fields).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el && val !== undefined) el.value = val;
+  });
+}
+
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+function showTab(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  el.classList.add('active');
+  renderAll();
+}
+
+// ══════════════════════════════════════════
+// SALES
+// ══════════════════════════════════════════
+function openSalesForm() {
+  document.getElementById('sales-form-card').style.display = 'block';
+  setTodayDates();
+}
+function closeSalesForm() { document.getElementById('sales-form-card').style.display = 'none'; }
+
+function logSale() {
+  const biz = document.getElementById('sale-biz').value.trim();
+  const type = document.getElementById('sale-type').value;
+  const cases = parseInt(document.getElementById('sale-cases').value) || 0;
+  const price = parseFloat(document.getElementById('sale-price').value) || 0;
+  const date = document.getElementById('sale-date').value;
+  const notes = document.getElementById('sale-notes').value.trim();
+  if (!biz || !cases || !date) { alert('Please fill in Business, Cases, and Date.'); return; }
+  data.sales.push({ id: Date.now(), biz, type, cases, price, date, notes });
+  save();
+  renderSales();
+  closeSalesForm();
+  ['sale-biz','sale-cases','sale-price','sale-notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteSale(id) {
+  data.sales = data.sales.filter(s => s.id !== id);
+  save(); renderSales();
+}
+
+function renderSales() {
+  const thisMonth = new Date().toISOString().slice(0,7);
+  const monthSales = data.sales.filter(s => s.date && s.date.startsWith(thisMonth));
+  const sold = monthSales.filter(s => s.type === 'sold');
+  const gifted = monthSales.filter(s => s.type === 'gifted');
+  const totalRevenue = sold.reduce((a,s) => a + (s.cases * s.price), 0);
+  const totalSoldCases = sold.reduce((a,s) => a + s.cases, 0);
+  const totalGiftedCases = gifted.reduce((a,s) => a + s.cases, 0);
+  const avgPrice = totalSoldCases ? (totalRevenue / totalSoldCases).toFixed(2) : null;
+
+  document.getElementById('stat-revenue').textContent = '$' + totalRevenue.toFixed(2);
+  document.getElementById('stat-sold').textContent = totalSoldCases;
+  document.getElementById('stat-gifted').textContent = totalGiftedCases;
+  document.getElementById('stat-avg-price').textContent = avgPrice ? '$' + avgPrice : '—';
+
+  // ROI
+  const giftedAccts = data.accounts.filter(a => a.status === 'gifted').length;
+  const convertedAccts = data.accounts.filter(a => a.status === 'sold').length;
+  document.getElementById('stat-converted').textContent = convertedAccts;
+  document.getElementById('stat-roi').textContent = giftedAccts + convertedAccts > 0 ? Math.round(convertedAccts/(giftedAccts+convertedAccts)*100) + '%' : '—';
+
+  // Goal bar
+  updateGoalBar(totalRevenue);
+
+  // Table
+  const tbody = document.getElementById('sales-tbody');
+  if (!data.sales.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="empty"><div class="empty-icon">💧</div>No transactions yet.</td></tr>';
+    return;
+  }
+  const sorted = [...data.sales].sort((a,b) => b.date.localeCompare(a.date));
+  tbody.innerHTML = sorted.map(s => `
+    <tr>
+      <td>${s.date}</td>
+      <td>${s.biz}</td>
+      <td><span class="badge badge-${s.type === 'sold' ? 'sold' : 'gifted'}">${s.type}</span></td>
+      <td>${s.cases}</td>
+      <td>${s.price ? '$' + s.price.toFixed(2) : '—'}</td>
+      <td>${s.type === 'sold' ? '$' + (s.cases * s.price).toFixed(2) : '—'}</td>
+      <td>${s.notes || '—'}</td>
+      <td><button class="del-btn" onclick="deleteSale(${s.id})">✕</button></td>
+    </tr>
+  `).join('');
+}
+
+function updateGoalBar(revenueOverride) {
+  const goal = parseFloat(document.getElementById('monthly-goal-input')?.value) || data.monthlyGoal || 0;
+  data.monthlyGoal = goal;
+
+  const thisMonth = new Date().toISOString().slice(0,7);
+  const revenue = revenueOverride !== undefined ? revenueOverride :
+    data.sales.filter(s => s.date && s.date.startsWith(thisMonth) && s.type === 'sold')
+              .reduce((a,s) => a + (s.cases * s.price), 0);
+
+  const pct = goal ? Math.min(100, (revenue / goal * 100)) : 0;
+  const bar = document.getElementById('goal-bar');
+  const label = document.getElementById('goal-pct-label');
+  const earned = document.getElementById('goal-earned');
+  const target = document.getElementById('goal-target');
+  if (bar) bar.style.width = pct + '%';
+  if (label) label.textContent = pct.toFixed(0) + '%';
+  if (earned) earned.textContent = '$' + revenue.toFixed(2);
+  if (target) target.textContent = '$' + goal.toFixed(2);
+  save();
+}
+
+// ══════════════════════════════════════════
+// ACCOUNTS
+// ══════════════════════════════════════════
+function openAcctForm() { document.getElementById('acct-form-card').style.display = 'block'; setTodayDates(); }
+function closeAcctForm() { document.getElementById('acct-form-card').style.display = 'none'; }
+
+function saveAccount() {
+  const name = document.getElementById('acct-name').value.trim();
+  const date = document.getElementById('acct-date').value;
+  if (!name || !date) { alert('Please fill in Business Name and Date.'); return; }
+  data.accounts.push({
+    id: Date.now(),
+    name,
+    biztype: document.getElementById('acct-biztype').value,
+    contact: document.getElementById('acct-contact').value.trim(),
+    phone: document.getElementById('acct-phone').value.trim(),
+    date,
+    status: document.getElementById('acct-status').value,
+    reorder: document.getElementById('acct-reorder').value,
+    cases: parseInt(document.getElementById('acct-cases').value) || 0,
+    notes: document.getElementById('acct-notes').value.trim()
+  });
+  save(); renderAll(); closeAcctForm();
+  ['acct-name','acct-contact','acct-phone','acct-cases','acct-notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteAccount(id) { data.accounts = data.accounts.filter(a => a.id !== id); save(); renderAll(); }
+
+let acctFilter = '';
+function filterAccounts(v) { acctFilter = v; renderAccounts(); }
+
+function renderAccounts() {
+  const total = data.accounts.length;
+  const sold = data.accounts.filter(a => a.status === 'sold').length;
+  const gifted = data.accounts.filter(a => a.status === 'gifted').length;
+  const followup = data.accounts.filter(a => a.status === 'followup').length;
+  document.getElementById('acct-total').textContent = total;
+  document.getElementById('acct-sold').textContent = sold;
+  document.getElementById('acct-gifted').textContent = gifted;
+  document.getElementById('acct-followup').textContent = followup;
+
+  const filtered = acctFilter ? data.accounts.filter(a => a.status === acctFilter) : data.accounts;
+  const tbody = document.getElementById('accounts-tbody');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty"><div class="empty-icon">🏢</div>No accounts found.</td></tr>';
+    return;
+  }
+  const badgeMap = { sold:'badge-sold', gifted:'badge-gifted', followup:'badge-followup', declined:'badge-declined' };
+  const reorderMap = { yes:'badge-reorder', no:'', pending:'badge-followup' };
+  tbody.innerHTML = [...filtered].sort((a,b) => b.date.localeCompare(a.date)).map(a => `
+    <tr>
+      <td><strong>${a.name}</strong></td>
+      <td>${a.biztype}</td>
+      <td>${a.contact || '—'}<br><span style="color:var(--gray-mid);font-size:11px">${a.phone || ''}</span></td>
+      <td>${a.date}</td>
+      <td><span class="badge ${badgeMap[a.status] || ''}">${a.status}</span></td>
+      <td>${a.cases || '—'}</td>
+      <td><span class="badge ${reorderMap[a.reorder] || ''}">${a.reorder}</span></td>
+      <td style="max-width:160px;font-size:12px">${a.notes || '—'}</td>
+      <td><button class="del-btn" onclick="deleteAccount(${a.id})">✕</button></td>
+    </tr>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+// ROUTES
+// ══════════════════════════════════════════
+function openRouteForm() { document.getElementById('route-form-card').style.display = 'block'; setTodayDates(); }
+function closeRouteForm() { document.getElementById('route-form-card').style.display = 'none'; }
+
+function saveRoute() {
+  const date = document.getElementById('route-date').value;
+  const area = document.getElementById('route-area').value.trim();
+  if (!date || !area) { alert('Please fill in Date and Area.'); return; }
+  const doors = parseInt(document.getElementById('route-doors-in').value) || 0;
+  const entered = parseInt(document.getElementById('route-entered').value) || 0;
+  const sold = parseInt(document.getElementById('route-sold-in').value) || 0;
+  const gifted = parseInt(document.getElementById('route-gifted-in').value) || 0;
+  const followup = parseInt(document.getElementById('route-followup-in').value) || 0;
+  const rev = parseFloat(document.getElementById('route-rev-in').value) || 0;
+  const notes = document.getElementById('route-notes').value.trim();
+  data.routes.push({ id: Date.now(), date, area, doors, entered, sold, gifted, followup, rev, notes });
+  save(); renderRoutes(); closeRouteForm();
+  ['route-area','route-doors-in','route-entered','route-sold-in','route-gifted-in','route-followup-in','route-rev-in','route-notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteRoute(id) { data.routes = data.routes.filter(r => r.id !== id); save(); renderRoutes(); }
+
+function renderRoutes() {
+  const totalDoors = data.routes.reduce((a,r) => a + r.doors, 0);
+  const totalVisited = data.routes.reduce((a,r) => a + r.entered, 0);
+  const totalPlaced = data.routes.reduce((a,r) => a + r.sold + r.gifted, 0);
+  const convRate = totalVisited ? Math.round(totalPlaced / totalVisited * 100) + '%' : '—';
+  document.getElementById('route-doors').textContent = totalDoors;
+  document.getElementById('route-visited').textContent = totalVisited;
+  document.getElementById('route-placed').textContent = totalPlaced;
+  document.getElementById('route-conv').textContent = convRate;
+
+  const tbody = document.getElementById('routes-tbody');
+  if (!data.routes.length) {
+    tbody.innerHTML = '<tr><td colspan="11" class="empty"><div class="empty-icon">🗺️</div>No sessions logged yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...data.routes].sort((a,b) => b.date.localeCompare(a.date)).map(r => {
+    const conv = r.entered ? Math.round((r.sold + r.gifted) / r.entered * 100) + '%' : '—';
+    return `
+    <tr>
+      <td>${r.date}</td>
+      <td>${r.area}</td>
+      <td>${r.doors}</td>
+      <td>${r.entered}</td>
+      <td>${r.sold}</td>
+      <td>${r.gifted}</td>
+      <td>${r.followup}</td>
+      <td>$${r.rev.toFixed(2)}</td>
+      <td>${conv}</td>
+      <td style="max-width:140px;font-size:12px">${r.notes || '—'}</td>
+      <td><button class="del-btn" onclick="deleteRoute(${r.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// INVENTORY
+// ══════════════════════════════════════════
+function openInvForm() {
+  document.getElementById('inv-form-inner').style.display = 'block';
+  document.getElementById('inv-form-prompt').style.display = 'none';
+  setTodayDates();
+}
+function closeInvForm() {
+  document.getElementById('inv-form-inner').style.display = 'none';
+  document.getElementById('inv-form-prompt').style.display = 'block';
+}
+
+function saveInvAdj() {
+  const type = document.getElementById('inv-adj-type').value;
+  const cases = parseInt(document.getElementById('inv-adj-cases').value) || 0;
+  const date = document.getElementById('inv-adj-date').value;
+  const notes = document.getElementById('inv-adj-notes').value.trim();
+  if (!cases || !date) { alert('Please enter Cases and Date.'); return; }
+  data.inventory.push({ id: Date.now(), type, cases, date, notes });
+  save(); renderInventory(); closeInvForm();
+  ['inv-adj-cases','inv-adj-notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteInvAdj(id) { data.inventory = data.inventory.filter(i => i.id !== id); save(); renderInventory(); }
+
+function updateInvStats() {
+  data.invSettings.cansPerCase = parseInt(document.getElementById('inv-cans-per-case')?.value) || 24;
+  data.invSettings.reorderThreshold = parseInt(document.getElementById('inv-reorder-threshold')?.value) || 0;
+  save(); renderInventory();
+}
+
+function renderInventory() {
+  // Set field values
+  const cpc = document.getElementById('inv-cans-per-case');
+  const rt = document.getElementById('inv-reorder-threshold');
+  if (cpc) cpc.value = data.invSettings.cansPerCase || 24;
+  if (rt) rt.value = data.invSettings.reorderThreshold || '';
+
+  let running = 0;
+  let soldTotal = 0, giftedTotal = 0;
+  const movements = [...data.inventory].sort((a,b) => a.date.localeCompare(b.date));
+  movements.forEach(m => {
+    if (m.type === 'receive' || m.type === 'adjust') running += m.cases;
+    else running -= m.cases;
+    if (m.type === 'sell') soldTotal += m.cases;
+    if (m.type === 'gift') giftedTotal += m.cases;
+  });
+
+  document.getElementById('inv-onhand').textContent = Math.max(0, running);
+  document.getElementById('inv-sold-total').textContent = soldTotal;
+  document.getElementById('inv-gifted-total').textContent = giftedTotal;
+  document.getElementById('inv-reorder-point').textContent = data.invSettings.reorderThreshold || '—';
+
+  // Alerts
+  const alertEl = document.getElementById('inv-alerts');
+  if (data.invSettings.reorderThreshold && running <= data.invSettings.reorderThreshold && running > 0) {
+    alertEl.innerHTML = `<div class="alert alert-low">⚠️ Stock low — only ${running} cases on hand. Reorder threshold is ${data.invSettings.reorderThreshold} cases.</div>`;
+  } else if (running <= 0 && data.inventory.length) {
+    alertEl.innerHTML = `<div class="alert alert-danger">🚨 Out of stock! Place a production order immediately.</div>`;
+  } else {
+    alertEl.innerHTML = '';
+  }
+
+  // Card color
+  const card = document.getElementById('inv-card-onhand');
+  if (card) {
+    card.className = 'stat-card';
+    if (data.invSettings.reorderThreshold && running <= data.invSettings.reorderThreshold) card.classList.add('danger');
+  }
+
+  // Table
+  const tbody = document.getElementById('inv-tbody');
+  if (!movements.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty"><div class="empty-icon">📦</div>No inventory movements logged.</td></tr>';
+    return;
+  }
+  let run2 = 0;
+  const rows = movements.map(m => {
+    if (m.type === 'receive' || m.type === 'adjust') run2 += m.cases;
+    else run2 -= m.cases;
+    const typeLabels = { receive:'Received', sell:'Sold', gift:'Gifted', adjust:'Adjustment' };
+    return `
+    <tr>
+      <td>${m.date}</td>
+      <td><span class="badge ${m.type === 'receive' ? 'badge-sold' : m.type === 'gift' ? 'badge-gifted' : m.type === 'sell' ? 'badge-reorder' : 'badge-followup'}">${typeLabels[m.type]}</span></td>
+      <td>${m.type === 'receive' || m.type === 'adjust' ? '+' : '-'}${m.cases}</td>
+      <td><strong>${Math.max(0,run2)}</strong></td>
+      <td>${m.notes || '—'}</td>
+      <td><button class="del-btn" onclick="deleteInvAdj(${m.id})">✕</button></td>
+    </tr>`;
+  });
+  tbody.innerHTML = rows.reverse().join('');
+}
+
+// ══════════════════════════════════════════
+// PRODUCTION
+// ══════════════════════════════════════════
+function openProdForm() { document.getElementById('prod-form-card').style.display = 'block'; setTodayDates(); }
+function closeProdForm() { document.getElementById('prod-form-card').style.display = 'none'; }
+
+function calcProdCostPerCase() {
+  const cases = parseFloat(document.getElementById('prod-cases').value) || 0;
+  const cost = parseFloat(document.getElementById('prod-cost').value) || 0;
+  document.getElementById('prod-cpc').value = cases && cost ? '$' + (cost / cases).toFixed(2) : '';
+}
+
+function saveProd() {
+  const name = document.getElementById('prod-name').value.trim();
+  const date = document.getElementById('prod-date').value;
+  if (!name || !date) { alert('Please fill in Batch Name and Production Date.'); return; }
+  const cases = parseInt(document.getElementById('prod-cases').value) || 0;
+  const cost = parseFloat(document.getElementById('prod-cost').value) || 0;
+  data.production.push({
+    id: Date.now(), name, date,
+    ready: document.getElementById('prod-ready').value,
+    cases, cost,
+    cpc: cases && cost ? (cost / cases) : 0,
+    status: document.getElementById('prod-status').value,
+    supplier: document.getElementById('prod-supplier').value.trim(),
+    notes: document.getElementById('prod-notes').value.trim()
+  });
+  save(); renderProduction(); closeProdForm();
+  ['prod-name','prod-cases','prod-cost','prod-cpc','prod-supplier','prod-notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteProd(id) { data.production = data.production.filter(p => p.id !== id); save(); renderProduction(); }
+
+function renderProduction() {
+  const total = data.production.length;
+  const upcoming = data.production.filter(p => p.status !== 'completed');
+  const upcomingCases = upcoming.reduce((a,p) => a + p.cases, 0);
+  const upcomingSpend = upcoming.reduce((a,p) => a + p.cost, 0);
+  const allCpc = data.production.filter(p => p.cpc > 0).map(p => p.cpc);
+  const avgCpc = allCpc.length ? allCpc.reduce((a,b) => a+b,0) / allCpc.length : 0;
+
+  document.getElementById('prod-total').textContent = total;
+  document.getElementById('prod-planned').textContent = upcomingCases;
+  document.getElementById('prod-spend').textContent = '$' + upcomingSpend.toFixed(0);
+  document.getElementById('prod-avg-cost').textContent = avgCpc ? '$' + avgCpc.toFixed(2) : '—';
+
+  const tbody = document.getElementById('prod-tbody');
+  if (!data.production.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty"><div class="empty-icon">🏭</div>No batch runs planned yet.</td></tr>';
+    return;
+  }
+  const statusBadge = { scheduled:'badge-scheduled', production:'badge-production', completed:'badge-completed' };
+  tbody.innerHTML = [...data.production].sort((a,b) => a.date.localeCompare(b.date)).map(p => `
+    <tr>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.date}</td>
+      <td>${p.ready || '—'}</td>
+      <td>${p.cases}</td>
+      <td>${p.cost ? '$' + p.cost.toFixed(2) : '—'}</td>
+      <td>${p.cpc ? '$' + p.cpc.toFixed(2) : '—'}</td>
+      <td>${p.supplier || '—'}</td>
+      <td><span class="badge ${statusBadge[p.status]}">${p.status}</span></td>
+      <td style="max-width:140px;font-size:12px">${p.notes || '—'}</td>
+      <td><button class="del-btn" onclick="deleteProd(${p.id})">✕</button></td>
+    </tr>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+// MARKETING
+// ══════════════════════════════════════════
+function openMktForm() { document.getElementById('mkt-form-card').style.display = 'block'; setTodayDates(); }
+function closeMktForm() { document.getElementById('mkt-form-card').style.display = 'none'; }
+
+function toggleMktFields() {
+  const type = document.getElementById('mkt-type').value;
+  document.getElementById('mkt-social-fields').style.display = type === 'social' ? 'block' : 'none';
+  document.getElementById('mkt-inf-fields').style.display = type === 'influencer' ? 'block' : 'none';
+  document.getElementById('mkt-event-fields').style.display = type === 'event' ? 'block' : 'none';
+}
+
+function saveMkt() {
+  const type = document.getElementById('mkt-type').value;
+  const date = document.getElementById('mkt-date').value;
+  if (!date) { alert('Please select a date.'); return; }
+  const entry = { id: Date.now(), type, date, notes: document.getElementById('mkt-notes').value.trim() };
+  if (type === 'social') {
+    entry.ig = parseInt(document.getElementById('mkt-ig-in').value) || 0;
+    entry.tt = parseInt(document.getElementById('mkt-tt-in').value) || 0;
+    entry.eng = parseFloat(document.getElementById('mkt-eng').value) || 0;
+  } else if (type === 'influencer') {
+    entry.inf = document.getElementById('mkt-inf-name').value.trim();
+    entry.infCases = parseInt(document.getElementById('mkt-inf-cases-in').value) || 0;
+    entry.platform = document.getElementById('mkt-inf-platform').value;
+  } else if (type === 'event') {
+    entry.eventName = document.getElementById('mkt-event-name').value.trim();
+    entry.brought = parseInt(document.getElementById('mkt-event-brought').value) || 0;
+    entry.eventSold = parseInt(document.getElementById('mkt-event-sold').value) || 0;
+  }
+  data.marketing.push(entry);
+  save(); renderMarketing(); closeMktForm();
+}
+
+function deleteMkt(id) { data.marketing = data.marketing.filter(m => m.id !== id); save(); renderMarketing(); }
+
+function renderMarketing() {
+  const latestSocial = [...data.marketing].filter(m => m.type === 'social').sort((a,b) => b.date.localeCompare(a.date))[0];
+  const infCases = data.marketing.filter(m => m.type === 'influencer').reduce((a,m) => a + (m.infCases||0), 0);
+  const events = data.marketing.filter(m => m.type === 'event').length;
+  document.getElementById('mkt-ig').textContent = latestSocial?.ig ? latestSocial.ig.toLocaleString() : '—';
+  document.getElementById('mkt-tt').textContent = latestSocial?.tt ? latestSocial.tt.toLocaleString() : '—';
+  document.getElementById('mkt-inf-cases').textContent = infCases;
+  document.getElementById('mkt-events').textContent = events;
+
+  const tbody = document.getElementById('mkt-tbody');
+  if (!data.marketing.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty"><div class="empty-icon">📣</div>No marketing entries yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...data.marketing].sort((a,b) => b.date.localeCompare(a.date)).map(m => {
+    let typeLabel = m.type.charAt(0).toUpperCase() + m.type.slice(1);
+    let detail = '';
+    if (m.type === 'social') detail = `IG: ${m.ig?.toLocaleString()||0} · TT: ${m.tt?.toLocaleString()||0} · Eng: ${m.eng||0}%`;
+    else if (m.type === 'influencer') detail = `${m.inf||'—'} (${m.platform}) · ${m.infCases} cases`;
+    else if (m.type === 'event') detail = `${m.eventName||'—'} · ${m.brought} brought · ${m.eventSold} placed`;
+    else if (m.type === 'press') detail = m.notes;
+    return `
+    <tr>
+      <td>${m.date}</td>
+      <td><span class="badge badge-gifted">${typeLabel}</span></td>
+      <td style="font-size:12px">${detail}</td>
+      <td style="font-size:12px;max-width:200px">${m.notes || '—'}</td>
+      <td><button class="del-btn" onclick="deleteMkt(${m.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// GOALS
+// ══════════════════════════════════════════
+function syncGoals() {
+  data.goals.revenue = parseFloat(document.getElementById('g-rev-goal')?.value) || 0;
+  data.goals.accounts = parseInt(document.getElementById('g-acct-goal')?.value) || 0;
+  data.goals.weeklyCases = parseInt(document.getElementById('g-weekly-cases')?.value) || 0;
+  save(); renderGoals();
+}
+
+function renderGoals() {
+  // Sync inputs
+  const gr = document.getElementById('g-rev-goal');
+  const ga = document.getElementById('g-acct-goal');
+  const gw = document.getElementById('g-weekly-cases');
+  if (gr) gr.value = data.goals.revenue || '';
+  if (ga) ga.value = data.goals.accounts || '';
+  if (gw) gw.value = data.goals.weeklyCases || '';
+
+  const thisMonth = new Date().toISOString().slice(0,7);
+  const revenue = data.sales.filter(s => s.date?.startsWith(thisMonth) && s.type === 'sold')
+                            .reduce((a,s) => a + (s.cases * s.price), 0);
+  const activeAccts = data.accounts.filter(a => a.status === 'sold').length;
+  const totalDoors = data.routes.reduce((a,r) => a + r.doors, 0);
+  const totalCases = data.routes.reduce((a,r) => a + r.sold + r.gifted, 0);
+  const totalEntered = data.routes.reduce((a,r) => a + r.entered, 0);
+
+  document.getElementById('g-revenue').textContent = '$' + revenue.toFixed(0);
+  document.getElementById('g-accounts').textContent = activeAccts;
+  document.getElementById('g-doors').textContent = totalDoors;
+  document.getElementById('g-cases-moved').textContent = totalCases;
+  document.getElementById('g-conv-rate').textContent = totalEntered ? Math.round(totalCases/totalEntered*100)+'%' : '—';
+
+  const g = document.getElementById('g-goal-show');
+  if (g) g.textContent = data.goals.revenue ? data.goals.revenue.toLocaleString() : '—';
+
+  const revPct = data.goals.revenue ? Math.min(100, revenue / data.goals.revenue * 100) : 0;
+  const acctPct = data.goals.accounts ? Math.min(100, activeAccts / data.goals.accounts * 100) : 0;
+  const gb = document.getElementById('g-goal-bar');
+  const ab = document.getElementById('g-acct-bar');
+  if (gb) gb.style.width = revPct + '%';
+  if (ab) ab.style.width = acctPct + '%';
+
+  // Gifted ROI
+  const giftedAccts = data.accounts.filter(a => a.status === 'gifted').length;
+  const convertedAccts = activeAccts;
+  const roiPct = (giftedAccts + convertedAccts) ? Math.round(convertedAccts/(giftedAccts+convertedAccts)*100) : 0;
+  const gGifted = document.getElementById('g-gifted');
+  const gConv = document.getElementById('g-converted');
+  const roiBar = document.getElementById('g-roi-bar');
+  const roiLabel = document.getElementById('g-roi-label');
+  if (gGifted) gGifted.textContent = giftedAccts + convertedAccts;
+  if (gConv) gConv.textContent = convertedAccts;
+  if (roiBar) roiBar.style.width = roiPct + '%';
+  if (roiLabel) roiLabel.textContent = roiPct + '% of gifted accounts converted to paying';
+
+  // Milestones
+  const milestones = [
+    { label: 'First 10 Active Accounts', target: 10, current: activeAccts },
+    { label: 'First 25 Active Accounts', target: 25, current: activeAccts },
+    { label: '100 Doors Knocked', target: 100, current: totalDoors },
+    { label: '500 Doors Knocked', target: 500, current: totalDoors },
+    { label: '100 Cases Moved', target: 100, current: totalCases },
+    { label: 'First Month $1,000 Revenue', target: 1000, current: revenue },
+    { label: 'First Month $5,000 Revenue', target: 5000, current: revenue },
+  ];
+  const ml = document.getElementById('milestones-list');
+  if (ml) ml.innerHTML = milestones.map(m => {
+    const pct = Math.min(100, (m.current / m.target * 100));
+    const done = m.current >= m.target;
+    return `
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="font-size:20px">${done ? '✅' : '⭕'}</div>
+      <div style="flex:1">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-weight:600;font-size:13px;color:${done ? 'var(--success)' : 'var(--navy)'}">${m.label}</span>
+          <span style="font-size:12px;color:var(--gray-text)">${m.current.toLocaleString()} / ${m.target.toLocaleString()}</span>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-bar" style="width:${pct}%;background:${done ? 'var(--success)' : ''}"></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// XLS EXPORT FUNCTIONS
+// ══════════════════════════════════════════
+
+function xlsDownload(wb, filename) {
+  XLSX.writeFile(wb, filename + '_' + new Date().toISOString().slice(0,10) + '.xlsx');
+}
+
+function applyHeaderStyle(ws, headers) {
+  headers.forEach((_, i) => {
+    const cell = ws[XLSX.utils.encode_cell({r:0, c:i})];
+    if (cell) {
+      cell.s = {
+        font: { bold: true, color: { rgb: 'FFFFFF' } },
+        fill: { fgColor: { rgb: '1B2A4A' } },
+        alignment: { horizontal: 'center' }
+      };
+    }
+  });
+}
+
+function exportSales() {
+  if (!data.sales.length) { alert('No sales data to export yet.'); return; }
+  const thisMonth = new Date().toISOString().slice(0,7);
+  const monthSold = data.sales.filter(s => s.date?.startsWith(thisMonth) && s.type === 'sold');
+  const totalRev = monthSold.reduce((a,s) => a + s.cases * s.price, 0);
+  const totalSold = monthSold.reduce((a,s) => a + s.cases, 0);
+  const totalGifted = data.sales.filter(s => s.date?.startsWith(thisMonth) && s.type === 'gifted').reduce((a,s) => a + s.cases, 0);
+
+  const wb = XLSX.utils.book_new();
+
+  // Summary sheet
+  const summaryData = [
+    ['CHAMP WATER — Sales & Revenue Summary', '', ''],
+    ['Generated', new Date().toLocaleDateString(), ''],
+    ['', '', ''],
+    ['Metric', 'Value', ''],
+    ['Revenue This Month', '$' + totalRev.toFixed(2), ''],
+    ['Cases Sold This Month', totalSold, ''],
+    ['Cases Gifted This Month', totalGifted, ''],
+    ['Avg Price Per Case', totalSold ? '$' + (totalRev/totalSold).toFixed(2) : '—', ''],
+    ['Monthly Goal', data.monthlyGoal ? '$' + data.monthlyGoal.toFixed(2) : 'Not set', ''],
+    ['Goal Progress', data.monthlyGoal ? (totalRev/data.monthlyGoal*100).toFixed(1)+'%' : '—', ''],
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{wch:30},{wch:20},{wch:15}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  // Transactions sheet
+  const headers = ['Date','Business','Type','Cases','Price Per Case','Total Revenue','Notes'];
+  const rows = [...data.sales].sort((a,b) => b.date.localeCompare(a.date)).map(s => [
+    s.date, s.biz, s.type === 'sold' ? 'Sold' : 'Gifted',
+    s.cases, s.type === 'sold' ? s.price : 0,
+    s.type === 'sold' ? s.cases * s.price : 0,
+    s.notes || ''
+  ]);
+  const wsTransactions = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  wsTransactions['!cols'] = [{wch:12},{wch:25},{wch:10},{wch:8},{wch:15},{wch:16},{wch:30}];
+  XLSX.utils.book_append_sheet(wb, wsTransactions, 'Transactions');
+
+  xlsDownload(wb, 'ChampWater_Sales');
+}
+
+function exportAccounts() {
+  if (!data.accounts.length) { alert('No accounts to export yet.'); return; }
+  const wb = XLSX.utils.book_new();
+
+  // Summary
+  const sold = data.accounts.filter(a => a.status === 'sold').length;
+  const gifted = data.accounts.filter(a => a.status === 'gifted').length;
+  const followup = data.accounts.filter(a => a.status === 'followup').length;
+  const declined = data.accounts.filter(a => a.status === 'declined').length;
+  const summaryData = [
+    ['CHAMP WATER — Account Tracker Summary', ''],
+    ['Generated', new Date().toLocaleDateString()],
+    ['',''],
+    ['Metric', 'Count'],
+    ['Total Accounts', data.accounts.length],
+    ['Active (Sold)', sold],
+    ['Gifted / Trial', gifted],
+    ['Follow-Up Needed', followup],
+    ['Declined', declined],
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{wch:25},{wch:15}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  // All Accounts
+  const headers = ['Business Name','Business Type','Contact Name','Phone/Email','First Visit','Status','Cases Placed','Reorder?','Notes'];
+  const rows = [...data.accounts].sort((a,b) => b.date.localeCompare(a.date)).map(a => [
+    a.name, a.biztype, a.contact||'', a.phone||'', a.date,
+    a.status, a.cases||0, a.reorder, a.notes||''
+  ]);
+  const wsAccounts = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  wsAccounts['!cols'] = [{wch:25},{wch:20},{wch:18},{wch:20},{wch:12},{wch:12},{wch:14},{wch:12},{wch:35}];
+  XLSX.utils.book_append_sheet(wb, wsAccounts, 'All Accounts');
+
+  // Separate sheets by status
+  ['sold','gifted','followup','declined'].forEach(status => {
+    const filtered = data.accounts.filter(a => a.status === status);
+    if (!filtered.length) return;
+    const statusRows = filtered.map(a => [a.name, a.biztype, a.contact||'', a.phone||'', a.date, a.cases||0, a.reorder, a.notes||'']);
+    const statusHeaders = ['Business Name','Business Type','Contact','Phone/Email','First Visit','Cases','Reorder?','Notes'];
+    const ws = XLSX.utils.aoa_to_sheet([statusHeaders, ...statusRows]);
+    ws['!cols'] = [{wch:25},{wch:20},{wch:18},{wch:20},{wch:12},{wch:8},{wch:12},{wch:35}];
+    const label = status.charAt(0).toUpperCase() + status.slice(1);
+    XLSX.utils.book_append_sheet(wb, ws, label);
+  });
+
+  xlsDownload(wb, 'ChampWater_Accounts');
+}
+
+function exportRoutes() {
+  if (!data.routes.length) { alert('No route sessions to export yet.'); return; }
+  const wb = XLSX.utils.book_new();
+
+  const totalDoors = data.routes.reduce((a,r) => a + r.doors, 0);
+  const totalEntered = data.routes.reduce((a,r) => a + r.entered, 0);
+  const totalPlaced = data.routes.reduce((a,r) => a + r.sold + r.gifted, 0);
+  const totalRev = data.routes.reduce((a,r) => a + r.rev, 0);
+  const convRate = totalEntered ? (totalPlaced/totalEntered*100).toFixed(1)+'%' : '—';
+
+  const summaryData = [
+    ['CHAMP WATER — Route & Visit Log Summary', ''],
+    ['Generated', new Date().toLocaleDateString()],
+    ['',''],
+    ['Metric', 'Total'],
+    ['Total Sessions', data.routes.length],
+    ['Doors Knocked', totalDoors],
+    ['Businesses Entered', totalEntered],
+    ['Cases Placed (Sold + Gifted)', totalPlaced],
+    ['Revenue Collected', '$' + totalRev.toFixed(2)],
+    ['Overall Conversion Rate', convRate],
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{wch:30},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  const headers = ['Date','Area','Doors Knocked','Businesses Entered','Cases Sold','Cases Gifted','Follow-Ups Set','Revenue ($)','Conversion %','Notes'];
+  const rows = [...data.routes].sort((a,b) => b.date.localeCompare(a.date)).map(r => {
+    const conv = r.entered ? (((r.sold+r.gifted)/r.entered)*100).toFixed(1)+'%' : '0%';
+    return [r.date, r.area, r.doors, r.entered, r.sold, r.gifted, r.followup, r.rev, conv, r.notes||''];
+  });
+  const wsRoutes = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  wsRoutes['!cols'] = [{wch:12},{wch:22},{wch:14},{wch:20},{wch:12},{wch:13},{wch:15},{wch:13},{wch:14},{wch:35}];
+  XLSX.utils.book_append_sheet(wb, wsRoutes, 'Session Log');
+
+  xlsDownload(wb, 'ChampWater_Routes');
+}
+
+function exportInventory() {
+  if (!data.inventory.length) { alert('No inventory movements to export yet.'); return; }
+  const wb = XLSX.utils.book_new();
+
+  let running = 0, soldTotal = 0, giftedTotal = 0, receivedTotal = 0;
+  data.inventory.forEach(m => {
+    if (m.type === 'receive' || m.type === 'adjust') { running += m.cases; receivedTotal += m.cases; }
+    else { running -= m.cases; }
+    if (m.type === 'sell') soldTotal += m.cases;
+    if (m.type === 'gift') giftedTotal += m.cases;
+  });
+
+  const summaryData = [
+    ['CHAMP WATER — Inventory Summary', ''],
+    ['Generated', new Date().toLocaleDateString()],
+    ['',''],
+    ['Metric', 'Value'],
+    ['Cases On Hand', Math.max(0, running)],
+    ['Total Received', receivedTotal],
+    ['Total Sold', soldTotal],
+    ['Total Gifted', giftedTotal],
+    ['Cans Per Case', data.invSettings.cansPerCase || 24],
+    ['Reorder Alert Threshold', data.invSettings.reorderThreshold || 'Not set'],
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{wch:28},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  const headers = ['Date','Movement Type','Cases (+/-)','Running Total','Notes'];
+  let run2 = 0;
+  const movements = [...data.inventory].sort((a,b) => a.date.localeCompare(b.date));
+  const rows = movements.map(m => {
+    const isAdd = m.type === 'receive' || m.type === 'adjust';
+    if (isAdd) run2 += m.cases; else run2 -= m.cases;
+    const typeLabels = { receive:'Received', sell:'Sold', gift:'Gifted', adjust:'Adjustment' };
+    return [m.date, typeLabels[m.type], (isAdd ? '+' : '-') + m.cases, Math.max(0,run2), m.notes||''];
+  });
+  const wsLog = XLSX.utils.aoa_to_sheet([headers, ...rows.reverse()]);
+  wsLog['!cols'] = [{wch:12},{wch:15},{wch:12},{wch:15},{wch:30}];
+  XLSX.utils.book_append_sheet(wb, wsLog, 'Movement Log');
+
+  xlsDownload(wb, 'ChampWater_Inventory');
+}
+
+function exportProduction() {
+  if (!data.production.length) { alert('No production batches to export yet.'); return; }
+  const wb = XLSX.utils.book_new();
+
+  const upcoming = data.production.filter(p => p.status !== 'completed');
+  const upcomingCases = upcoming.reduce((a,p) => a + p.cases, 0);
+  const upcomingSpend = upcoming.reduce((a,p) => a + p.cost, 0);
+  const allCpc = data.production.filter(p => p.cpc > 0).map(p => p.cpc);
+  const avgCpc = allCpc.length ? allCpc.reduce((a,b)=>a+b,0)/allCpc.length : 0;
+
+  const summaryData = [
+    ['CHAMP WATER — Production Planner Summary', ''],
+    ['Generated', new Date().toLocaleDateString()],
+    ['',''],
+    ['Metric', 'Value'],
+    ['Total Batch Runs', data.production.length],
+    ['Upcoming Cases Planned', upcomingCases],
+    ['Upcoming Total Spend', '$' + upcomingSpend.toFixed(2)],
+    ['Average Cost Per Case', avgCpc ? '$' + avgCpc.toFixed(2) : '—'],
+    ['Completed Runs', data.production.filter(p => p.status === 'completed').length],
+    ['Scheduled Runs', data.production.filter(p => p.status === 'scheduled').length],
+    ['In Production', data.production.filter(p => p.status === 'production').length],
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{wch:28},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  const headers = ['Batch Name','Production Date','Ready Date','Cases Planned','Total Cost ($)','Cost Per Case ($)','Supplier / Facility','Status','Notes'];
+  const rows = [...data.production].sort((a,b) => a.date.localeCompare(b.date)).map(p => [
+    p.name, p.date, p.ready||'', p.cases,
+    p.cost||0, p.cpc ? parseFloat(p.cpc.toFixed(2)) : 0,
+    p.supplier||'', p.status, p.notes||''
+  ]);
+  const wsBatches = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  wsBatches['!cols'] = [{wch:28},{wch:16},{wch:14},{wch:15},{wch:14},{wch:16},{wch:25},{wch:14},{wch:30}];
+  XLSX.utils.book_append_sheet(wb, wsBatches, 'Batch Runs');
+
+  xlsDownload(wb, 'ChampWater_Production');
+}
+
+function exportMarketing() {
+  if (!data.marketing.length) { alert('No marketing entries to export yet.'); return; }
+  const wb = XLSX.utils.book_new();
+
+  const latestSocial = [...data.marketing].filter(m => m.type === 'social').sort((a,b) => b.date.localeCompare(a.date))[0];
+  const infCases = data.marketing.filter(m => m.type === 'influencer').reduce((a,m) => a+(m.infCases||0), 0);
+  const events = data.marketing.filter(m => m.type === 'event').length;
+
+  const summaryData = [
+    ['CHAMP WATER — Marketing & Brand Summary', ''],
+    ['Generated', new Date().toLocaleDateString()],
+    ['',''],
+    ['Metric', 'Value'],
+    ['Instagram Followers (Latest)', latestSocial?.ig || '—'],
+    ['TikTok Followers (Latest)', latestSocial?.tt || '—'],
+    ['Latest Engagement Rate', latestSocial?.eng ? latestSocial.eng + '%' : '—'],
+    ['Cases Gifted to Influencers', infCases],
+    ['Events Attended', events],
+    ['Total Log Entries', data.marketing.length],
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{wch:30},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  const headers = ['Date','Type','Detail','Notes'];
+  const rows = [...data.marketing].sort((a,b) => b.date.localeCompare(a.date)).map(m => {
+    let detail = '';
+    if (m.type === 'social') detail = `IG: ${m.ig||0} · TT: ${m.tt||0} · Engagement: ${m.eng||0}%`;
+    else if (m.type === 'influencer') detail = `${m.inf||''} (${m.platform}) · ${m.infCases} cases gifted`;
+    else if (m.type === 'event') detail = `${m.eventName||''} · Brought: ${m.brought} · Placed: ${m.eventSold}`;
+    else if (m.type === 'press') detail = 'Press / Feature';
+    return [m.date, m.type.charAt(0).toUpperCase()+m.type.slice(1), detail, m.notes||''];
+  });
+  const wsLog = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  wsLog['!cols'] = [{wch:12},{wch:14},{wch:45},{wch:35}];
+  XLSX.utils.book_append_sheet(wb, wsLog, 'Marketing Log');
+
+  xlsDownload(wb, 'ChampWater_Marketing');
+}
+
+function exportGoals() {
+  const wb = XLSX.utils.book_new();
+  const thisMonth = new Date().toISOString().slice(0,7);
+  const revenue = data.sales.filter(s => s.date?.startsWith(thisMonth) && s.type === 'sold').reduce((a,s)=>a+s.cases*s.price,0);
+  const activeAccts = data.accounts.filter(a => a.status === 'sold').length;
+  const giftedAccts = data.accounts.filter(a => a.status === 'gifted').length;
+  const totalDoors = data.routes.reduce((a,r)=>a+r.doors,0);
+  const totalCases = data.routes.reduce((a,r)=>a+r.sold+r.gifted,0);
+  const totalEntered = data.routes.reduce((a,r)=>a+r.entered,0);
+  const convRate = totalEntered ? (totalCases/totalEntered*100).toFixed(1)+'%' : '—';
+  const roiPct = (giftedAccts+activeAccts) ? (activeAccts/(giftedAccts+activeAccts)*100).toFixed(1)+'%' : '—';
+
+  const summaryData = [
+    ['CHAMP WATER — Goals & Growth Report', '',''],
+    ['Generated', new Date().toLocaleDateString(),''],
+    ['','',''],
+    ['KPI', 'Current', 'Goal'],
+    ['Monthly Revenue', '$'+revenue.toFixed(2), data.goals.revenue ? '$'+data.goals.revenue : 'Not set'],
+    ['Active Accounts', activeAccts, data.goals.accounts || 'Not set'],
+    ['Weekly Cases Goal', '—', data.goals.weeklyCases || 'Not set'],
+    ['Total Doors Knocked', totalDoors, ''],
+    ['Total Cases Moved', totalCases, ''],
+    ['Overall Conversion Rate', convRate, ''],
+    ['Gifted Case ROI', roiPct, ''],
+    ['','',''],
+    ['MILESTONES', 'Current', 'Target'],
+    ['Active Accounts → 10', activeAccts, 10],
+    ['Active Accounts → 25', activeAccts, 25],
+    ['Doors Knocked → 100', totalDoors, 100],
+    ['Doors Knocked → 500', totalDoors, 500],
+    ['Cases Moved → 100', totalCases, 100],
+    ['Monthly Revenue → $1,000', '$'+revenue.toFixed(2), '$1,000'],
+    ['Monthly Revenue → $5,000', '$'+revenue.toFixed(2), '$5,000'],
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(summaryData);
+  ws['!cols'] = [{wch:35},{wch:20},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Goals & Growth');
+
+  xlsDownload(wb, 'ChampWater_Goals');
+}
+
+// ══════════════════════════════════════════
+// MARGIN CALCULATOR
+// ══════════════════════════════════════════
+
+function saveMarginInputs() {
+  data.margin = {
+    costCan: parseFloat(document.getElementById('m-cost-can').value) || 0,
+    cansCase: parseInt(document.getElementById('m-cans-case').value) || 0,
+    shipping: parseFloat(document.getElementById('m-shipping').value) || 0,
+    packaging: parseFloat(document.getElementById('m-packaging').value) || 0,
+    commission: parseFloat(document.getElementById('m-commission').value) || 0,
+    other: parseFloat(document.getElementById('m-other').value) || 0,
+    sellPrice: parseFloat(document.getElementById('m-sell-price').value) || 0,
+    marginGoal: parseFloat(document.getElementById('m-margin-goal').value) || 0,
+  };
+  save();
+  calcMargin();
+}
+
+function loadMarginInputs() {
+  if (!data.margin) return;
+  const m = data.margin;
+  const fields = {
+    'm-cost-can': m.costCan, 'm-cans-case': m.cansCase,
+    'm-shipping': m.shipping, 'm-packaging': m.packaging,
+    'm-commission': m.commission, 'm-other': m.other,
+    'm-sell-price': m.sellPrice, 'm-margin-goal': m.marginGoal
+  };
+  Object.entries(fields).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el && val) el.value = val;
+  });
+}
+
+function calcMargin() {
+  const costCan   = parseFloat(document.getElementById('m-cost-can').value) || 0;
+  const cansCase  = parseInt(document.getElementById('m-cans-case').value) || 0;
+  const shipping  = parseFloat(document.getElementById('m-shipping').value) || 0;
+  const packaging = parseFloat(document.getElementById('m-packaging').value) || 0;
+  const commission= parseFloat(document.getElementById('m-commission').value) || 0;
+  const other     = parseFloat(document.getElementById('m-other').value) || 0;
+  const sellPrice = parseFloat(document.getElementById('m-sell-price').value) || 0;
+  const marginGoal= parseFloat(document.getElementById('m-margin-goal').value) || 0;
+
+  if (!costCan || !cansCase) return;
+
+  const cogsCans    = costCan * cansCase;         // production cost per case
+  const cogsTotal   = cogsCans + shipping + packaging + commission + other; // total COGS per case
+  const grossProfit = sellPrice - cogsTotal;
+  const marginPct   = sellPrice ? (grossProfit / sellPrice * 100) : 0;
+  const profitCan   = cansCase ? (grossProfit / cansCase) : 0;
+
+  // Stat cards
+  document.getElementById('m-margin-per-case').textContent = sellPrice ? '$' + grossProfit.toFixed(2) : '—';
+  document.getElementById('m-margin-pct').textContent = sellPrice ? marginPct.toFixed(1) + '%' : '—';
+  document.getElementById('m-profit-can').textContent = sellPrice ? '$' + profitCan.toFixed(3) : '—';
+  document.getElementById('m-goal-label').textContent = marginGoal ? marginGoal + '%' : 'Not set';
+
+  // Goal status
+  const goalCard = document.getElementById('m-goal-card');
+  const goalStatus = document.getElementById('m-goal-status');
+  const goalNote = document.getElementById('m-goal-note');
+  if (marginGoal && sellPrice) {
+    if (marginPct >= marginGoal) {
+      goalCard.className = 'stat-card success';
+      goalStatus.textContent = '✅ On Target';
+      goalStatus.style.color = 'var(--success)';
+      goalNote.textContent = '+' + (marginPct - marginGoal).toFixed(1) + '% above goal';
+    } else {
+      goalCard.className = 'stat-card danger';
+      goalStatus.textContent = '⚠️ Below Goal';
+      goalStatus.style.color = 'var(--danger)';
+      goalNote.textContent = (marginGoal - marginPct).toFixed(1) + '% below goal';
+    }
+  } else {
+    goalCard.className = 'stat-card';
+    goalStatus.textContent = '—';
+    goalNote.textContent = 'Set a margin goal';
+  }
+
+  // P&L Breakdown
+  const breakdown = document.getElementById('m-breakdown');
+  const rows = [
+    { label: 'Selling Price Per Case', value: sellPrice, color: 'var(--success)', bold: true },
+    { label: `Production Cost (${cansCase} cans × $${costCan})`, value: -cogsCans, color: 'var(--danger)' },
+    { label: 'Shipping / Delivery', value: -shipping, color: 'var(--danger)' },
+    { label: 'Packaging / Labels', value: -packaging, color: 'var(--danger)' },
+    { label: 'Sales Commission', value: -commission, color: 'var(--danger)' },
+    { label: 'Other Costs', value: -other, color: 'var(--danger)' },
+  ].filter(r => r.bold || Math.abs(r.value) > 0);
+
+  breakdown.innerHTML = `
+    <div style="display:grid;gap:0">
+      ${rows.map(r => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--gray-light)">
+          <span style="font-size:13px;font-weight:${r.bold ? '700' : '500'};color:var(--navy)">${r.label}</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:${r.color}">${r.value >= 0 ? '+' : ''}$${Math.abs(r.value).toFixed(2)}</span>
+        </div>
+      `).join('')}
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;margin-top:4px;background:${grossProfit >= 0 ? 'var(--aqua-pale)' : '#fdecea'};border-radius:8px;padding:12px 14px">
+        <span style="font-size:14px;font-weight:700;color:var(--navy)">Gross Profit Per Case</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:${grossProfit >= 0 ? 'var(--success)' : 'var(--danger)'}">$${grossProfit.toFixed(2)} <span style="font-size:14px">(${marginPct.toFixed(1)}%)</span></span>
+      </div>
+      <div style="margin-top:10px;padding:10px 14px;background:var(--navy);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;font-weight:600;color:var(--aqua-light)">Total COGS Per Case</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--white)">$${cogsTotal.toFixed(2)}</span>
+      </div>
+      <div style="margin-top:8px;padding:10px 14px;background:var(--gray-light);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;font-weight:600;color:var(--gray-text)">COGS Per Can</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--navy)">$${cansCase ? (cogsTotal/cansCase).toFixed(3) : '—'}</span>
+      </div>
+    </div>
+  `;
+
+  // Volume scenarios
+  const scenarios = [10, 25, 50, 100, 250, 500, 1000];
+  const tbody = document.getElementById('m-scenarios-tbody');
+  if (sellPrice) {
+    tbody.innerHTML = scenarios.map(qty => {
+      const rev = qty * sellPrice;
+      const cogs = qty * cogsTotal;
+      const profit = rev - cogs;
+      const pct = (profit / rev * 100).toFixed(1);
+      const isGoal = marginGoal && parseFloat(pct) >= marginGoal;
+      return `
+        <tr style="${isGoal ? 'background:var(--aqua-pale)' : ''}">
+          <td><strong>${qty.toLocaleString()}</strong>${isGoal ? ' ✅' : ''}</td>
+          <td>$${rev.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td style="color:var(--danger)">$${cogs.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td style="color:${profit >= 0 ? 'var(--success)' : 'var(--danger)'};font-weight:700">$${profit.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td style="color:${parseFloat(pct) >= (marginGoal||0) ? 'var(--success)' : 'var(--danger)'};font-weight:700">${pct}%</td>
+        </tr>`;
+    }).join('');
+  } else {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty">Enter selling price to see projections</td></tr>';
+  }
+
+  // Price sensitivity — what price hits X% margin?
+  const sensitivity = document.getElementById('m-sensitivity');
+  if (cogsTotal > 0) {
+    const targets = [20, 30, 40, 50, 60];
+    sensitivity.innerHTML = targets.map(target => {
+      // price = COGS / (1 - margin%)
+      const targetPrice = cogsTotal / (1 - target/100);
+      const isCurrent = marginGoal && target === marginGoal;
+      const isAbove = sellPrice && targetPrice <= sellPrice;
+      return `
+        <div style="text-align:center;padding:20px;background:${isCurrent ? 'var(--navy)' : isAbove ? 'var(--aqua-pale)' : 'var(--white)'};border:2px solid ${isCurrent ? 'var(--aqua)' : 'var(--gray-light)'};border-radius:10px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:${isCurrent ? 'var(--aqua-light)' : 'var(--gray-text)'};margin-bottom:6px">${target}% Margin${isCurrent ? ' ← YOUR GOAL' : ''}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;color:${isCurrent ? 'var(--aqua)' : 'var(--navy)'}">$${targetPrice.toFixed(2)}</div>
+          <div style="font-size:12px;color:${isCurrent ? 'var(--aqua-light)' : 'var(--gray-text)'};margin-top:4px">per case</div>
+          ${sellPrice ? `<div style="font-size:11px;margin-top:8px;font-weight:600;color:${isAbove ? 'var(--success)' : 'var(--danger)'}">${isAbove ? '✅ Your price qualifies' : '⚠️ Need $' + (targetPrice - sellPrice).toFixed(2) + ' more'}</div>` : ''}
+        </div>`;
+    }).join('');
+  } else {
+    sensitivity.innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-mid);font-size:13px;grid-column:1/-1">Enter your cost inputs and margin goal to see target pricing</div>';
+  }
+
+  // Gifted case cost
+  const giftedCases = data.sales.filter(s => s.type === 'gifted').reduce((a,s) => a + s.cases, 0);
+  const giftedCogs = cogsTotal * giftedCases;
+  const convertedAccts = data.accounts.filter(a => a.status === 'sold').length;
+  document.getElementById('m-gifted-cases').textContent = giftedCases;
+  document.getElementById('m-gifted-cogs').textContent = cogsTotal ? '$' + giftedCogs.toFixed(2) : '—';
+  document.getElementById('m-gifted-converted').textContent = convertedAccts;
+
+  const roiEl = document.getElementById('m-gifted-roi');
+  if (cogsTotal && giftedCases) {
+    const costPerConversion = convertedAccts ? (giftedCogs / convertedAccts).toFixed(2) : null;
+    roiEl.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;text-align:center">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-text);margin-bottom:4px">Cost to Gift 1 Case</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:var(--navy)">$${cogsTotal.toFixed(2)}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-text);margin-bottom:4px">Total Gifted Investment</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:var(--warning)">$${giftedCogs.toFixed(2)}</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray-text);margin-bottom:4px">Cost Per Conversion</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:var(--success)">${costPerConversion ? '$'+costPerConversion : '—'}</div>
+        </div>
+      </div>`;
+  } else {
+    roiEl.textContent = 'Enter your cost per can and cans per case above to calculate your gifted case investment.';
+  }
+}
+
+function exportMargin() {
+  const costCan   = parseFloat(document.getElementById('m-cost-can').value) || 0;
+  const cansCase  = parseInt(document.getElementById('m-cans-case').value) || 0;
+  const shipping  = parseFloat(document.getElementById('m-shipping').value) || 0;
+  const packaging = parseFloat(document.getElementById('m-packaging').value) || 0;
+  const commission= parseFloat(document.getElementById('m-commission').value) || 0;
+  const other     = parseFloat(document.getElementById('m-other').value) || 0;
+  const sellPrice = parseFloat(document.getElementById('m-sell-price').value) || 0;
+  const marginGoal= parseFloat(document.getElementById('m-margin-goal').value) || 0;
+
+  if (!costCan || !cansCase) { alert('Please enter your cost inputs first.'); return; }
+
+  const cogsCans  = costCan * cansCase;
+  const cogsTotal = cogsCans + shipping + packaging + commission + other;
+  const grossProfit = sellPrice - cogsTotal;
+  const marginPct = sellPrice ? (grossProfit / sellPrice * 100) : 0;
+
+  const wb = XLSX.utils.book_new();
+
+  // Summary
+  const summary = [
+    ['CHAMP WATER — Margin Calculator', '', ''],
+    ['Generated', new Date().toLocaleDateString(), ''],
+    ['', '', ''],
+    ['INPUTS', '', ''],
+    ['Cost Per Can', '$' + costCan.toFixed(3), ''],
+    ['Cans Per Case', cansCase, ''],
+    ['Shipping Per Case', '$' + shipping.toFixed(2), ''],
+    ['Packaging Per Case', '$' + packaging.toFixed(2), ''],
+    ['Sales Commission Per Case', '$' + commission.toFixed(2), ''],
+    ['Other Costs Per Case', '$' + other.toFixed(2), ''],
+    ['Selling Price Per Case', '$' + sellPrice.toFixed(2), ''],
+    ['Margin Goal', marginGoal + '%', ''],
+    ['', '', ''],
+    ['P&L PER CASE', '', ''],
+    ['Production COGS (cans)', '$' + cogsCans.toFixed(2), ''],
+    ['Total COGS Per Case', '$' + cogsTotal.toFixed(2), ''],
+    ['COGS Per Can', '$' + (cansCase ? cogsTotal/cansCase : 0).toFixed(3), ''],
+    ['Gross Profit Per Case', '$' + grossProfit.toFixed(2), ''],
+    ['Gross Margin %', marginPct.toFixed(1) + '%', ''],
+    ['Profit Per Can', '$' + (cansCase ? grossProfit/cansCase : 0).toFixed(3), ''],
+    ['Goal Status', marginPct >= marginGoal ? 'ON TARGET ✅' : 'BELOW GOAL ⚠️', ''],
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summary);
+  wsSummary['!cols'] = [{wch:35},{wch:20},{wch:15}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Margin Summary');
+
+  // Volume scenarios
+  const scenarioHeaders = ['Cases Sold', 'Revenue', 'Total COGS', 'Gross Profit', 'Margin %'];
+  const scenarios = [10,25,50,100,250,500,1000].map(qty => {
+    const rev = qty * sellPrice;
+    const cogs = qty * cogsTotal;
+    const profit = rev - cogs;
+    return [qty, '$'+rev.toFixed(2), '$'+cogs.toFixed(2), '$'+profit.toFixed(2), (profit/rev*100).toFixed(1)+'%'];
+  });
+  const wsScenarios = XLSX.utils.aoa_to_sheet([scenarioHeaders, ...scenarios]);
+  wsScenarios['!cols'] = [{wch:12},{wch:16},{wch:16},{wch:16},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, wsScenarios, 'Volume Scenarios');
+
+  // Price sensitivity
+  const sensHeaders = ['Margin Target', 'Required Price Per Case', 'Your Current Price', 'Gap'];
+  const sens = [20,30,40,50,60].map(t => {
+    const req = cogsTotal / (1 - t/100);
+    const gap = sellPrice ? (req - sellPrice) : null;
+    return [t+'%', '$'+req.toFixed(2), sellPrice ? '$'+sellPrice.toFixed(2) : '—', gap !== null ? (gap <= 0 ? 'Achieved ✅' : 'Need $'+gap.toFixed(2)+' more') : '—'];
+  });
+  const wsSens = XLSX.utils.aoa_to_sheet([sensHeaders, ...sens]);
+  wsSens['!cols'] = [{wch:16},{wch:24},{wch:20},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, wsSens, 'Price Sensitivity');
+
+  xlsDownload(wb, 'ChampWater_Margin');
+}
+
+</script>
+</body>
+</html>
