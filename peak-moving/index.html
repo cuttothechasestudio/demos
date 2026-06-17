@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peak Moving Co. — Command Center</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
+
+:root {
+  --ink: #0D0F12;
+  --ink-mid: #1A1C1F;
+  --ink-light: #242628;
+  --slate: #2C3340;
+  --steel: #4A5568;
+  --mist: #8896AA;
+  --white: #FFFFFF;
+  --red: #E5282A;
+  --red-dim: rgba(229,40,42,0.12);
+  --red-glow: rgba(229,40,42,0.25);
+  --red-dark: #B01E20;
+  --green: #2ECC71;
+  --yellow: #F5A623;
+  --blue: #3B82F6;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--ink);
+  color: var(--white);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ink-mid);
+  border-bottom: 2px solid var(--red);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  background: var(--red);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.logo-text span {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--mist);
+  margin-top: 3px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.demo-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  background: rgba(245,166,35,0.12);
+  border: 1px solid rgba(245,166,35,0.3);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 32px;
+  background: var(--ink-mid);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  overflow-x: auto;
+}
+
+.tab {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mist);
+  padding: 14px 18px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.tab:hover { color: var(--white); }
+.tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+/* ── CONTENT ── */
+.content {
+  padding: 32px;
+  max-width: 1400px;
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── STAT CARDS ── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--ink-mid);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.stat-card.highlight {
+  border-color: var(--red);
+  background: var(--red-dim);
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 32px;
+  color: var(--white);
+  line-height: 1;
+}
+
+.stat-card.highlight .stat-value { color: var(--red); }
+
+.stat-sub {
+  font-size: 12px;
+  color: var(--mist);
+  margin-top: 6px;
+}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--white);
+}
+
+.btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.btn-red {
+  background: var(--red);
+  color: var(--white);
+}
+
+.btn-red:hover { background: var(--red-dark); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--mist);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
+
+/* ── TABLE ── */
+.table-wrap {
+  background: var(--ink-mid);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: var(--ink-light);
+}
+
+th {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mist);
+  padding: 12px 16px;
+  text-align: left;
+}
+
+td {
+  font-size: 13px;
+  color: var(--white);
+  padding: 13px 16px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ── BADGES ── */
+.badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.badge-green { background: rgba(46,204,113,0.15); color: #2ECC71; }
+.badge-yellow { background: rgba(245,166,35,0.15); color: #F5A623; }
+.badge-red { background: rgba(229,40,42,0.15); color: #E5282A; }
+.badge-blue { background: rgba(59,130,246,0.15); color: #3B82F6; }
+.badge-mist { background: rgba(136,150,170,0.15); color: #8896AA; }
+
+/* ── TWO COL ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.panel {
+  background: var(--ink-mid);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.panel-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ── FORM ELEMENTS ── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full { grid-column: 1 / -1; }
+
+label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+input, select, textarea {
+  background: var(--ink-light);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--red);
+}
+
+select option { background: #1A1C1F; }
+
+/* ── QUOTE RESULT ── */
+.quote-result {
+  background: var(--red-dim);
+  border: 1px solid rgba(229,40,42,0.3);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.quote-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 13px;
+  color: var(--mist);
+}
+
+.quote-result-row:last-child { border-bottom: none; }
+.quote-result-row span:last-child { color: var(--white); font-weight: 600; }
+.quote-result-row.total span { color: var(--red); font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; }
+.quote-result-row.total { font-size: 14px; font-weight: 700; color: var(--white); }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--red);
+  transition: width 0.4s;
+}
+
+.progress-bar.green { background: var(--green); }
+.progress-bar.yellow { background: var(--yellow); }
+
+/* ── CREW CARDS ── */
+.crew-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.crew-card {
+  background: var(--ink-mid);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.crew-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.crew-role {
+  font-size: 11px;
+  color: var(--mist);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.crew-stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--mist);
+  padding: 5px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.crew-stat span:last-child { color: var(--white); font-weight: 600; }
+
+/* ── TRUCK CARDS ── */
+.truck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.truck-card {
+  background: var(--ink-mid);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.truck-id {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--white);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.truck-model {
+  font-size: 12px;
+  color: var(--mist);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.truck-stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--mist);
+  padding: 6px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.truck-stat span:last-child { color: var(--white); font-weight: 600; }
+
+/* ── REVENUE CHART ── */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 120px;
+  margin-bottom: 8px;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  background: var(--red);
+  opacity: 0.7;
+  min-height: 4px;
+  transition: opacity 0.2s;
+}
+
+.bar.current { opacity: 1; }
+.bar.low { background: var(--steel); opacity: 0.5; }
+
+.bar-label {
+  font-size: 10px;
+  color: var(--mist);
+  text-align: center;
+}
+
+/* ── MARGIN TABLE ── */
+.margin-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.margin-label {
+  font-size: 13px;
+  color: var(--white);
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.margin-bar-wrap {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.margin-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--green);
+}
+
+.margin-bar.mid { background: var(--yellow); }
+.margin-bar.low { background: var(--red); }
+
+.margin-pct {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  width: 50px;
+  text-align: right;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 24px 0;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .content { padding: 16px; }
+  .two-col { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  header { padding: 0 16px; }
+  .tabs { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">PM</div>
+    <div class="logo-text">
+      Peak Moving Co.
+      <span>Command Center</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="demo-badge">⚡ Demo Mode — Sample Data</div>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('jobs')">📋 Job Board</div>
+  <div class="tab" onclick="showTab('quote')">💰 Quote Builder</div>
+  <div class="tab" onclick="showTab('revenue')">📊 Revenue & Cash Flow</div>
+  <div class="tab" onclick="showTab('crew')">👷 Crew Tracker</div>
+  <div class="tab" onclick="showTab('trucks')">🚛 Truck Log</div>
+  <div class="tab" onclick="showTab('crm')">🤝 Customer CRM</div>
+  <div class="tab" onclick="showTab('margin')">📈 Margin by Job Type</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ── JOB BOARD ── -->
+  <div class="section active" id="jobs">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Jobs This Week</div>
+        <div class="stat-value">11</div>
+        <div class="stat-sub">3 today · 4 tomorrow</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">In Progress</div>
+        <div class="stat-value">2</div>
+        <div class="stat-sub">Crews on the road</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Completed This Month</div>
+        <div class="stat-value">38</div>
+        <div class="stat-sub">vs. 31 last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Open Slots This Week</div>
+        <div class="stat-value">4</div>
+        <div class="stat-sub">Truck & crew available</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Active & Upcoming Jobs</div>
+      <button class="btn btn-red" onclick="alert('Add job form coming soon!')">+ New Job</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Job #</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Type</th>
+            <th>Crew</th>
+            <th>Truck</th>
+            <th>Status</th>
+            <th>Est. Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#1047</td>
+            <td>Jun 17</td>
+            <td>Martinez, R.</td>
+            <td>Brentwood, TN</td>
+            <td>Franklin, TN</td>
+            <td><span class="badge badge-blue">Local</span></td>
+            <td>Crew A</td>
+            <td>Truck 1</td>
+            <td><span class="badge badge-yellow">En Route</span></td>
+            <td>$680</td>
+          </tr>
+          <tr>
+            <td>#1046</td>
+            <td>Jun 17</td>
+            <td>Thompson, D.</td>
+            <td>Nashville, TN</td>
+            <td>Murfreesboro, TN</td>
+            <td><span class="badge badge-blue">Local</span></td>
+            <td>Crew B</td>
+            <td>Truck 2</td>
+            <td><span class="badge badge-green">Loading</span></td>
+            <td>$520</td>
+          </tr>
+          <tr>
+            <td>#1048</td>
+            <td>Jun 17</td>
+            <td>Nguyen, L.</td>
+            <td>Smyrna, TN</td>
+            <td>Smyrna, TN</td>
+            <td><span class="badge badge-mist">Small</span></td>
+            <td>Crew C</td>
+            <td>Truck 3</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$320</td>
+          </tr>
+          <tr>
+            <td>#1049</td>
+            <td>Jun 18</td>
+            <td>O'Brien, K.</td>
+            <td>Hendersonville, TN</td>
+            <td>Memphis, TN</td>
+            <td><span class="badge badge-red">Long Distance</span></td>
+            <td>Crew A</td>
+            <td>Truck 1</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$1,850</td>
+          </tr>
+          <tr>
+            <td>#1050</td>
+            <td>Jun 18</td>
+            <td>Patel, S.</td>
+            <td>Nolensville, TN</td>
+            <td>Spring Hill, TN</td>
+            <td><span class="badge badge-blue">Local</span></td>
+            <td>Crew B</td>
+            <td>Truck 2</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$740</td>
+          </tr>
+          <tr>
+            <td>#1051</td>
+            <td>Jun 19</td>
+            <td>Williams, J.</td>
+            <td>Nashville, TN</td>
+            <td>Nashville, TN</td>
+            <td><span class="badge badge-mist">Small</span></td>
+            <td>Crew C</td>
+            <td>Truck 3</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$280</td>
+          </tr>
+          <tr>
+            <td>#1052</td>
+            <td>Jun 19</td>
+            <td>Garcia, M.</td>
+            <td>Clarksville, TN</td>
+            <td>Nashville, TN</td>
+            <td><span class="badge badge-blue">Local</span></td>
+            <td>Crew A</td>
+            <td>Truck 1</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$890</td>
+          </tr>
+          <tr>
+            <td>#1053</td>
+            <td>Jun 20</td>
+            <td>Clark, B.</td>
+            <td>Brentwood, TN</td>
+            <td>Chattanooga, TN</td>
+            <td><span class="badge badge-red">Long Distance</span></td>
+            <td>Crew B</td>
+            <td>Truck 2</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$2,100</td>
+          </tr>
+          <tr>
+            <td>#1044</td>
+            <td>Jun 15</td>
+            <td>Robinson, A.</td>
+            <td>Franklin, TN</td>
+            <td>Brentwood, TN</td>
+            <td><span class="badge badge-blue">Local</span></td>
+            <td>Crew A</td>
+            <td>Truck 1</td>
+            <td><span class="badge badge-green">Completed</span></td>
+            <td>$610</td>
+          </tr>
+          <tr>
+            <td>#1043</td>
+            <td>Jun 14</td>
+            <td>Lewis, T.</td>
+            <td>Nashville, TN</td>
+            <td>Bowling Green, KY</td>
+            <td><span class="badge badge-red">Long Distance</span></td>
+            <td>Crew C</td>
+            <td>Truck 3</td>
+            <td><span class="badge badge-green">Completed</span></td>
+            <td>$1,620</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── QUOTE BUILDER ── -->
+  <div class="section" id="quote">
+    <div class="section-header">
+      <div class="section-title">Quote Builder</div>
+      <button class="btn btn-ghost" onclick="clearQuote()">Clear</button>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">Job Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Move Type</label>
+            <select id="q-type" onchange="calcQuote()">
+              <option value="local">Local (Under 50 miles)</option>
+              <option value="longdistance">Long Distance (50+ miles)</option>
+              <option value="small">Small / Single Room</option>
+              <option value="commercial">Commercial</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Home Size</label>
+            <select id="q-size" onchange="calcQuote()">
+              <option value="studio">Studio / 1BR</option>
+              <option value="2br">2 Bedroom</option>
+              <option value="3br">3 Bedroom</option>
+              <option value="4br">4+ Bedroom</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Crew Hours (Estimated)</label>
+            <input type="number" id="q-hours" value="4" min="1" oninput="calcQuote()">
+          </div>
+          <div class="form-group">
+            <label>Number of Movers</label>
+            <input type="number" id="q-movers" value="2" min="1" max="6" oninput="calcQuote()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Miles (Round Trip)</label>
+            <input type="number" id="q-miles" value="30" min="1" oninput="calcQuote()">
+          </div>
+          <div class="form-group">
+            <label>Packing Materials ($)</label>
+            <input type="number" id="q-materials" value="40" min="0" oninput="calcQuote()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Hourly Rate Per Mover ($)</label>
+            <input type="number" id="q-rate" value="25" min="10" oninput="calcQuote()">
+          </div>
+          <div class="form-group">
+            <label>Fuel Cost Per Mile ($)</label>
+            <input type="number" id="q-fuel" value="0.65" step="0.05" min="0.1" oninput="calcQuote()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Truck Cost Per Hour ($)</label>
+            <input type="number" id="q-truck" value="15" min="0" oninput="calcQuote()">
+          </div>
+          <div class="form-group">
+            <label>Your Target Margin (%)</label>
+            <input type="number" id="q-margin" value="35" min="10" max="80" oninput="calcQuote()">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Cost Breakdown & Suggested Price</div>
+        <div id="quote-output">
+          <div class="quote-result">
+            <div class="quote-result-row">
+              <span>Labor Cost</span>
+              <span id="r-labor">—</span>
+            </div>
+            <div class="quote-result-row">
+              <span>Fuel Cost</span>
+              <span id="r-fuel">—</span>
+            </div>
+            <div class="quote-result-row">
+              <span>Truck Cost</span>
+              <span id="r-truck">—</span>
+            </div>
+            <div class="quote-result-row">
+              <span>Materials</span>
+              <span id="r-materials">—</span>
+            </div>
+            <div class="quote-result-row">
+              <span>Overhead (10%)</span>
+              <span id="r-overhead">—</span>
+            </div>
+            <div class="quote-result-row" style="padding-top:12px;">
+              <span style="color:var(--mist)">Your Real Cost</span>
+              <span id="r-cost" style="color:var(--white)">—</span>
+            </div>
+            <div class="quote-result-row total">
+              <span>Suggested Quote</span>
+              <span id="r-quote">—</span>
+            </div>
+            <div class="quote-result-row">
+              <span>Your Profit on This Job</span>
+              <span id="r-profit" style="color:var(--green)">—</span>
+            </div>
+          </div>
+          <div style="margin-top:12px; font-size:12px; color:var(--mist); line-height:1.6;">
+            💡 Adjust the inputs on the left to see how crew size, drive time, and materials affect your actual margin.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── REVENUE ── -->
+  <div class="section" id="revenue">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Revenue This Month</div>
+        <div class="stat-value">$28,740</div>
+        <div class="stat-sub">vs. $24,110 last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Deposits Collected</div>
+        <div class="stat-value">$6,200</div>
+        <div class="stat-sub">From upcoming jobs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Outstanding Invoices</div>
+        <div class="stat-value">$3,480</div>
+        <div class="stat-sub" style="color:var(--yellow)">3 invoices unpaid</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Monthly Goal</div>
+        <div class="stat-value">$32,000</div>
+        <div class="stat-sub">$3,260 to go — 90%</div>
+      </div>
+    </div>
+
+    <div style="background:var(--ink-mid); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:20px; margin-bottom:24px;">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-title" style="font-size:15px;">Monthly Revenue — 2024/2025</div>
+      </div>
+
+      <div style="margin-bottom:8px;">
+        <div class="bar-chart">
+          <div class="bar-col"><div class="bar low" style="height:42%"></div><div class="bar-label">Jan</div></div>
+          <div class="bar-col"><div class="bar low" style="height:38%"></div><div class="bar-label">Feb</div></div>
+          <div class="bar-col"><div class="bar" style="height:55%"></div><div class="bar-label">Mar</div></div>
+          <div class="bar-col"><div class="bar" style="height:72%"></div><div class="bar-label">Apr</div></div>
+          <div class="bar-col"><div class="bar" style="height:88%"></div><div class="bar-label">May</div></div>
+          <div class="bar-col"><div class="bar current" style="height:90%"></div><div class="bar-label">Jun</div></div>
+          <div class="bar-col"><div class="bar" style="height:0%; opacity:0.2; border:1px dashed rgba(255,255,255,0.2)"></div><div class="bar-label">Jul</div></div>
+          <div class="bar-col"><div class="bar" style="height:0%; opacity:0.2; border:1px dashed rgba(255,255,255,0.2)"></div><div class="bar-label">Aug</div></div>
+          <div class="bar-col"><div class="bar" style="height:0%; opacity:0.2; border:1px dashed rgba(255,255,255,0.2)"></div><div class="bar-label">Sep</div></div>
+          <div class="bar-col"><div class="bar" style="height:0%; opacity:0.2; border:1px dashed rgba(255,255,255,0.2)"></div><div class="bar-label">Oct</div></div>
+          <div class="bar-col"><div class="bar low" style="height:0%; opacity:0.2; border:1px dashed rgba(255,255,255,0.2)"></div><div class="bar-label">Nov</div></div>
+          <div class="bar-col"><div class="bar low" style="height:0%; opacity:0.2; border:1px dashed rgba(255,255,255,0.2)"></div><div class="bar-label">Dec</div></div>
+        </div>
+        <div style="font-size:11px; color:var(--mist); margin-top:4px;">⚠️ Jan–Feb are slow season. Plan cash reserves accordingly.</div>
+      </div>
+
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06);">
+        <div style="font-size:12px; color:var(--mist); margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em;">Monthly Goal Progress</div>
+        <div class="progress-wrap" style="height:12px;">
+          <div class="progress-bar green" style="width:90%"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:12px; color:var(--mist);">
+          <span>$28,740 collected</span><span>$32,000 goal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Outstanding Invoices</div>
+      <button class="btn btn-ghost">⬇ Export</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Invoice #</th>
+            <th>Customer</th>
+            <th>Job Date</th>
+            <th>Amount</th>
+            <th>Days Outstanding</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>INV-1038</td>
+            <td>Davidson, P.</td>
+            <td>Jun 8</td>
+            <td>$1,240</td>
+            <td style="color:var(--red)">9 days</td>
+            <td><span class="badge badge-red">Overdue</span></td>
+          </tr>
+          <tr>
+            <td>INV-1041</td>
+            <td>Brooks, M.</td>
+            <td>Jun 12</td>
+            <td>$890</td>
+            <td style="color:var(--yellow)">5 days</td>
+            <td><span class="badge badge-yellow">Pending</span></td>
+          </tr>
+          <tr>
+            <td>INV-1044</td>
+            <td>Robinson, A.</td>
+            <td>Jun 15</td>
+            <td>$1,350</td>
+            <td>2 days</td>
+            <td><span class="badge badge-yellow">Pending</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── CREW ── -->
+  <div class="section" id="crew">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Total Crew</div>
+        <div class="stat-value">7</div>
+        <div class="stat-sub">5 active · 2 part-time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">On Jobs Today</div>
+        <div class="stat-value">6</div>
+        <div class="stat-sub">All 3 crews deployed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Hours This Week</div>
+        <div class="stat-value">148</div>
+        <div class="stat-sub">Across all crew</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">No-Shows This Month</div>
+        <div class="stat-value">1</div>
+        <div class="stat-sub" style="color:var(--green)">Down from 3 last month</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Crew Members</div>
+      <button class="btn btn-red" onclick="alert('Add crew member coming soon!')">+ Add Crew</button>
+    </div>
+
+    <div class="crew-grid">
+      <div class="crew-card">
+        <div class="crew-name">Marcus J.</div>
+        <div class="crew-role">Driver / Lead — Crew A</div>
+        <div class="crew-stat"><span>Status</span><span><span class="badge badge-yellow">On Job #1047</span></span></div>
+        <div class="crew-stat"><span>Hours This Week</span><span>24 hrs</span></div>
+        <div class="crew-stat"><span>Jobs This Month</span><span>14</span></div>
+        <div class="crew-stat"><span>CDL</span><span style="color:var(--green)">✓ Valid</span></div>
+      </div>
+      <div class="crew-card">
+        <div class="crew-name">Derek T.</div>
+        <div class="crew-role">Mover — Crew A</div>
+        <div class="crew-stat"><span>Status</span><span><span class="badge badge-yellow">On Job #1047</span></span></div>
+        <div class="crew-stat"><span>Hours This Week</span><span>22 hrs</span></div>
+        <div class="crew-stat"><span>Jobs This Month</span><span>14</span></div>
+        <div class="crew-stat"><span>CDL</span><span style="color:var(--mist)">No</span></div>
+      </div>
+      <div class="crew-card">
+        <div class="crew-name">Ray V.</div>
+        <div class="crew-role">Driver / Lead — Crew B</div>
+        <div class="crew-stat"><span>Status</span><span><span class="badge badge-green">On Job #1046</span></span></div>
+        <div class="crew-stat"><span>Hours This Week</span><span>26 hrs</span></div>
+        <div class="crew-stat"><span>Jobs This Month</span><span>16</span></div>
+        <div class="crew-stat"><span>CDL</span><span style="color:var(--green)">✓ Valid</span></div>
+      </div>
+      <div class="crew-card">
+        <div class="crew-name">Antonio M.</div>
+        <div class="crew-role">Mover — Crew B</div>
+        <div class="crew-stat"><span>Status</span><span><span class="badge badge-green">On Job #1046</span></span></div>
+        <div class="crew-stat"><span>Hours This Week</span><span>20 hrs</span></div>
+        <div class="crew-stat"><span>Jobs This Month</span><span>12</span></div>
+        <div class="crew-stat"><span>CDL</span><span style="color:var(--mist)">No</span></div>
+      </div>
+      <div class="crew-card">
+        <div class="crew-name">Josh P.</div>
+        <div class="crew-role">Driver / Lead — Crew C</div>
+        <div class="crew-stat"><span>Status</span><span><span class="badge badge-mist">Scheduled #1048</span></span></div>
+        <div class="crew-stat"><span>Hours This Week</span><span>18 hrs</span></div>
+        <div class="crew-stat"><span>Jobs This Month</span><span>11</span></div>
+        <div class="crew-stat"><span>CDL</span><span style="color:var(--green)">✓ Valid</span></div>
+      </div>
+      <div class="crew-card">
+        <div class="crew-name">Darius K.</div>
+        <div class="crew-role">Mover — Crew C</div>
+        <div class="crew-stat"><span>Status</span><span><span class="badge badge-mist">Scheduled #1048</span></span></div>
+        <div class="crew-stat"><span>Hours This Week</span><span>16 hrs</span></div>
+        <div class="crew-stat"><span>Jobs This Month</span><span>10</span></div>
+        <div class="crew-stat"><span>CDL</span><span style="color:var(--mist)">No</span></div>
+      </div>
+      <div class="crew-card" style="border-style:dashed; opacity:0.6;">
+        <div class="crew-name">Tyler B.</div>
+        <div class="crew-role">Part-Time Mover</div>
+        <div class="crew-stat"><span>Status</span><span><span class="badge badge-mist">Available</span></span></div>
+        <div class="crew-stat"><span>Hours This Week</span><span>0 hrs</span></div>
+        <div class="crew-stat"><span>Jobs This Month</span><span>4</span></div>
+        <div class="crew-stat"><span>CDL</span><span style="color:var(--mist)">No</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TRUCKS ── -->
+  <div class="section" id="trucks">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Fleet Size</div>
+        <div class="stat-value">3</div>
+        <div class="stat-sub">All operational</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">On Road Today</div>
+        <div class="stat-value">2</div>
+        <div class="stat-sub">Truck 3 scheduled PM</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Maintenance Due</div>
+        <div class="stat-value">1</div>
+        <div class="stat-sub" style="color:var(--yellow)">Truck 2 — oil change</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Miles This Month</div>
+        <div class="stat-value">4,820</div>
+        <div class="stat-sub">Across all 3 trucks</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Fleet Overview</div>
+      <button class="btn btn-ghost">⬇ Export Log</button>
+    </div>
+
+    <div class="truck-grid">
+      <div class="truck-card">
+        <div class="truck-id">🚛 Truck 1 <span class="badge badge-yellow" style="font-size:10px;">On Job</span></div>
+        <div class="truck-model">2021 Ford F-650 · 26ft Box</div>
+        <div class="truck-stat"><span>Current Job</span><span>#1047 — Brentwood → Franklin</span></div>
+        <div class="truck-stat"><span>Assigned Crew</span><span>Marcus J. / Derek T.</span></div>
+        <div class="truck-stat"><span>Miles This Month</span><span>1,840</span></div>
+        <div class="truck-stat"><span>Last Oil Change</span><span>Apr 28</span></div>
+        <div class="truck-stat"><span>Next Maintenance</span><span style="color:var(--green)">Jul 15</span></div>
+        <div class="truck-stat"><span>Insurance Exp.</span><span>Dec 31, 2025</span></div>
+      </div>
+
+      <div class="truck-card" style="border-color:rgba(245,166,35,0.3);">
+        <div class="truck-id">🚛 Truck 2 <span class="badge badge-green" style="font-size:10px;">On Job</span></div>
+        <div class="truck-model">2019 Isuzu NPR · 20ft Box</div>
+        <div class="truck-stat"><span>Current Job</span><span>#1046 — Nashville → Murfreesboro</span></div>
+        <div class="truck-stat"><span>Assigned Crew</span><span>Ray V. / Antonio M.</span></div>
+        <div class="truck-stat"><span>Miles This Month</span><span>1,620</span></div>
+        <div class="truck-stat"><span>Last Oil Change</span><span>Mar 10</span></div>
+        <div class="truck-stat"><span>Next Maintenance</span><span style="color:var(--yellow)">⚠️ Overdue — Oil Change</span></div>
+        <div class="truck-stat"><span>Insurance Exp.</span><span>Dec 31, 2025</span></div>
+      </div>
+
+      <div class="truck-card">
+        <div class="truck-id">🚛 Truck 3 <span class="badge badge-mist" style="font-size:10px;">Standby</span></div>
+        <div class="truck-model">2020 Ford Transit · 15ft Box</div>
+        <div class="truck-stat"><span>Current Job</span><span>None — Available PM</span></div>
+        <div class="truck-stat"><span>Assigned Crew</span><span>Josh P. / Darius K.</span></div>
+        <div class="truck-stat"><span>Miles This Month</span><span>1,360</span></div>
+        <div class="truck-stat"><span>Last Oil Change</span><span>May 19</span></div>
+        <div class="truck-stat"><span>Next Maintenance</span><span style="color:var(--green)">Aug 1</span></div>
+        <div class="truck-stat"><span>Insurance Exp.</span><span>Dec 31, 2025</span></div>
+      </div>
+    </div>
+
+    <div class="section-header" style="margin-top:8px;">
+      <div class="section-title">Mileage Log</div>
+      <button class="btn btn-red" onclick="alert('Log mileage coming soon!')">+ Log Mileage</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Truck</th>
+            <th>Job #</th>
+            <th>Miles</th>
+            <th>Driver</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Jun 17</td><td>Truck 1</td><td>#1047</td><td>28</td><td>Marcus J.</td><td>Brentwood → Franklin RT</td></tr>
+          <tr><td>Jun 17</td><td>Truck 2</td><td>#1046</td><td>52</td><td>Ray V.</td><td>Nashville → Murfreesboro RT</td></tr>
+          <tr><td>Jun 15</td><td>Truck 1</td><td>#1044</td><td>18</td><td>Marcus J.</td><td>Franklin → Brentwood RT</td></tr>
+          <tr><td>Jun 14</td><td>Truck 3</td><td>#1043</td><td>214</td><td>Josh P.</td><td>Nashville → Bowling Green KY RT</td></tr>
+          <tr><td>Jun 12</td><td>Truck 2</td><td>#1041</td><td>44</td><td>Ray V.</td><td>Nashville → Smyrna RT</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── CRM ── -->
+  <div class="section" id="crm">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Total Customers</div>
+        <div class="stat-value">84</div>
+        <div class="stat-sub">Since company founding</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Repeat Customers</div>
+        <div class="stat-value">19</div>
+        <div class="stat-sub">23% repeat rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Referrals This Month</div>
+        <div class="stat-value">7</div>
+        <div class="stat-sub">Word of mouth winning</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Follow-Ups Needed</div>
+        <div class="stat-value">5</div>
+        <div class="stat-sub" style="color:var(--yellow)">Don't let them go cold</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Customer Records</div>
+      <button class="btn btn-red" onclick="alert('Add customer coming soon!')">+ Add Customer</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Phone</th>
+            <th>Last Move</th>
+            <th>Jobs</th>
+            <th>Total Spent</th>
+            <th>Referral Source</th>
+            <th>Repeat</th>
+            <th>Follow-Up</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Martinez, R.</td>
+            <td>(615) 555-0142</td>
+            <td>Jun 17, 2025</td>
+            <td>2</td>
+            <td>$1,290</td>
+            <td>Google</td>
+            <td><span class="badge badge-green">Yes</span></td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+          <tr>
+            <td>O'Brien, K.</td>
+            <td>(615) 555-0289</td>
+            <td>Jun 18, 2025</td>
+            <td>1</td>
+            <td>$1,850</td>
+            <td>Referral — Martinez</td>
+            <td><span class="badge badge-mist">No</span></td>
+            <td><span class="badge badge-yellow">Post-Move Check-In</span></td>
+          </tr>
+          <tr>
+            <td>Robinson, A.</td>
+            <td>(615) 555-0374</td>
+            <td>Jun 15, 2025</td>
+            <td>3</td>
+            <td>$2,140</td>
+            <td>Yelp</td>
+            <td><span class="badge badge-green">Yes</span></td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+          <tr>
+            <td>Lewis, T.</td>
+            <td>(615) 555-0481</td>
+            <td>Jun 14, 2025</td>
+            <td>1</td>
+            <td>$1,620</td>
+            <td>Google</td>
+            <td><span class="badge badge-mist">No</span></td>
+            <td><span class="badge badge-yellow">Review Request</span></td>
+          </tr>
+          <tr>
+            <td>Davidson, P.</td>
+            <td>(615) 555-0593</td>
+            <td>Jun 8, 2025</td>
+            <td>1</td>
+            <td>$1,240</td>
+            <td>Nextdoor</td>
+            <td><span class="badge badge-mist">No</span></td>
+            <td><span class="badge badge-red">Invoice Overdue</span></td>
+          </tr>
+          <tr>
+            <td>Thompson, D.</td>
+            <td>(615) 555-0617</td>
+            <td>Jun 17, 2025</td>
+            <td>1</td>
+            <td>$520</td>
+            <td>Google</td>
+            <td><span class="badge badge-mist">No</span></td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+          <tr>
+            <td>Patel, S.</td>
+            <td>(615) 555-0728</td>
+            <td>Jun 18, 2025</td>
+            <td>2</td>
+            <td>$1,460</td>
+            <td>Referral — Robinson</td>
+            <td><span class="badge badge-green">Yes</span></td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+          <tr>
+            <td>Garcia, M.</td>
+            <td>(615) 555-0835</td>
+            <td>Jun 19, 2025</td>
+            <td>1</td>
+            <td>$890</td>
+            <td>Facebook</td>
+            <td><span class="badge badge-mist">No</span></td>
+            <td><span class="badge badge-yellow">Post-Move Check-In</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── MARGIN ── -->
+  <div class="section" id="margin">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Avg Margin — All Jobs</div>
+        <div class="stat-value">31%</div>
+        <div class="stat-sub">Target: 35%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Most Profitable Type</div>
+        <div class="stat-value" style="font-size:22px;">Long Dist.</div>
+        <div class="stat-sub">42% avg margin</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Least Profitable Type</div>
+        <div class="stat-value" style="font-size:22px;">Small Jobs</div>
+        <div class="stat-sub" style="color:var(--red)">18% avg margin</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Jobs Below Break-Even</div>
+        <div class="stat-value">3</div>
+        <div class="stat-sub" style="color:var(--red)">This month — review pricing</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">Margin by Job Type</div>
+
+        <div class="margin-row">
+          <div class="margin-label">Long Distance</div>
+          <div class="margin-bar-wrap"><div class="margin-bar" style="width:84%"></div></div>
+          <div class="margin-pct" style="color:var(--green)">42%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Commercial</div>
+          <div class="margin-bar-wrap"><div class="margin-bar" style="width:74%"></div></div>
+          <div class="margin-pct" style="color:var(--green)">37%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Local (3BR+)</div>
+          <div class="margin-bar-wrap"><div class="margin-bar mid" style="width:62%"></div></div>
+          <div class="margin-pct" style="color:var(--yellow)">31%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Local (1–2BR)</div>
+          <div class="margin-bar-wrap"><div class="margin-bar mid" style="width:54%"></div></div>
+          <div class="margin-pct" style="color:var(--yellow)">27%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Small / Single Room</div>
+          <div class="margin-bar-wrap"><div class="margin-bar low" style="width:36%"></div></div>
+          <div class="margin-pct" style="color:var(--red)">18%</div>
+        </div>
+
+        <div style="margin-top:20px; padding:14px; background:var(--red-dim); border:1px solid rgba(229,40,42,0.2); border-radius:8px;">
+          <div style="font-size:12px; color:var(--white); font-weight:600; margin-bottom:6px;">💡 Owner Insight</div>
+          <div style="font-size:12px; color:var(--mist); line-height:1.6;">Small jobs under $350 are barely breaking even after fuel and crew time. Consider a minimum job rate of $300, or bundle small jobs on the same route to improve per-trip economics.</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Jobs This Month — Estimate vs. Actual</div>
+        <div class="table-wrap" style="border:none; margin:0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Job #</th>
+                <th>Type</th>
+                <th>Quoted</th>
+                <th>Actual Cost</th>
+                <th>Margin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#1043</td>
+                <td><span class="badge badge-red">Long Dist.</span></td>
+                <td>$1,620</td>
+                <td>$940</td>
+                <td style="color:var(--green); font-weight:700;">42%</td>
+              </tr>
+              <tr>
+                <td>#1044</td>
+                <td><span class="badge badge-blue">Local</span></td>
+                <td>$610</td>
+                <td>$420</td>
+                <td style="color:var(--yellow); font-weight:700;">31%</td>
+              </tr>
+              <tr>
+                <td>#1038</td>
+                <td><span class="badge badge-blue">Local</span></td>
+                <td>$1,240</td>
+                <td>$840</td>
+                <td style="color:var(--yellow); font-weight:700;">32%</td>
+              </tr>
+              <tr>
+                <td>#1035</td>
+                <td><span class="badge badge-mist">Small</span></td>
+                <td>$280</td>
+                <td>$230</td>
+                <td style="color:var(--red); font-weight:700;">18%</td>
+              </tr>
+              <tr>
+                <td>#1032</td>
+                <td><span class="badge badge-mist">Small</span></td>
+                <td>$310</td>
+                <td>$290</td>
+                <td style="color:var(--red); font-weight:700;">6%</td>
+              </tr>
+              <tr>
+                <td>#1029</td>
+                <td><span class="badge badge-red">Long Dist.</span></td>
+                <td>$2,200</td>
+                <td>$1,260</td>
+                <td style="color:var(--green); font-weight:700;">43%</td>
+              </tr>
+              <tr>
+                <td>#1026</td>
+                <td><span class="badge badge-blue">Local</span></td>
+                <td>$740</td>
+                <td>$510</td>
+                <td style="color:var(--yellow); font-weight:700;">31%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function calcQuote() {
+  const hours = parseFloat(document.getElementById('q-hours').value) || 0;
+  const movers = parseFloat(document.getElementById('q-movers').value) || 0;
+  const miles = parseFloat(document.getElementById('q-miles').value) || 0;
+  const materials = parseFloat(document.getElementById('q-materials').value) || 0;
+  const rate = parseFloat(document.getElementById('q-rate').value) || 0;
+  const fuel = parseFloat(document.getElementById('q-fuel').value) || 0;
+  const truck = parseFloat(document.getElementById('q-truck').value) || 0;
+  const margin = parseFloat(document.getElementById('q-margin').value) || 35;
+
+  const labor = hours * movers * rate;
+  const fuelCost = miles * fuel;
+  const truckCost = hours * truck;
+  const overhead = (labor + fuelCost + truckCost + materials) * 0.10;
+  const totalCost = labor + fuelCost + truckCost + materials + overhead;
+  const suggested = totalCost / (1 - margin / 100);
+  const profit = suggested - totalCost;
+
+  const fmt = (n) => '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  document.getElementById('r-labor').textContent = fmt(labor);
+  document.getElementById('r-fuel').textContent = fmt(fuelCost);
+  document.getElementById('r-truck').textContent = fmt(truckCost);
+  document.getElementById('r-materials').textContent = fmt(materials);
+  document.getElementById('r-overhead').textContent = fmt(overhead);
+  document.getElementById('r-cost').textContent = fmt(totalCost);
+  document.getElementById('r-quote').textContent = fmt(suggested);
+  document.getElementById('r-profit').textContent = fmt(profit) + ' profit (' + margin + '% margin)';
+}
+
+function clearQuote() {
+  document.getElementById('q-hours').value = 4;
+  document.getElementById('q-movers').value = 2;
+  document.getElementById('q-miles').value = 30;
+  document.getElementById('q-materials').value = 40;
+  document.getElementById('q-rate').value = 25;
+  document.getElementById('q-fuel').value = 0.65;
+  document.getElementById('q-truck').value = 15;
+  document.getElementById('q-margin').value = 35;
+  calcQuote();
+}
+
+// Run on load
+calcQuote();
+</script>
+</body>
+</html>
