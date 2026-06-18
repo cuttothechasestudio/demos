@@ -30,7 +30,6 @@ color: var(--white);
 min-height: 100vh;
 }
 
-/* ── HEADER ── */
 header {
 padding: 28px 48px;
 display: flex;
@@ -99,7 +98,6 @@ background: var(--cut);
 color: var(--ink);
 }
 
-/* ── HERO ── */
 .hero {
 padding: 80px 48px 60px;
 max-width: 900px;
@@ -156,14 +154,12 @@ color: var(--white);
 font-weight: 600;
 }
 
-/* ── DIVIDER ── */
 .divider {
 height: 1px;
 background: linear-gradient(90deg, var(--cut) 0%, rgba(0,194,255,0.1) 60%, transparent 100%);
 margin: 0 48px;
 }
 
-/* ── DEMOS SECTION ── */
 .demos-section {
 padding: 60px 48px;
 }
@@ -188,7 +184,6 @@ height: 1px;
 background: rgba(255,255,255,0.08);
 }
 
-/* ── DEMO CARDS ── */
 .demo-grid {
 display: grid;
 grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -242,6 +237,7 @@ margin-bottom: 10px;
 }
 
 .tag-beverage { background: rgba(91,200,216,0.15); color: #5BC8D8; }
+.tag-moving { background: rgba(229,40,42,0.15); color: #E5282A; }
 .tag-coming { background: rgba(255,255,255,0.06); color: var(--mist); }
 
 .demo-card-title {
@@ -312,13 +308,11 @@ color: var(--mist);
 font-weight: 500;
 }
 
-/* Coming soon card */
 .demo-card.coming-soon {
 opacity: 0.5;
 pointer-events: none;
 }
 
-/* ── CLIENT LINK ── */
 .client-link-bar {
 margin-top: 40px;
 padding-top: 32px;
@@ -349,7 +343,6 @@ transition: opacity 0.2s;
 
 .client-link-bar a:hover { opacity: 0.75; }
 
-/* ── HOW IT WORKS ── */
 .how-section {
 padding: 60px 48px;
 border-top: 1px solid rgba(255,255,255,0.06);
@@ -361,8 +354,6 @@ grid-template-columns: repeat(3, 1fr);
 gap: 40px;
 margin-top: 40px;
 }
-
-.how-item {}
 
 .how-num {
 font-family: 'Barlow Condensed', sans-serif;
@@ -392,7 +383,6 @@ color: var(--mist);
 line-height: 1.6;
 }
 
-/* ── FOOTER ── */
 footer {
 padding: 32px 48px;
 border-top: 1px solid rgba(255,255,255,0.06);
@@ -429,7 +419,6 @@ header, .hero, .demos-section, .how-section, footer { padding-left: 24px; paddin
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
 <div class="logo">
 <div class="logo-mark">CC</div>
@@ -441,7 +430,6 @@ Cut to the Chase
 <a href="mailto:hello@cuttothechase.co" class="header-cta">Work With Us</a>
 </header>
 
-<!-- HERO -->
 <div class="hero">
 <div class="hero-eyebrow">Live Dashboard Demos</div>
 <h1 class="hero-title">Your business.<br><em>Actually</em> visible.</h1>
@@ -452,7 +440,6 @@ We build <strong>custom command centers</strong> for small businesses — brande
 
 <div class="divider"></div>
 
-<!-- DEMOS -->
 <div class="demos-section">
 <div class="section-label">Live Client Demos — Click to explore</div>
 
@@ -568,6 +555,68 @@ We build <strong>custom command centers</strong> for small businesses — brande
 </div>
 </a>
 
+<!-- Peak Moving Co. — Anonymized -->
+<a href="peak-moving/index.html" class="demo-card">
+<div class="demo-card-preview" style="background:linear-gradient(135deg,#1a0a0a 0%,#2a1010 50%,#1a0a0a 100%)">
+<svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+<rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(229,40,42,0.3)" stroke-width="1"/>
+<rect x="16" y="16" width="308" height="28" rx="8" fill="#1a0a0a"/>
+<rect x="16" y="36" width="308" height="8" fill="#1a0a0a"/>
+<rect x="16" y="16" width="308" height="3" rx="0" fill="#E5282A" opacity="0.9"/>
+<rect x="24" y="22" width="28" height="12" rx="4" fill="#E5282A"/>
+<rect x="58" y="24" width="90" height="6" rx="2" fill="rgba(255,255,255,0.5)"/>
+<rect x="58" y="33" width="60" height="4" rx="1" fill="rgba(229,40,42,0.4)"/>
+<!-- Stat cards -->
+<rect x="24" y="54" width="64" height="34" rx="4" fill="rgba(229,40,42,0.15)" stroke="rgba(229,40,42,0.4)" stroke-width="1"/>
+<rect x="96" y="54" width="64" height="34" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+<rect x="168" y="54" width="64" height="34" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+<rect x="240" y="54" width="72" height="34" rx="4" fill="rgba(46,204,113,0.1)" stroke="rgba(46,204,113,0.3)" stroke-width="0.5"/>
+<rect x="30" y="60" width="28" height="4" rx="1" fill="rgba(229,40,42,0.5)"/>
+<rect x="30" y="68" width="40" height="10" rx="2" fill="#E5282A"/>
+<rect x="102" y="60" width="28" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
+<rect x="102" y="68" width="36" height="10" rx="2" fill="rgba(255,255,255,0.7)"/>
+<rect x="174" y="60" width="28" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
+<rect x="174" y="68" width="36" height="10" rx="2" fill="rgba(245,166,35,0.9)"/>
+<rect x="246" y="60" width="28" height="4" rx="1" fill="rgba(46,204,113,0.5)"/>
+<rect x="246" y="68" width="52" height="10" rx="2" fill="rgba(46,204,113,0.9)"/>
+<!-- Job table -->
+<rect x="24" y="98" width="288" height="56" rx="4" fill="rgba(255,255,255,0.02)" stroke="rgba(229,40,42,0.15)" stroke-width="0.5"/>
+<rect x="24" y="98" width="288" height="14" rx="4" fill="#2a1010"/>
+<rect x="30" y="102" width="25" height="6" rx="1" fill="rgba(229,40,42,0.5)"/>
+<rect x="80" y="102" width="40" height="6" rx="1" fill="rgba(229,40,42,0.5)"/>
+<rect x="150" y="102" width="50" height="6" rx="1" fill="rgba(229,40,42,0.5)"/>
+<rect x="230" y="102" width="35" height="6" rx="1" fill="rgba(229,40,42,0.5)"/>
+<rect x="30" y="119" width="35" height="5" rx="1" fill="rgba(255,255,255,0.4)"/>
+<rect x="80" y="119" width="55" height="5" rx="1" fill="rgba(255,255,255,0.25)"/>
+<rect x="150" y="118" width="36" height="7" rx="3" fill="rgba(245,166,35,0.35)"/>
+<rect x="230" y="119" width="40" height="5" rx="1" fill="rgba(255,255,255,0.35)"/>
+<rect x="30" y="131" width="35" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
+<rect x="80" y="131" width="55" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="150" y="130" width="36" height="7" rx="3" fill="rgba(46,204,113,0.3)"/>
+<rect x="230" y="131" width="40" height="5" rx="1" fill="rgba(255,255,255,0.25)"/>
+<!-- Truck icon area -->
+<text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(229,40,42,0.5)" text-anchor="middle" letter-spacing="3">PEAK MOVING CO.</text>
+</svg>
+</div>
+<div class="demo-card-body">
+<div class="demo-card-tag tag-moving">Home Moving · Anonymized</div>
+<div class="demo-card-title">Peak Moving Co.</div>
+<div class="demo-card-desc">Small but growing home moving company. Tracks jobs, crew scheduling, truck maintenance, customer CRM, and job-level margin so the owner always knows where money is being made — and lost.</div>
+<div class="demo-card-features">
+<span class="feature-pill">Job Board</span>
+<span class="feature-pill">Quote Builder</span>
+<span class="feature-pill">Crew Tracker</span>
+<span class="feature-pill">Truck Log</span>
+<span class="feature-pill">Customer CRM</span>
+<span class="feature-pill">Margin by Job</span>
+</div>
+<div class="demo-card-footer">
+<span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
+<span class="demo-card-status">⚡ Sample Data</span>
+</div>
+</div>
+</a>
+
 <!-- Coming Soon -->
 <div class="demo-card coming-soon">
 <div class="demo-card-preview" style="background:linear-gradient(135deg,#1a1a2e,#2d1b4e)">
@@ -592,15 +641,13 @@ We build <strong>custom command centers</strong> for small businesses — brande
 
 </div>
 
-<!-- LINK TO CLIENT SHOWCASES -->
 <div class="client-link-bar">
 <p>Want to see full branded client builds?</p>
-<a href="clients/">View Client Showcases →</a>
+<a href="artofpossible/">View Client Showcases →</a>
 </div>
 
 </div>
 
-<!-- HOW IT WORKS -->
 <div class="how-section">
 <div class="section-label">How it works</div>
 <div class="how-grid">
@@ -622,7 +669,6 @@ We build <strong>custom command centers</strong> for small businesses — brande
 </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
 <div class="footer-brand">
 <strong>Cut to the Chase</strong> Studio
