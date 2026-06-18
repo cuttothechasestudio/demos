@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pilates Power House — Studio Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1C1C1E;
+    --surface: #252528;
+    --surface2: #2E2E32;
+    --surface3: #38383C;
+    --accent: #E8732A;
+    --accent-dim: #C45E1E;
+    --accent-glow: rgba(232,115,42,0.15);
+    --text: #F5F5F0;
+    --text-muted: #9B9B9B;
+    --text-dim: #6B6B6F;
+    --success: #4CAF7D;
+    --danger: #E85D4A;
+    --warning: #F0B429;
+    --border: rgba(255,255,255,0.07);
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    height: 58px;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 32px;
+  }
+
+  .logo-bar {
+    width: 3px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .logo-letters {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-left: 2px;
+    align-self: flex-end;
+    padding-bottom: 2px;
+  }
+
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-date {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 10px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  /* ── TABS ── */
+  .tabs-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-icon { font-size: 14px; }
+
+  /* ── MAIN ── */
+  .main { padding: 28px; max-width: 1200px; margin: 0 auto; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title span { color: var(--accent); }
+
+  /* ── STAT CARDS ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .stat-card.accent { border-color: var(--accent); background: var(--accent-glow); }
+  .stat-card.accent .stat-value { color: var(--accent); }
+  .stat-card.danger { border-color: var(--danger); background: rgba(232,93,74,0.08); }
+  .stat-card.danger .stat-value { color: var(--danger); }
+  .stat-card.success { border-color: var(--success); background: rgba(76,175,125,0.08); }
+  .stat-card.success .stat-value { color: var(--success); }
+
+  /* ── GRID LAYOUT ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ── TABLE ── */
+  .tbl { width: 100%; border-collapse: collapse; }
+  .tbl th {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tbl td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .badge-orange { background: rgba(232,115,42,0.2); color: var(--accent); }
+  .badge-green { background: rgba(76,175,125,0.2); color: var(--success); }
+  .badge-red { background: rgba(232,93,74,0.2); color: var(--danger); }
+  .badge-gray { background: var(--surface2); color: var(--text-muted); }
+  .badge-yellow { background: rgba(240,180,41,0.2); color: var(--warning); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-danger { background: rgba(232,93,74,0.15); color: var(--danger); border: 1px solid rgba(232,93,74,0.3); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+  /* ── FORM ELEMENTS ── */
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+  input::placeholder, textarea::placeholder { color: var(--text-dim); }
+  select option { background: var(--surface2); }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    letter-spacing: 0.3px;
+  }
+  .form-group { margin-bottom: 14px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    width: 520px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-lg { width: 700px; }
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+  /* ── ALERT ── */
+  .alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .alert-warning { background: rgba(240,180,41,0.1); border: 1px solid rgba(240,180,41,0.25); color: var(--warning); }
+  .alert-danger { background: rgba(232,93,74,0.1); border: 1px solid rgba(232,93,74,0.25); color: var(--danger); }
+  .alert-success { background: rgba(76,175,125,0.1); border: 1px solid rgba(76,175,125,0.25); color: var(--success); }
+
+  /* ── CALENDAR ── */
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .cal-nav { display: flex; gap: 8px; align-items: center; }
+  .cal-month { font-family: 'DM Serif Display', serif; font-size: 20px; }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .cal-day-label {
+    background: var(--surface2);
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 4px;
+  }
+
+  .cal-cell {
+    background: var(--surface);
+    min-height: 90px;
+    padding: 6px;
+    position: relative;
+  }
+
+  .cal-cell.empty { background: var(--bg); opacity: 0.4; }
+  .cal-cell.today { background: rgba(232,115,42,0.06); }
+
+  .cal-date {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .cal-cell.today .cal-date {
+    color: var(--accent);
+  }
+
+  .cal-event {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Location colors */
+  .loc-1 { background: rgba(232,115,42,0.25); color: #E8732A; border-left: 2px solid #E8732A; }
+  .loc-2 { background: rgba(107,165,131,0.25); color: #6BA583; border-left: 2px solid #6BA583; }
+  .loc-3 { background: rgba(108,130,190,0.25); color: #6C82BE; border-left: 2px solid #6C82BE; }
+  .loc-4 { background: rgba(172,120,190,0.25); color: #AC78BE; border-left: 2px solid #AC78BE; }
+
+  /* Class type stripe for private */
+  .type-private {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 3px,
+      rgba(255,255,255,0.06) 3px,
+      rgba(255,255,255,0.06) 6px
+    );
+  }
+
+  /* ── LOCATION LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+  }
+  .legend-sep {
+    width: 1px; height: 14px;
+    background: var(--border);
+  }
+
+  /* ── CLIENT PROFILE ── */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .profile-name { font-family: 'DM Serif Display', serif; font-size: 18px; }
+  .profile-meta { font-size: 12px; color: var(--text-muted); }
+
+  .session-entry {
+    padding: 10px 12px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    border-left: 3px solid var(--accent);
+  }
+  .session-entry-date { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
+  .session-entry-note { font-size: 13px; color: var(--text); }
+
+  /* ── PAY TRACKER ── */
+  .pay-class-row {
+    display: grid;
+    grid-template-columns: 1fr 100px 80px 100px 100px 100px 80px;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .pay-class-row.header { 
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding-bottom: 8px;
+  }
+  .pay-total-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+    padding-top: 14px;
+    font-weight: 600;
+  }
+  .pay-total-label { color: var(--text-muted); font-size: 13px; }
+  .pay-total-val { font-size: 18px; color: var(--success); }
+
+  /* ── SUB NETWORK ── */
+  .sub-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 14px;
+    align-items: center;
+  }
+
+  /* ── ATTENDANCE ── */
+  .att-toggle {
+    display: flex;
+    gap: 4px;
+  }
+  .att-btn {
+    padding: 4px 9px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-muted);
+    transition: all 0.12s;
+  }
+  .att-btn.present { background: rgba(76,175,125,0.2); border-color: var(--success); color: var(--success); }
+  .att-btn.absent { background: rgba(232,93,74,0.2); border-color: var(--danger); color: var(--danger); }
+  .att-btn.late { background: rgba(240,180,41,0.2); border-color: var(--warning); color: var(--warning); }
+
+  /* ── CREDIT BAR ── */
+  .credit-bar {
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .credit-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .credit-fill.low { background: var(--danger); }
+
+  /* ── MISC ── */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+  }
+  .empty-state .es-icon { font-size: 36px; margin-bottom: 10px; }
+  .empty-state p { font-size: 13px; }
+
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .pill {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--surface2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .pill.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent); }
+
+  .search-bar {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .search-bar input { padding-left: 32px; }
+  .search-bar::before {
+    content: '🔍';
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    z-index: 1;
+  }
+
+  /* ── INTRO / TRIAL BADGE ── */
+  .badge-purple { background: rgba(172,120,190,0.2); color: #AC78BE; }
+  .badge-blue { background: rgba(108,130,190,0.2); color: #6C82BE; }
+
+  /* ── NO-SHOW HEATMAP ── */
+  .noshowdot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 2px;
+    vertical-align: middle;
+  }
+  .noshowdot.hit { background: var(--danger); }
+  .noshowdot.miss { background: var(--surface3); }
+
+  /* ── WAITLIST ── */
+  .waitlist-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+  .waitlist-pos {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+
+  /* ── RETENTION FOLLOW-UP ── */
+  .followup-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+  }
+  .followup-check {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    transition: all 0.12s;
+  }
+  .followup-check.done { background: var(--success); border-color: var(--success); color: #fff; }
+
+  /* ── EXPIRY WARNING ── */
+  .expiry-warn { color: var(--warning); font-size: 11px; }
+  .expiry-danger { color: var(--danger); font-size: 11px; }
+
+  @media (max-width: 768px) {
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .form-row, .form-row-3 { grid-template-columns: 1fr; }
+    .pay-class-row { grid-template-columns: 1fr; }
+    .main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-mark">
+      <div class="logo-bar"></div>
+      <span class="logo-letters">Pilates Power House</span>
+    </div>
+    <span class="logo-sub">Studio Dashboard</span>
+  </div>
+  <div class="header-right">
+    <div class="header-date" id="headerDate"></div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('addClassModal')">+ Add Class</button>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('dashboard', this)"><span class="tab-icon">⚡</span> Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('calendar', this)"><span class="tab-icon">🗓</span> Class Calendar</button>
+  <button class="tab-btn" onclick="switchTab('attendance', this)"><span class="tab-icon">📋</span> Attendance</button>
+  <button class="tab-btn" onclick="switchTab('clients', this)"><span class="tab-icon">👥</span> Client Roster</button>
+  <button class="tab-btn" onclick="switchTab('privates', this)"><span class="tab-icon">📓</span> Private Clients</button>
+  <button class="tab-btn" onclick="switchTab('pay', this)"><span class="tab-icon">💰</span> Pay Tracker</button>
+  <button class="tab-btn" onclick="switchTab('subs', this)"><span class="tab-icon">🤝</span> Sub Network</button>
+  <button class="tab-btn" onclick="switchTab('retention', this)"><span class="tab-icon">💬</span> Retention</button>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ══ DASHBOARD ══ -->
+  <div id="tab-dashboard" class="tab-panel active">
+    <div class="section-title">Today's <span>Overview</span></div>
+
+    <div class="stat-grid">
+      <div class="stat-card accent">
+        <div class="stat-label">Classes Today</div>
+        <div class="stat-value">3</div>
+        <div class="stat-sub">8am · 10am · 5:30pm</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Clients</div>
+        <div class="stat-value">24</div>
+        <div class="stat-sub">18 group · 6 private</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Month Earnings</div>
+        <div class="stat-value">$1,840</div>
+        <div class="stat-sub">4 sellout bonuses earned</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-label">Low Credits</div>
+        <div class="stat-value">3</div>
+        <div class="stat-sub">Clients with ≤2 sessions left</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Fill Rate</div>
+        <div class="stat-value">78%</div>
+        <div class="stat-sub">Last 30 days</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <div class="card-title">Today's Classes</div>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Class</th>
+                <th>Location</th>
+                <th>Fill</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>8:00 AM</strong></td>
+                <td>Reformer Fundamentals</td>
+                <td><span class="badge badge-orange">Main Studio</span></td>
+                <td>8/10 <span class="badge badge-gray">80%</span></td>
+              </tr>
+              <tr>
+                <td><strong>10:00 AM</strong></td>
+                <td>Mat Flow</td>
+                <td><span class="badge" style="background:rgba(107,165,131,0.2);color:#6BA583">Westside</span></td>
+                <td>12/12 <span class="badge badge-green">FULL ⚡</span></td>
+              </tr>
+              <tr>
+                <td><strong>5:30 PM</strong></td>
+                <td>Power Reformer</td>
+                <td><span class="badge badge-orange">Main Studio</span></td>
+                <td>6/10 <span class="badge badge-gray">60%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title">⚠️ Alerts</div>
+          <div class="alert alert-danger">
+            <span>🔴</span>
+            <div><strong>Sarah M.</strong> has 1 private session credit remaining</div>
+          </div>
+          <div class="alert alert-warning">
+            <span>🟡</span>
+            <div><strong>Priya K.</strong> hasn't attended in 18 days — <a href="#" onclick="switchTab('retention',document.querySelectorAll('.tab-btn')[7])" style="color:var(--warning)">follow up →</a></div>
+          </div>
+          <div class="alert alert-warning">
+            <span>🟡</span>
+            <div><strong>Tom R.</strong> has 2 group credits remaining</div>
+          </div>
+          <div class="alert alert-success">
+            <span>🟢</span>
+            <div>10:00 AM Mat Flow is <strong>sold out</strong> — bonus applies!</div>
+          </div>
+          <div class="alert alert-warning">
+            <span>🌱</span>
+            <div><strong>3 intro clients</strong> ready for package conversion follow-up</div>
+          </div>
+          <div class="alert alert-danger">
+            <span>⚠️</span>
+            <div><strong>Luis V.</strong> has no-showed 3 of last 5 sessions</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-title">Upcoming Private Sessions</div>
+          <table class="tbl">
+            <thead>
+              <tr><th>Client</th><th>Date/Time</th><th>Credits Left</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Sarah M.</strong></td>
+                <td>Today 2:00 PM</td>
+                <td><span class="badge badge-red">1 left</span></td>
+              </tr>
+              <tr>
+                <td><strong>James L.</strong></td>
+                <td>Tomorrow 9:00 AM</td>
+                <td><span class="badge badge-green">7 left</span></td>
+              </tr>
+              <tr>
+                <td><strong>Dana W.</strong></td>
+                <td>Thu 11:00 AM</td>
+                <td><span class="badge badge-orange">3 left</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Pay Snapshot — June</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px">
+            <div>
+              <div class="stat-label">Base Pay</div>
+              <div style="font-size:22px;font-weight:700;color:var(--text)">$1,440</div>
+            </div>
+            <div>
+              <div class="stat-label">Sellout Bonuses</div>
+              <div style="font-size:22px;font-weight:700;color:var(--success)">+$400</div>
+            </div>
+          </div>
+          <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden">
+            <div style="width:78%;height:100%;background:linear-gradient(90deg,var(--accent),var(--success));border-radius:3px"></div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:6px">78% of monthly goal ($2,360)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CALENDAR ══ -->
+  <div id="tab-calendar" class="tab-panel">
+    <div class="section-title">Class <span>Calendar</span></div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#E8732A"></div> Main Studio</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6BA583"></div> Westside</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6C82BE"></div> Northgate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#AC78BE"></div> Online</div>
+      <div class="legend-sep"></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--surface3);border:1.5px solid var(--text-muted)"></div> Solid = Group</div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background-image:repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,0.3) 2px,rgba(255,255,255,0.3) 4px);background-color:#555;border:1px solid #888"></div>
+        Striped = Private
+      </div>
+    </div>
+
+    <div class="cal-header">
+      <button class="btn btn-ghost btn-sm" onclick="calNav(-1)">← Prev</button>
+      <div class="cal-month" id="calMonthLabel"></div>
+      <button class="btn btn-ghost btn-sm" onclick="calNav(1)">Next →</button>
+    </div>
+
+    <div class="cal-grid" id="calGrid">
+      <!-- Generated by JS -->
+    </div>
+
+    <div style="margin-top:20px">
+      <button class="btn btn-primary" onclick="openModal('addClassModal')">+ Add Class to Calendar</button>
+    </div>
+  </div>
+
+  <!-- ══ ATTENDANCE ══ -->
+  <div id="tab-attendance" class="tab-panel">
+    <div class="section-title">Attendance <span>Log</span></div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Log a Session</div>
+      <div class="form-row-3">
+        <div class="form-group">
+          <label>Session Type</label>
+          <select id="attType" onchange="renderAttForm()">
+            <option value="group">Group Class</option>
+            <option value="private">Private Session</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Class / Client</label>
+          <select id="attClass">
+            <option>Reformer Fundamentals — Mon 8AM</option>
+            <option>Mat Flow — Mon 10AM</option>
+            <option>Power Reformer — Mon 5:30PM</option>
+            <option>Barre Fusion — Wed 6PM</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="attDate">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        Reformer Fundamentals — Mon Jun 16
+        <span><span class="badge badge-orange">8 / 10 attended</span></span>
+      </div>
+      <table class="tbl">
+        <thead>
+          <tr><th>Client</th><th>Package</th><th>Credits</th><th>Status</th></tr>
+        </thead>
+        <tbody id="attRoster">
+          <!-- Rendered by JS -->
+        </tbody>
+      </table>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="saveAttendance()">Save Attendance</button>
+        <button class="btn btn-ghost">Export Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CLIENT ROSTER ══ -->
+  <div id="tab-clients" class="tab-panel">
+    <div class="section-title">Client <span>Roster</span>
+      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openModal('addClientModal')">+ Add Client</button>
+    </div>
+
+    <div class="search-bar"><input type="text" placeholder="Search clients…" oninput="filterClients(this.value)"></div>
+
+    <div class="pill-row">
+      <span class="pill active" onclick="filterClientType('all',this)">All</span>
+      <span class="pill" onclick="filterClientType('group',this)">Group</span>
+      <span class="pill" onclick="filterClientType('private',this)">Private</span>
+      <span class="pill" onclick="filterClientType('intro',this)">🌱 Intro / Trial</span>
+      <span class="pill" onclick="filterClientType('low',this)">Low Credits ⚠️</span>
+      <span class="pill" onclick="filterClientType('inactive',this)">Inactive 14d+</span>
+      <span class="pill" onclick="filterClientType('noshows',this)">No-Show Pattern</span>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="tbl" id="clientTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Package</th>
+            <th>Credits / Expiry</th>
+            <th>No-Shows</th>
+            <th>Last Seen</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="clientBody">
+          <!-- Rendered by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ PRIVATE CLIENTS ══ -->
+  <div id="tab-privates" class="tab-panel">
+    <div class="section-title">Private Client <span>Profiles</span>
+      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openModal('addPrivateModal')">+ New Private Client</button>
+    </div>
+
+    <div class="two-col" style="gap:16px">
+      <!-- Left: list -->
+      <div>
+        <div class="search-bar"><input type="text" placeholder="Search private clients…"></div>
+        <div id="privateList"><!-- Rendered by JS --></div>
+      </div>
+      <!-- Right: profile -->
+      <div id="privateProfile">
+        <div class="card" style="text-align:center;padding:48px 20px;color:var(--text-dim)">
+          <div style="font-size:32px;margin-bottom:12px">📓</div>
+          <p>Select a client to view their full profile</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAY TRACKER ══ -->
+  <div id="tab-pay" class="tab-panel">
+    <div class="section-title">Pay <span>Tracker</span></div>
+
+    <div class="stat-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat-card">
+        <div class="stat-label">This Week</div>
+        <div class="stat-value" id="payWeek">$0</div>
+        <div class="stat-sub" id="payWeekSub">0 classes</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value" id="payMonth">$0</div>
+        <div class="stat-sub" id="payMonthSub">0 bonuses earned</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-label">Sellout Bonuses</div>
+        <div class="stat-value" id="payBonus">$0</div>
+        <div class="stat-sub">Month to date</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg per Class</div>
+        <div class="stat-value" id="payAvg">$0</div>
+        <div class="stat-sub">Base + bonus</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        Rate Settings
+        <span style="font-size:11px;color:var(--text-dim);font-weight:400">Applied to all new class entries</span>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Default Flat Rate per Class ($)</label>
+          <input type="number" id="defaultFlat" value="60" oninput="recalcPay()">
+        </div>
+        <div class="form-group">
+          <label>Sellout Bonus per Class ($)</label>
+          <input type="number" id="defaultBonus" value="20" oninput="recalcPay()">
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0 20px 20px">
+      <div class="card-title" style="padding-top:20px">
+        Class Log
+        <button class="btn btn-primary btn-sm" onclick="openModal('addPayClassModal')">+ Log Class</button>
+      </div>
+      <div class="pay-class-row header">
+        <span>Class</span>
+        <span>Date</span>
+        <span>Attended</span>
+        <span>Capacity</span>
+        <span>Flat Rate</span>
+        <span>Bonus</span>
+        <span>Total</span>
+      </div>
+      <div id="payRows"><!-- Rendered by JS --></div>
+      <div class="pay-total-row">
+        <div>
+          <div class="pay-total-label">Month Total</div>
+          <div class="pay-total-val" id="payGrandTotal">$0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SUB NETWORK ══ -->
+  <div id="tab-subs" class="tab-panel">
+    <div class="section-title">Sub <span>Network</span>
+      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openModal('addSubModal')">+ Add Instructor</button>
+    </div>
+
+    <div class="search-bar"><input type="text" placeholder="Search instructors…" oninput="filterSubs(this.value)"></div>
+
+    <div id="subList"><!-- Rendered by JS --></div>
+  </div>
+
+  <!-- ══ RETENTION ══ -->
+  <div id="tab-retention" class="tab-panel">
+    <div class="section-title">Retention <span>Follow-Up</span></div>
+
+    <div class="two-col" style="gap:20px">
+      <div>
+        <div class="card">
+          <div class="card-title">
+            Inactive Clients
+            <span style="font-size:11px;color:var(--text-dim);font-weight:400">14+ days since last session</span>
+          </div>
+          <div id="retentionList"><!-- Rendered by JS --></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🌱 Intro / Trial Clients
+            <span style="font-size:11px;color:var(--text-dim);font-weight:400">Need conversion follow-up</span>
+          </div>
+          <div id="introList"><!-- Rendered by JS --></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-title">⚠️ No-Show Patterns
+            <span style="font-size:11px;color:var(--text-dim);font-weight:400">2+ no-shows in last 5 sessions</span>
+          </div>
+          <div id="noshowList"><!-- Rendered by JS --></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📦 Expiring Packages
+            <span style="font-size:11px;color:var(--text-dim);font-weight:400">Expiring within 14 days</span>
+          </div>
+          <div id="expiryList"><!-- Rendered by JS --></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Waitlist Modal -->
+<div class="modal-overlay" id="waitlistModal">
+  <div class="modal">
+    <div class="modal-title" id="waitlistModalTitle">Waitlist <button class="modal-close" onclick="closeModal('waitlistModal')">×</button></div>
+    <div id="waitlistContent"><!-- Rendered by JS --></div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+      <div class="card-title" style="padding:0;border:none;margin-bottom:10px">Add to Waitlist</div>
+      <div class="form-row">
+        <div class="form-group"><label>Name</label><input type="text" id="wlName" placeholder="Full name"></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="wlPhone" placeholder="615-555-…"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addToWaitlist()">Add to Waitlist</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODALS ══ -->
+
+<!-- Add Class -->
+<div class="modal-overlay" id="addClassModal">
+  <div class="modal">
+    <div class="modal-title">Add Class to Calendar <button class="modal-close" onclick="closeModal('addClassModal')">×</button></div>
+    <div class="form-group"><label>Class Name</label><input type="text" id="newClassName" placeholder="e.g. Reformer Fundamentals"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Date</label><input type="date" id="newClassDate"></div>
+      <div class="form-group"><label>Time</label><input type="time" id="newClassTime"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Location</label>
+        <select id="newClassLoc">
+          <option value="1">Main Studio</option>
+          <option value="2">Westside</option>
+          <option value="3">Northgate</option>
+          <option value="4">Online</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Class Type</label>
+        <select id="newClassType">
+          <option value="group">Group</option>
+          <option value="private">Private</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Capacity</label><input type="number" id="newClassCap" placeholder="10"></div>
+      <div class="form-group"><label>Flat Rate ($)</label><input type="number" id="newClassFlat" placeholder="60"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('addClassModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addClass()">Add Class</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Client -->
+<div class="modal-overlay" id="addClientModal">
+  <div class="modal">
+    <div class="modal-title">Add Client <button class="modal-close" onclick="closeModal('addClientModal')">×</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>First Name</label><input type="text" id="newClientFirst"></div>
+      <div class="form-group"><label>Last Name</label><input type="text" id="newClientLast"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Email</label><input type="email" id="newClientEmail"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="newClientPhone"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Session Type</label>
+        <select id="newClientType">
+          <option value="group">Group</option>
+          <option value="private">Private</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Package</label>
+        <select id="newClientPkg">
+          <option value="dropin">Drop-in</option>
+          <option value="5pack">5-Pack</option>
+          <option value="10pack">10-Pack</option>
+          <option value="unlimited">Unlimited Monthly</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Starting Credits</label><input type="number" id="newClientCredits" value="5"></div>
+    <div class="form-group">
+      <label>Package Expiry Date (optional)</label>
+      <input type="date" id="newClientExpiry">
+    </div>
+    <div class="form-group" style="display:flex;align-items:center;gap:10px">
+      <input type="checkbox" id="newClientIntro" style="width:auto">
+      <label style="margin:0;cursor:pointer" for="newClientIntro">🌱 Mark as Intro / Trial client</label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('addClientModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addClient()">Add Client</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Private Client -->
+<div class="modal-overlay" id="addPrivateModal">
+  <div class="modal modal-lg">
+    <div class="modal-title">New Private Client Profile <button class="modal-close" onclick="closeModal('addPrivateModal')">×</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>First Name</label><input type="text" id="newPrivFirst"></div>
+      <div class="form-group"><label>Last Name</label><input type="text" id="newPrivLast"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Email</label><input type="email" id="newPrivEmail"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="newPrivPhone"></div>
+    </div>
+    <div class="form-group"><label>Emergency Contact</label><input type="text" id="newPrivEmerg" placeholder="Name — Phone"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Package</label>
+        <select id="newPrivPkg">
+          <option value="5pack">5-Pack</option>
+          <option value="10pack">10-Pack</option>
+          <option value="unlimited">Unlimited Monthly</option>
+          <option value="dropin">Drop-in</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Credits</label><input type="number" id="newPrivCredits" value="10"></div>
+    </div>
+    <div class="form-group"><label>Injuries / Limitations</label><textarea id="newPrivInjuries" rows="2" placeholder="e.g. Lower back herniation L4-L5, avoid deep flexion…"></textarea></div>
+    <div class="form-group"><label>Goals</label><textarea id="newPrivGoals" rows="2" placeholder="e.g. Core strength, improve posture, post-partum recovery…"></textarea></div>
+    <div class="form-group"><label>General Notes</label><textarea id="newPrivNotes" rows="2" placeholder="Preferences, personality, what they respond well to…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('addPrivateModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addPrivateClient()">Create Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Sub -->
+<div class="modal-overlay" id="addSubModal">
+  <div class="modal">
+    <div class="modal-title">Add Instructor to Network <button class="modal-close" onclick="closeModal('addSubModal')">×</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>First Name</label><input type="text" id="newSubFirst"></div>
+      <div class="form-group"><label>Last Name</label><input type="text" id="newSubLast"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Phone</label><input type="tel" id="newSubPhone"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="newSubEmail"></div>
+    </div>
+    <div class="form-group"><label>Home Studio</label><input type="text" id="newSubStudio" placeholder="e.g. Westside Pilates"></div>
+    <div class="form-group">
+      <label>Specialties</label>
+      <div class="pill-row" id="specPills">
+        <span class="pill" onclick="toggleSpec(this)">Reformer</span>
+        <span class="pill" onclick="toggleSpec(this)">Mat</span>
+        <span class="pill" onclick="toggleSpec(this)">Barre</span>
+        <span class="pill" onclick="toggleSpec(this)">Tower</span>
+        <span class="pill" onclick="toggleSpec(this)">Chair</span>
+        <span class="pill" onclick="toggleSpec(this)">Pre/Postnatal</span>
+        <span class="pill" onclick="toggleSpec(this)">Rehab</span>
+      </div>
+    </div>
+    <div class="form-group"><label>Notes</label><textarea id="newSubNotes" rows="2" placeholder="Availability, personality, anything worth noting…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('addSubModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addSub()">Add to Network</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Pay Class -->
+<div class="modal-overlay" id="addPayClassModal">
+  <div class="modal">
+    <div class="modal-title">Log a Class <button class="modal-close" onclick="closeModal('addPayClassModal')">×</button></div>
+    <div class="form-group"><label>Class Name</label><input type="text" id="newPayClass" placeholder="e.g. Power Reformer"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Date</label><input type="date" id="newPayDate"></div>
+      <div class="form-group"><label>Students Attended</label><input type="number" id="newPayAttended" placeholder="8"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Capacity</label><input type="number" id="newPayCap" placeholder="10"></div>
+      <div class="form-group"><!-- spacer --></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Flat Rate ($)</label><input type="number" id="newPayFlat"></div>
+      <div class="form-group"><label>Sellout Bonus ($)</label><input type="number" id="newPayBonus"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('addPayClassModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addPayClass()">Log Class</button>
+    </div>
+  </div>
+</div>
+
+<!-- Session Note Modal -->
+<div class="modal-overlay" id="sessionNoteModal">
+  <div class="modal">
+    <div class="modal-title">Add Session Note <button class="modal-close" onclick="closeModal('sessionNoteModal')">×</button></div>
+    <div class="form-group"><label>Date</label><input type="date" id="noteDate"></div>
+    <div class="form-group"><label>Session Notes</label><textarea id="noteText" rows="5" placeholder="What did you work on? Any breakthroughs, struggles, adjustments made…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('sessionNoteModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSessionNote()">Save Note</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+const S = {
+  calYear: new Date().getFullYear(),
+  calMonth: new Date().getMonth(),
+  activePrivate: null,
+  classes: [
+    { id:1, name:'Reformer Fundamentals', date:'2025-06-16', time:'08:00', loc:1, type:'group', cap:10 },
+    { id:2, name:'Mat Flow', date:'2025-06-16', time:'10:00', loc:2, type:'group', cap:12 },
+    { id:3, name:'Power Reformer', date:'2025-06-16', time:'17:30', loc:1, type:'group', cap:10 },
+    { id:4, name:'Private: Sarah M.', date:'2025-06-16', time:'14:00', loc:1, type:'private', cap:1 },
+    { id:5, name:'Barre Fusion', date:'2025-06-18', time:'18:00', loc:3, type:'group', cap:15 },
+    { id:6, name:'Reformer Fundamentals', date:'2025-06-23', time:'08:00', loc:1, type:'group', cap:10 },
+    { id:7, name:'Private: James L.', date:'2025-06-17', time:'09:00', loc:1, type:'private', cap:1 },
+    { id:8, name:'Mat Flow', date:'2025-06-19', time:'10:00', loc:4, type:'group', cap:20 },
+    { id:9, name:'Power Reformer', date:'2025-06-21', time:'09:00', loc:2, type:'group', cap:10 },
+    { id:10, name:'Private: Dana W.', date:'2025-06-19', time:'11:00', loc:1, type:'private', cap:1 },
+  ],
+  clients: [
+    { id:1, first:'Sarah', last:'Mitchell', email:'sarah.m@email.com', phone:'615-555-0101', type:'private', pkg:'5pack', credits:1, lastSeen:'2025-06-12', intro:false, pkgExpiry:'2025-07-12', noShows:[false,false,true,false,true] },
+    { id:2, first:'James', last:'Larson', email:'jlarson@email.com', phone:'615-555-0102', type:'private', pkg:'10pack', credits:7, lastSeen:'2025-06-15', intro:false, pkgExpiry:'2025-08-15', noShows:[false,false,false,false,false] },
+    { id:3, first:'Dana', last:'Whitmore', email:'dana.w@email.com', phone:'615-555-0103', type:'both', pkg:'5pack', credits:3, lastSeen:'2025-06-10', intro:false, pkgExpiry:'2025-07-10', noShows:[false,true,false,false,false] },
+    { id:4, first:'Priya', last:'Kumar', email:'priya.k@email.com', phone:'615-555-0104', type:'group', pkg:'10pack', credits:6, lastSeen:'2025-05-29', intro:false, pkgExpiry:'2025-08-01', noShows:[true,true,false,true,false] },
+    { id:5, first:'Tom', last:'Reardon', email:'tom.r@email.com', phone:'615-555-0105', type:'group', pkg:'10pack', credits:2, lastSeen:'2025-06-14', intro:false, pkgExpiry:'2025-07-20', noShows:[false,false,false,true,false] },
+    { id:6, first:'Mei', last:'Chen', email:'mei.c@email.com', phone:'615-555-0106', type:'group', pkg:'unlimited', credits:999, lastSeen:'2025-06-16', intro:false, pkgExpiry:null, noShows:[false,false,false,false,false] },
+    { id:7, first:'Bridget', last:'Okafor', email:'b.okafor@email.com', phone:'615-555-0107', type:'group', pkg:'5pack', credits:4, lastSeen:'2025-06-11', intro:true, pkgExpiry:'2025-07-11', noShows:[false,false,false,false,false] },
+    { id:8, first:'Luis', last:'Vega', email:'l.vega@email.com', phone:'615-555-0108', type:'group', pkg:'dropin', credits:1, lastSeen:'2025-06-09', intro:true, pkgExpiry:null, noShows:[false,true,true,false,true] },
+    { id:9, first:'Chloe', last:'Park', email:'c.park@email.com', phone:'615-555-0109', type:'group', pkg:'dropin', credits:1, lastSeen:'2025-06-03', intro:true, pkgExpiry:null, noShows:[false,false,false,false,false] },
+  ],
+  privateProfiles: [
+    {
+      id:1, clientId:1,
+      emergency:'Mark Mitchell — 615-555-9901',
+      injuries:'Lower back herniation L4-L5. Avoid deep spinal flexion. Modify roll-ups to half roll-back.',
+      goals:'Core stability, reduce chronic back pain, return to hiking.',
+      notes:'Very motivated, responds well to cuing. Prefers morning sessions. Likes when exercises are explained anatomically.',
+      sessions: [
+        { date:'2025-06-12', note:'Worked footwork series and short box. Great engagement through core. First time tried long stretch without pain — breakthrough! Modified tree to stay in sagittal plane.' },
+        { date:'2025-06-05', note:'Focused on breathing mechanics and pelvic floor engagement. Introduced elephant on reformer with box modification. She felt "100% better" after session.' },
+        { date:'2025-05-29', note:'Intake session. Assessed posture, spinal mobility. Clear anterior pelvic tilt. Tight hip flexors. Set goals. Introduced basic footwork.' },
+      ]
+    },
+    {
+      id:2, clientId:2,
+      emergency:'Claire Larson — 615-555-9902',
+      injuries:'Previous ACL reconstruction (right knee, 2022). Full clearance from PT. Avoid deep knee flexion under load.',
+      goals:'Athletic performance for tennis, core power, flexibility.',
+      notes:'Very athletic background. Gets bored easily — needs variety and challenge. Responds well to competition framing ("beat your last set").',
+      sessions: [
+        { date:'2025-06-15', note:'Long stretch series, pike, down stretch. Upped spring tension on footwork — handles it well. Introduced side splits. Competitive energy today, pushed himself hard.' },
+        { date:'2025-06-08', note:'Continued short box series, added twist. Introduced elephant. Knee tracking well, no discomfort reported.' },
+      ]
+    },
+    {
+      id:3, clientId:3,
+      emergency:'Ryan Whitmore — 615-555-9903',
+      injuries:'Mild diastasis recti (post-partum, 18 months). Cleared by OB. Avoid loaded sit-ups, traditional crunches.',
+      goals:'Post-partum core restoration, overall toning, stress relief.',
+      notes:'Two young kids — sessions are her "me time." Keep energy positive and fun. Does both group reformer and privates with me.',
+      sessions: [
+        { date:'2025-06-10', note:'Supine abdominal series with modifications. Introduced kneeling arm work on reformer. Great session — she said core feels stronger than pre-pregnancy for first time.' },
+      ]
+    },
+  ],
+  payClasses: [
+    { id:1, name:'Reformer Fundamentals', date:'2025-06-02', attended:9, cap:10, flat:60, bonus:20 },
+    { id:2, name:'Mat Flow', date:'2025-06-02', attended:12, cap:12, flat:55, bonus:15 },
+    { id:3, name:'Power Reformer', date:'2025-06-04', attended:8, cap:10, flat:65, bonus:25 },
+    { id:4, name:'Reformer Fundamentals', date:'2025-06-09', attended:10, cap:10, flat:60, bonus:20 },
+    { id:5, name:'Barre Fusion', date:'2025-06-11', attended:14, cap:15, flat:60, bonus:20 },
+    { id:6, name:'Mat Flow', date:'2025-06-09', attended:11, cap:12, flat:55, bonus:15 },
+    { id:7, name:'Power Reformer', date:'2025-06-11', attended:9, cap:10, flat:65, bonus:25 },
+    { id:8, name:'Reformer Fundamentals', date:'2025-06-16', attended:8, cap:10, flat:60, bonus:20 },
+  ],
+  subs: [
+    { id:1, first:'Maya', last:'Torres', phone:'615-555-0201', email:'maya.t@pilates.com', studio:'Westside Pilates', specialties:['Reformer','Mat','Pre/Postnatal'], notes:'Best sub. Very reliable. Can cover any reformer class with 2hr notice.' },
+    { id:2, first:'Devon', last:'Parks', phone:'615-555-0202', email:'d.parks@movement.co', studio:'Northgate Wellness', specialties:['Mat','Barre','Tower'], notes:'Great energy. Prefers morning slots. Not available Mondays.' },
+    { id:3, first:'Renata', last:'Silva', phone:'615-555-0203', email:'renata.s@email.com', studio:'Core Studio Franklin', specialties:['Reformer','Chair','Rehab'], notes:'Certified in therapeutic Pilates. Excellent for injury-modification classes.' },
+  ],
+  attRoster: [
+    { clientId:4, status:'present' },
+    { clientId:5, status:'present' },
+    { clientId:6, status:'present' },
+    { clientId:7, status:'absent' },
+    { clientId:8, status:'late' },
+  ],
+  waitlists: {
+    // classId -> [{clientId, name, phone, addedDate}]
+    2: [
+      { id:1, name:'Jordan Ellis', phone:'615-555-0301', addedDate:'2025-06-14' },
+      { id:2, name:'Nadia Bloom', phone:'615-555-0302', addedDate:'2025-06-15' },
+      { id:3, name:'Chris M.', phone:'615-555-0303', addedDate:'2025-06-16' },
+    ]
+  },
+  retention: [
+    { clientId:4, lastContact:null, contactLog:[], done:false },
+    { clientId:8, lastContact:null, contactLog:[], done:false },
+    { clientId:9, lastContact:'2025-06-10', contactLog:['Jun 10 — Sent text, no reply'], done:false },
+  ]
+};
+
+const LOCATIONS = {
+  1: { name: 'Main Studio', cls: 'loc-1' },
+  2: { name: 'Westside', cls: 'loc-2' },
+  3: { name: 'Northgate', cls: 'loc-3' },
+  4: { name: 'Online', cls: 'loc-4' },
+};
+
+const PKG_LABELS = { dropin:'Drop-in', '5pack':'5-Pack', '10pack':'10-Pack', unlimited:'Unlimited ∞' };
+
+// ══════════════════════════════════
+// TABS
+// ══════════════════════════════════
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'retention') renderRetentionTab();
+}
+
+// ══════════════════════════════════
+// MODALS
+// ══════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  // Pre-fill defaults for pay modal
+  if (id === 'addPayClassModal') {
+    document.getElementById('newPayFlat').value = document.getElementById('defaultFlat').value;
+    document.getElementById('newPayBonus').value = document.getElementById('defaultBonus').value;
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('newPayDate').value = today;
+  }
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// ══════════════════════════════════
+// HEADER DATE
+// ══════════════════════════════════
+function initDate() {
+  const d = new Date();
+  document.getElementById('headerDate').textContent = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+  // Set default dates
+  const iso = d.toISOString().split('T')[0];
+  document.querySelectorAll('input[type=date]').forEach(el => el.value = iso);
+}
+
+// ══════════════════════════════════
+// CALENDAR
+// ══════════════════════════════════
+function renderCalendar() {
+  const { calYear: y, calMonth: m } = S;
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calMonthLabel').textContent = `${months[m]} ${y}`;
+
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  days.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'cal-day-label';
+    el.textContent = d;
+    grid.appendChild(el);
+  });
+
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const today = new Date();
+
+  for (let i = 0; i < firstDay; i++) {
+    const el = document.createElement('div');
+    el.className = 'cal-cell empty';
+    grid.appendChild(el);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const el = document.createElement('div');
+    const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = today.getFullYear()===y && today.getMonth()===m && today.getDate()===d;
+    el.className = 'cal-cell' + (isToday ? ' today' : '');
+
+    const dateEl = document.createElement('div');
+    dateEl.className = 'cal-date';
+    dateEl.textContent = d;
+    el.appendChild(dateEl);
+
+    const dayClasses = S.classes.filter(c => c.date === dateStr);
+    dayClasses.forEach(cls => {
+      const ev = document.createElement('div');
+      const locCls = LOCATIONS[cls.loc]?.cls || 'loc-1';
+      const typeCls = cls.type === 'private' ? ' type-private' : '';
+      ev.className = `cal-event ${locCls}${typeCls}`;
+      const waitCount = (S.waitlists[cls.id] || []).length;
+      const waitTag = waitCount > 0 ? ` [WL:${waitCount}]` : '';
+      ev.textContent = `${cls.time.replace(':','h')} ${cls.name}${waitTag}`;
+      ev.title = `${cls.name} — Click to manage waitlist`;
+      ev.onclick = () => openWaitlist(cls.id, cls.name);
+      ev.style.cursor = 'pointer';
+      el.appendChild(ev);
+    });
+
+    grid.appendChild(el);
+  }
+}
+
+function calNav(dir) {
+  S.calMonth += dir;
+  if (S.calMonth > 11) { S.calMonth = 0; S.calYear++; }
+  if (S.calMonth < 0) { S.calMonth = 11; S.calYear--; }
+  renderCalendar();
+}
+
+function addClass() {
+  const name = document.getElementById('newClassName').value.trim();
+  const date = document.getElementById('newClassDate').value;
+  const time = document.getElementById('newClassTime').value;
+  const loc = parseInt(document.getElementById('newClassLoc').value);
+  const type = document.getElementById('newClassType').value;
+  const cap = parseInt(document.getElementById('newClassCap').value) || 10;
+  if (!name || !date) return;
+  S.classes.push({ id: Date.now(), name, date, time, loc, type, cap });
+  closeModal('addClassModal');
+  renderCalendar();
+  document.getElementById('newClassName').value = '';
+}
+
+// ══════════════════════════════════
+// CLIENTS
+// ══════════════════════════════════
+function renderClients(filter='all', search='') {
+  const tbody = document.getElementById('clientBody');
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+
+  let clients = S.clients.filter(c => {
+    const name = `${c.first} ${c.last}`.toLowerCase();
+    if (search && !name.includes(search.toLowerCase())) return false;
+    if (filter === 'group') return c.type === 'group';
+    if (filter === 'private') return c.type === 'private';
+    if (filter === 'intro') return c.intro;
+    if (filter === 'low') return c.credits <= 2 && c.pkg !== 'unlimited';
+    if (filter === 'inactive') {
+      const last = new Date(c.lastSeen);
+      return (today - last) / 86400000 >= 14;
+    }
+    if (filter === 'noshows') return (c.noShows || []).filter(Boolean).length >= 2;
+    return true;
+  });
+
+  tbody.innerHTML = clients.map(c => {
+    const last = new Date(c.lastSeen);
+    const days = Math.floor((today - last) / 86400000);
+    const inactive = days >= 14;
+    const low = c.credits <= 2 && c.pkg !== 'unlimited';
+    const maxCred = c.pkg === '5pack' ? 5 : c.pkg === '10pack' ? 10 : c.pkg === 'dropin' ? 1 : 99;
+    const pct = c.pkg === 'unlimited' ? 100 : Math.round((c.credits/maxCred)*100);
+    const noShowCount = (c.noShows || []).filter(Boolean).length;
+    const noShowDots = (c.noShows || []).map(ns => `<span class="noshowdot ${ns?'hit':'miss'}"></span>`).join('');
+
+    // Expiry check
+    let expiryHtml = '';
+    if (c.pkgExpiry) {
+      const expDate = new Date(c.pkgExpiry);
+      const daysToExpiry = Math.ceil((expDate - today) / 86400000);
+      if (daysToExpiry <= 0) expiryHtml = `<div class="expiry-danger">Expired!</div>`;
+      else if (daysToExpiry <= 14) expiryHtml = `<div class="expiry-warn">Exp. in ${daysToExpiry}d</div>`;
+    }
+
+    // Status badge
+    let statusBadge = '<span class="badge badge-green">Active</span>';
+    if (inactive) statusBadge = '<span class="badge badge-red">Inactive</span>';
+    else if (low) statusBadge = '<span class="badge badge-yellow">Low Credits</span>';
+    if (c.intro) statusBadge += ' <span class="badge badge-purple">Intro</span>';
+    if (noShowCount >= 2) statusBadge += ' <span class="badge badge-red">No-Shows</span>';
+
+    return `<tr>
+      <td><strong>${c.first} ${c.last}</strong></td>
+      <td><span class="badge badge-gray">${c.type}</span></td>
+      <td>${PKG_LABELS[c.pkg]}</td>
+      <td>
+        ${c.pkg === 'unlimited' ? '<span class="badge badge-green">∞</span>' : `<strong>${c.credits}</strong>`}
+        <div class="credit-bar"><div class="credit-fill ${low?'low':''}" style="width:${pct}%"></div></div>
+        ${expiryHtml}
+      </td>
+      <td title="${noShowCount} no-shows in last 5 sessions">${noShowDots} <span style="font-size:11px;color:${noShowCount>=2?'var(--danger)':'var(--text-dim)'}"> ${noShowCount}/5</span></td>
+      <td>${days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days}d ago`}</td>
+      <td>${statusBadge}</td>
+      <td><button class="btn btn-ghost btn-sm">Edit</button></td>
+    </tr>`;
+  }).join('');
+}
+
+let _clientFilter = 'all';
+function filterClientType(type, el) {
+  _clientFilter = type;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderClients(type);
+}
+function filterClients(val) { renderClients(_clientFilter, val); }
+
+function addClient() {
+  const first = document.getElementById('newClientFirst').value.trim();
+  const last = document.getElementById('newClientLast').value.trim();
+  if (!first || !last) return;
+  S.clients.push({
+    id: Date.now(),
+    first, last,
+    email: document.getElementById('newClientEmail').value,
+    phone: document.getElementById('newClientPhone').value,
+    type: document.getElementById('newClientType').value,
+    pkg: document.getElementById('newClientPkg').value,
+    credits: parseInt(document.getElementById('newClientCredits').value) || 5,
+    lastSeen: new Date().toISOString().split('T')[0],
+    intro: document.getElementById('newClientIntro').checked,
+    pkgExpiry: document.getElementById('newClientExpiry').value || null,
+    noShows: [false,false,false,false,false]
+  });
+  closeModal('addClientModal');
+  renderClients();
+}
+
+// ══════════════════════════════════
+// PRIVATE PROFILES
+// ══════════════════════════════════
+function renderPrivateList() {
+  const container = document.getElementById('privateList');
+  container.innerHTML = S.privateProfiles.map(p => {
+    const client = S.clients.find(c => c.id === p.clientId);
+    if (!client) return '';
+    const initials = `${client.first[0]}${client.last[0]}`;
+    const active = S.activePrivate === p.id;
+    return `<div class="sub-card" style="cursor:pointer;margin-bottom:10px;${active ? 'border-color:var(--accent);background:var(--accent-glow)':''}" onclick="viewPrivate(${p.id})">
+      <div class="avatar" style="${active ? '' : 'border-color:var(--surface3);background:var(--surface2);color:var(--text-muted)'}">${initials}</div>
+      <div>
+        <div style="font-weight:600">${client.first} ${client.last}</div>
+        <div style="font-size:12px;color:var(--text-muted)">${PKG_LABELS[client.pkg]} · ${client.credits === 999 ? '∞' : client.credits} credits · ${p.sessions.length} sessions logged</div>
+      </div>
+      <span class="badge badge-orange">View →</span>
+    </div>`;
+  }).join('');
+}
+
+function viewPrivate(id) {
+  S.activePrivate = id;
+  renderPrivateList();
+  const p = S.privateProfiles.find(x => x.id === id);
+  const client = S.clients.find(c => c.id === p.clientId);
+  const initials = `${client.first[0]}${client.last[0]}`;
+
+  document.getElementById('privateProfile').innerHTML = `
+    <div class="card">
+      <div class="profile-header">
+        <div class="avatar">${initials}</div>
+        <div>
+          <div class="profile-name">${client.first} ${client.last}</div>
+          <div class="profile-meta">${client.email} · ${client.phone}</div>
+          <div class="profile-meta" style="margin-top:2px">Emergency: ${p.emergency}</div>
+        </div>
+        <div style="margin-left:auto;text-align:right">
+          <div class="stat-label">Credits</div>
+          <div style="font-size:22px;font-weight:700;color:${client.credits<=2?'var(--danger)':'var(--accent)'}">${client.credits === 999 ? '∞' : client.credits}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${PKG_LABELS[client.pkg]}</div>
+        </div>
+      </div>
+
+      <div class="two-col" style="gap:14px;margin-bottom:16px">
+        <div>
+          <div class="stat-label" style="margin-bottom:6px">⚠️ Injuries & Limitations</div>
+          <div style="font-size:13px;color:var(--text);background:rgba(232,93,74,0.07);border:1px solid rgba(232,93,74,0.2);border-radius:6px;padding:10px">${p.injuries || '<span style="color:var(--text-dim)">None noted</span>'}</div>
+        </div>
+        <div>
+          <div class="stat-label" style="margin-bottom:6px">🎯 Goals</div>
+          <div style="font-size:13px;color:var(--text);background:rgba(76,175,125,0.07);border:1px solid rgba(76,175,125,0.2);border-radius:6px;padding:10px">${p.goals || '<span style="color:var(--text-dim)">Not set</span>'}</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <div class="stat-label" style="margin-bottom:6px">📝 General Notes</div>
+        <div style="font-size:13px;color:var(--text);background:var(--surface2);border-radius:6px;padding:10px">${p.notes || '<span style="color:var(--text-dim)">No notes yet</span>'}</div>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="stat-label">📅 Session History (${p.sessions.length})</div>
+          <button class="btn btn-primary btn-sm" onclick="openSessionNote(${p.id})">+ Add Session Note</button>
+        </div>
+        ${p.sessions.length === 0 ? '<div class="empty-state"><p>No sessions logged yet</p></div>' :
+          p.sessions.map(s => `
+            <div class="session-entry">
+              <div class="session-entry-date">${formatDate(s.date)}</div>
+              <div class="session-entry-note">${s.note}</div>
+            </div>
+          `).join('')}
+      </div>
+    </div>`;
+}
+
+function openSessionNote(profileId) {
+  S._currentNoteProfile = profileId;
+  openModal('sessionNoteModal');
+}
+
+function saveSessionNote() {
+  const p = S.privateProfiles.find(x => x.id === S._currentNoteProfile);
+  const note = document.getElementById('noteText').value.trim();
+  const date = document.getElementById('noteDate').value;
+  if (!note) return;
+  p.sessions.unshift({ date, note });
+  document.getElementById('noteText').value = '';
+  closeModal('sessionNoteModal');
+  viewPrivate(S._currentNoteProfile);
+}
+
+function addPrivateClient() {
+  const first = document.getElementById('newPrivFirst').value.trim();
+  const last = document.getElementById('newPrivLast').value.trim();
+  if (!first || !last) return;
+  const clientId = Date.now();
+  S.clients.push({
+    id: clientId, first, last,
+    email: document.getElementById('newPrivEmail').value,
+    phone: document.getElementById('newPrivPhone').value,
+    type: 'private',
+    pkg: document.getElementById('newPrivPkg').value,
+    credits: parseInt(document.getElementById('newPrivCredits').value) || 10,
+    lastSeen: new Date().toISOString().split('T')[0]
+  });
+  S.privateProfiles.push({
+    id: clientId,
+    clientId,
+    emergency: document.getElementById('newPrivEmerg').value,
+    injuries: document.getElementById('newPrivInjuries').value,
+    goals: document.getElementById('newPrivGoals').value,
+    notes: document.getElementById('newPrivNotes').value,
+    sessions: []
+  });
+  closeModal('addPrivateModal');
+  renderPrivateList();
+}
+
+// ══════════════════════════════════
+// PAY TRACKER
+// ══════════════════════════════════
+function recalcPay() {
+  const rows = S.payClasses;
+  const today = new Date();
+  const month = today.getMonth();
+  const year = today.getFullYear();
+  // Use June 2025 as demo month
+  const demoMonth = 5; const demoYear = 2025;
+
+  let weekTotal = 0, monthTotal = 0, bonusTotal = 0;
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - today.getDay());
+
+  const html = rows.map(r => {
+    const isSellout = r.attended >= r.cap;
+    const total = isSellout ? r.flat + r.bonus : r.flat;
+    const d = new Date(r.date);
+
+    // Count toward month (demo: June 2025)
+    if (d.getMonth() === demoMonth && d.getFullYear() === demoYear) {
+      monthTotal += total;
+      if (isSellout) bonusTotal += r.bonus;
+    }
+
+    return `<div class="pay-class-row">
+      <span>${r.name}</span>
+      <span style="color:var(--text-muted)">${formatDate(r.date)}</span>
+      <span>${r.attended}</span>
+      <span>${r.cap} ${isSellout ? '⚡' : ''}</span>
+      <span>$${r.flat}</span>
+      <span>${isSellout ? `<span style="color:var(--success)">+$${r.bonus}</span>` : '<span style="color:var(--text-dim)">—</span>'}</span>
+      <span style="font-weight:700;color:${isSellout ? 'var(--success)' : 'var(--text)'}">$${total}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('payRows').innerHTML = html;
+  document.getElementById('payMonth').textContent = `$${monthTotal}`;
+  document.getElementById('payBonus').textContent = `$${bonusTotal}`;
+  document.getElementById('payMonthSub').textContent = `${rows.filter(r => { const d=new Date(r.date); return d.getMonth()===demoMonth&&d.getFullYear()===demoYear&&r.attended>=r.cap; }).length} bonuses earned`;
+  document.getElementById('payGrandTotal').textContent = `$${monthTotal}`;
+  const avg = rows.length ? Math.round(rows.reduce((a,r) => a + (r.attended>=r.cap ? r.flat+r.bonus : r.flat), 0) / rows.length) : 0;
+  document.getElementById('payAvg').textContent = `$${avg}`;
+  document.getElementById('payWeek').textContent = `$${monthTotal}`;
+  document.getElementById('payWeekSub').textContent = `${rows.length} classes this month`;
+}
+
+function addPayClass() {
+  const name = document.getElementById('newPayClass').value.trim();
+  const date = document.getElementById('newPayDate').value;
+  const attended = parseInt(document.getElementById('newPayAttended').value);
+  const cap = parseInt(document.getElementById('newPayCap').value);
+  const flat = parseFloat(document.getElementById('newPayFlat').value);
+  const bonus = parseFloat(document.getElementById('newPayBonus').value);
+  if (!name || !date || isNaN(attended) || isNaN(cap)) return;
+  S.payClasses.push({ id: Date.now(), name, date, attended, cap, flat, bonus });
+  closeModal('addPayClassModal');
+  recalcPay();
+}
+
+// ══════════════════════════════════
+// SUB NETWORK
+// ══════════════════════════════════
+function renderSubs(search='') {
+  const container = document.getElementById('subList');
+  const subs = S.subs.filter(s => {
+    if (!search) return true;
+    return `${s.first} ${s.last} ${s.studio}`.toLowerCase().includes(search.toLowerCase());
+  });
+
+  if (subs.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="es-icon">🤝</div><p>No instructors in your network yet</p></div>';
+    return;
+  }
+
+  container.innerHTML = subs.map(s => `
+    <div class="sub-card">
+      <div class="avatar" style="font-size:14px;border-color:var(--surface3);background:var(--surface2);color:var(--text-muted)">${s.first[0]}${s.last[0]}</div>
+      <div>
+        <div style="font-weight:600;font-size:15px">${s.first} ${s.last}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">${s.studio}</div>
+        <div style="font-size:12px;margin-bottom:6px">
+          📞 <a href="tel:${s.phone}" style="color:var(--accent);text-decoration:none">${s.phone}</a>
+          &nbsp;·&nbsp;
+          ✉️ <a href="mailto:${s.email}" style="color:var(--accent);text-decoration:none">${s.email}</a>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          ${s.specialties.map(sp => `<span class="badge badge-orange">${sp}</span>`).join('')}
+        </div>
+        ${s.notes ? `<div style="margin-top:8px;font-size:12px;color:var(--text-muted);font-style:italic">${s.notes}</div>` : ''}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+        <a href="tel:${s.phone}" class="btn btn-primary btn-sm">📞 Call</a>
+        <a href="sms:${s.phone}" class="btn btn-ghost btn-sm">💬 Text</a>
+        <button class="btn btn-ghost btn-sm" onclick="removeSub(${s.id})">Remove</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterSubs(val) { renderSubs(val); }
+
+function addSub() {
+  const first = document.getElementById('newSubFirst').value.trim();
+  const last = document.getElementById('newSubLast').value.trim();
+  if (!first || !last) return;
+  const specs = [...document.querySelectorAll('#specPills .pill.active')].map(p => p.textContent);
+  S.subs.push({
+    id: Date.now(), first, last,
+    phone: document.getElementById('newSubPhone').value,
+    email: document.getElementById('newSubEmail').value,
+    studio: document.getElementById('newSubStudio').value,
+    specialties: specs,
+    notes: document.getElementById('newSubNotes').value,
+  });
+  // Reset spec pills
+  document.querySelectorAll('#specPills .pill').forEach(p => p.classList.remove('active'));
+  closeModal('addSubModal');
+  renderSubs();
+}
+
+function removeSub(id) {
+  S.subs = S.subs.filter(s => s.id !== id);
+  renderSubs();
+}
+
+function toggleSpec(el) { el.classList.toggle('active'); }
+
+// ══════════════════════════════════
+// ATTENDANCE
+// ══════════════════════════════════
+function renderAttRoster() {
+  const tbody = document.getElementById('attRoster');
+  tbody.innerHTML = S.attRoster.map(r => {
+    const c = S.clients.find(cl => cl.id === r.clientId);
+    if (!c) return '';
+    return `<tr>
+      <td><strong>${c.first} ${c.last}</strong></td>
+      <td>${PKG_LABELS[c.pkg]}</td>
+      <td>${c.pkg === 'unlimited' ? '∞' : c.credits}</td>
+      <td>
+        <div class="att-toggle">
+          <button class="att-btn ${r.status==='present'?'present':''}" onclick="setAtt(${r.clientId},'present',this)">✓ Present</button>
+          <button class="att-btn ${r.status==='absent'?'absent':''}" onclick="setAtt(${r.clientId},'absent',this)">✗ Absent</button>
+          <button class="att-btn ${r.status==='late'?'late':''}" onclick="setAtt(${r.clientId},'late',this)">⏱ Late</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function setAtt(clientId, status, btn) {
+  const row = S.attRoster.find(r => r.clientId === clientId);
+  if (row) row.status = status;
+  const group = btn.closest('.att-toggle');
+  group.querySelectorAll('.att-btn').forEach(b => b.className = 'att-btn');
+  btn.classList.add(status);
+}
+
+function saveAttendance() {
+  S.attRoster.forEach(r => {
+    if (r.status === 'present' || r.status === 'late') {
+      const c = S.clients.find(cl => cl.id === r.clientId);
+      if (c && c.pkg !== 'unlimited' && c.credits > 0) c.credits--;
+      c.lastSeen = new Date().toISOString().split('T')[0];
+    }
+  });
+  renderClients();
+  alert('✅ Attendance saved! Credits updated.');
+}
+
+// ══════════════════════════════════
+// UTILS
+// ══════════════════════════════════
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+// ══════════════════════════════════
+// WAITLIST
+// ══════════════════════════════════
+let _currentWaitlistClass = null;
+
+function openWaitlist(classId, className) {
+  _currentWaitlistClass = classId;
+  document.getElementById('waitlistModalTitle').innerHTML = `Waitlist — ${className} <button class="modal-close" onclick="closeModal('waitlistModal')">×</button>`;
+  renderWaitlistContent(classId);
+  openModal('waitlistModal');
+}
+
+function renderWaitlistContent(classId) {
+  const list = S.waitlists[classId] || [];
+  const container = document.getElementById('waitlistContent');
+  if (list.length === 0) {
+    container.innerHTML = '<div style="color:var(--text-dim);font-size:13px;padding:10px 0">No one on the waitlist yet.</div>';
+    return;
+  }
+  container.innerHTML = list.map((w, i) => `
+    <div class="waitlist-entry">
+      <div class="waitlist-pos">${i+1}</div>
+      <div style="flex:1">
+        <strong>${w.name}</strong>
+        <div style="font-size:12px;color:var(--text-muted)">📞 ${w.phone} · Added ${formatDate(w.addedDate)}</div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <a href="tel:${w.phone}" class="btn btn-primary btn-sm">Call</a>
+        <button class="btn btn-ghost btn-sm" onclick="removeFromWaitlist(${classId}, ${w.id})">✕</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addToWaitlist() {
+  const name = document.getElementById('wlName').value.trim();
+  const phone = document.getElementById('wlPhone').value.trim();
+  if (!name) return;
+  const classId = _currentWaitlistClass;
+  if (!S.waitlists[classId]) S.waitlists[classId] = [];
+  S.waitlists[classId].push({ id: Date.now(), name, phone, addedDate: new Date().toISOString().split('T')[0] });
+  document.getElementById('wlName').value = '';
+  document.getElementById('wlPhone').value = '';
+  renderWaitlistContent(classId);
+}
+
+function removeFromWaitlist(classId, id) {
+  S.waitlists[classId] = (S.waitlists[classId] || []).filter(w => w.id !== id);
+  renderWaitlistContent(classId);
+}
+
+// ══════════════════════════════════
+// RETENTION TAB
+// ══════════════════════════════════
+function renderRetentionTab() {
+  const today = new Date();
+
+  // Inactive list
+  const inactive = S.clients.filter(c => {
+    const last = new Date(c.lastSeen);
+    return Math.floor((today - last) / 86400000) >= 14;
+  });
+  const retEl = document.getElementById('retentionList');
+  if (retEl) {
+    if (inactive.length === 0) {
+      retEl.innerHTML = '<div style="color:var(--text-dim);font-size:13px;padding:8px">No inactive clients right now 🎉</div>';
+    } else {
+      retEl.innerHTML = inactive.map(c => {
+        const days = Math.floor((today - new Date(c.lastSeen)) / 86400000);
+        const rec = S.retention.find(r => r.clientId === c.id);
+        const done = rec?.done || false;
+        return `<div class="followup-entry">
+          <div class="followup-check ${done?'done':''}" onclick="toggleRetention(${c.id}, this)">${done?'✓':''}</div>
+          <div style="flex:1">
+            <div style="font-weight:600">${c.first} ${c.last} <span style="font-size:11px;color:var(--danger)">${days}d ago</span></div>
+            <div style="font-size:12px;color:var(--text-muted)">${c.phone} · ${c.email}</div>
+            ${rec?.contactLog?.length ? `<div style="font-size:11px;color:var(--text-dim);margin-top:3px">Last: ${rec.contactLog[rec.contactLog.length-1]}</div>` : ''}
+          </div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <a href="tel:${c.phone}" class="btn btn-primary btn-sm">Call</a>
+            <a href="sms:${c.phone}" class="btn btn-ghost btn-sm">Text</a>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // Intro list
+  const intros = S.clients.filter(c => c.intro);
+  const introEl = document.getElementById('introList');
+  if (introEl) {
+    if (intros.length === 0) {
+      introEl.innerHTML = '<div style="color:var(--text-dim);font-size:13px;padding:8px">No intro clients currently.</div>';
+    } else {
+      introEl.innerHTML = intros.map(c => `
+        <div class="followup-entry">
+          <div style="font-size:18px">🌱</div>
+          <div style="flex:1">
+            <div style="font-weight:600">${c.first} ${c.last}</div>
+            <div style="font-size:12px;color:var(--text-muted)">${c.pkg === 'dropin' ? 'Drop-in' : PKG_LABELS[c.pkg]} · Last seen ${Math.floor((today-new Date(c.lastSeen))/86400000)}d ago</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <a href="sms:${c.phone}" class="btn btn-primary btn-sm">💬 Follow Up</a>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // No-show patterns
+  const noshowers = S.clients.filter(c => (c.noShows||[]).filter(Boolean).length >= 2);
+  const nsEl = document.getElementById('noshowList');
+  if (nsEl) {
+    if (noshowers.length === 0) {
+      nsEl.innerHTML = '<div style="color:var(--text-dim);font-size:13px;padding:8px">No no-show patterns detected.</div>';
+    } else {
+      nsEl.innerHTML = noshowers.map(c => {
+        const count = (c.noShows||[]).filter(Boolean).length;
+        const dots = (c.noShows||[]).map(ns => `<span class="noshowdot ${ns?'hit':'miss'}"></span>`).join('');
+        return `<div class="followup-entry">
+          <div style="font-size:18px">⚠️</div>
+          <div style="flex:1">
+            <div style="font-weight:600">${c.first} ${c.last} <span style="color:var(--danger);font-size:12px">${count}/5 no-shows</span></div>
+            <div style="margin-top:4px">${dots}</div>
+          </div>
+          <a href="sms:${c.phone}" class="btn btn-ghost btn-sm">Check In</a>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // Expiring packages
+  const expiring = S.clients.filter(c => {
+    if (!c.pkgExpiry) return false;
+    const daysLeft = Math.ceil((new Date(c.pkgExpiry) - today) / 86400000);
+    return daysLeft <= 14 && daysLeft > 0;
+  });
+  const expEl = document.getElementById('expiryList');
+  if (expEl) {
+    if (expiring.length === 0) {
+      expEl.innerHTML = '<div style="color:var(--text-dim);font-size:13px;padding:8px">No packages expiring soon.</div>';
+    } else {
+      expEl.innerHTML = expiring.map(c => {
+        const daysLeft = Math.ceil((new Date(c.pkgExpiry) - today) / 86400000);
+        return `<div class="followup-entry">
+          <div style="font-size:18px">📦</div>
+          <div style="flex:1">
+            <div style="font-weight:600">${c.first} ${c.last}</div>
+            <div style="font-size:12px;color:${daysLeft<=7?'var(--danger)':'var(--warning)'}">Package expires in <strong>${daysLeft} days</strong> · ${c.credits} credits left</div>
+          </div>
+          <a href="sms:${c.phone}" class="btn btn-primary btn-sm">Renew Nudge</a>
+        </div>`;
+      }).join('');
+    }
+  }
+}
+
+function toggleRetention(clientId, el) {
+  let rec = S.retention.find(r => r.clientId === clientId);
+  if (!rec) {
+    rec = { clientId, lastContact: null, contactLog: [], done: false };
+    S.retention.push(rec);
+  }
+  rec.done = !rec.done;
+  if (rec.done) {
+    const today = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    rec.contactLog.push(`${today} — Marked contacted`);
+    rec.lastContact = new Date().toISOString().split('T')[0];
+  }
+  renderRetentionTab();
+}
+
+// ══════════════════════════════════
+// INIT
+// ══════════════════════════════════
+function init() {
+  initDate();
+  renderCalendar();
+  renderClients();
+  renderPrivateList();
+  renderAttRoster();
+  recalcPay();
+  renderSubs();
+}
+
+init();
+</script>
+</body>
+</html>
