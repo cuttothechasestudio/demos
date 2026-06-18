@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,389 +24,68 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-font-family: 'Barlow', sans-serif;
-background: var(--ink);
-color: var(--white);
-min-height: 100vh;
-}
+body { font-family: 'Barlow', sans-serif; background: var(--ink); color: var(--white); min-height: 100vh; }
 
-header {
-padding: 28px 48px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-border-bottom: 1px solid rgba(255,255,255,0.06);
-}
+header { padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.logo { display: flex; align-items: center; gap: 14px; }
+.logo-mark { width: 40px; height: 40px; background: var(--cut); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; color: var(--ink); letter-spacing: -0.02em; flex-shrink: 0; }
+.logo-text { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 18px; color: var(--white); letter-spacing: 0.04em; text-transform: uppercase; line-height: 1; }
+.logo-text span { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.2em; color: var(--mist); margin-top: 3px; }
+.header-cta { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cut); text-decoration: none; border: 1.5px solid var(--cut); padding: 8px 18px; border-radius: 6px; transition: all 0.2s; }
+.header-cta:hover { background: var(--cut); color: var(--ink); }
 
-.logo {
-display: flex;
-align-items: center;
-gap: 14px;
-}
+.hero { padding: 80px 48px 60px; max-width: 900px; }
+.hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--cut); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.hero-eyebrow::after { content: ''; display: block; width: 40px; height: 1px; background: var(--cut); opacity: 0.5; }
+.hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(48px, 7vw, 84px); line-height: 0.92; letter-spacing: -0.01em; text-transform: uppercase; color: var(--white); margin-bottom: 28px; }
+.hero-title em { font-style: normal; color: var(--cut); }
+.hero-body { font-size: 17px; line-height: 1.65; color: var(--mist); max-width: 580px; font-weight: 400; }
+.hero-body strong { color: var(--white); font-weight: 600; }
 
-.logo-mark {
-width: 40px;
-height: 40px;
-background: var(--cut);
-border-radius: 8px;
-display: flex;
-align-items: center;
-justify-content: center;
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 900;
-font-size: 20px;
-color: var(--ink);
-letter-spacing: -0.02em;
-flex-shrink: 0;
-}
+.divider { height: 1px; background: linear-gradient(90deg, var(--cut) 0%, rgba(0,194,255,0.1) 60%, transparent 100%); margin: 0 48px; }
 
-.logo-text {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 800;
-font-size: 18px;
-color: var(--white);
-letter-spacing: 0.04em;
-text-transform: uppercase;
-line-height: 1;
-}
+.demos-section { padding: 60px 48px; }
+.section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mist); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
 
-.logo-text span {
-display: block;
-font-size: 10px;
-font-weight: 600;
-letter-spacing: 0.2em;
-color: var(--mist);
-margin-top: 3px;
-}
+.demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
 
-.header-cta {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 700;
-font-size: 13px;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-color: var(--cut);
-text-decoration: none;
-border: 1.5px solid var(--cut);
-padding: 8px 18px;
-border-radius: 6px;
-transition: all 0.2s;
-}
-
-.header-cta:hover {
-background: var(--cut);
-color: var(--ink);
-}
-
-.hero {
-padding: 80px 48px 60px;
-max-width: 900px;
-}
-
-.hero-eyebrow {
-font-family: 'Barlow Condensed', sans-serif;
-font-size: 12px;
-font-weight: 700;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(--cut);
-margin-bottom: 20px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-
-.hero-eyebrow::after {
-content: '';
-display: block;
-width: 40px;
-height: 1px;
-background: var(--cut);
-opacity: 0.5;
-}
-
-.hero-title {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 900;
-font-size: clamp(48px, 7vw, 84px);
-line-height: 0.92;
-letter-spacing: -0.01em;
-text-transform: uppercase;
-color: var(--white);
-margin-bottom: 28px;
-}
-
-.hero-title em {
-font-style: normal;
-color: var(--cut);
-}
-
-.hero-body {
-font-size: 17px;
-line-height: 1.65;
-color: var(--mist);
-max-width: 580px;
-font-weight: 400;
-}
-
-.hero-body strong {
-color: var(--white);
-font-weight: 600;
-}
-
-.divider {
-height: 1px;
-background: linear-gradient(90deg, var(--cut) 0%, rgba(0,194,255,0.1) 60%, transparent 100%);
-margin: 0 48px;
-}
-
-.demos-section {
-padding: 60px 48px;
-}
-
-.section-label {
-font-family: 'Barlow Condensed', sans-serif;
-font-size: 11px;
-font-weight: 700;
-letter-spacing: 0.25em;
-text-transform: uppercase;
-color: var(--mist);
-margin-bottom: 32px;
-display: flex;
-align-items: center;
-gap: 12px;
-}
-
-.section-label::after {
-content: '';
-flex: 1;
-height: 1px;
-background: rgba(255,255,255,0.08);
-}
-
-.demo-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-gap: 24px;
-}
-
-.demo-card {
-background: var(--ink-mid);
-border: 1px solid rgba(255,255,255,0.07);
-border-radius: 14px;
-overflow: hidden;
-transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-text-decoration: none;
-display: block;
-}
-
-.demo-card:hover {
-transform: translateY(-4px);
-border-color: var(--cut);
-box-shadow: 0 0 40px var(--cut-glow);
-}
-
-.demo-card-preview {
-height: 180px;
-display: flex;
-align-items: center;
-justify-content: center;
-position: relative;
-overflow: hidden;
-}
-
-.demo-card-preview svg {
-width: 100%;
-height: 100%;
-}
-
-.demo-card-body {
-padding: 22px 24px;
-}
-
-.demo-card-tag {
-font-family: 'Barlow Condensed', sans-serif;
-font-size: 10px;
-font-weight: 700;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-padding: 3px 8px;
-border-radius: 4px;
-display: inline-block;
-margin-bottom: 10px;
-}
-
+.demo-card { background: var(--ink-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; overflow: hidden; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; text-decoration: none; display: block; }
+.demo-card:hover { transform: translateY(-4px); border-color: var(--cut); box-shadow: 0 0 40px var(--cut-glow); }
+.demo-card-preview { height: 180px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.demo-card-preview svg { width: 100%; height: 100%; }
+.demo-card-body { padding: 22px 24px; }
+.demo-card-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
 .tag-beverage { background: rgba(91,200,216,0.15); color: #5BC8D8; }
 .tag-moving { background: rgba(229,40,42,0.15); color: #E5282A; }
+.tag-detail { background: rgba(200,208,220,0.12); color: #C8D0DC; }
 .tag-coming { background: rgba(255,255,255,0.06); color: var(--mist); }
-
-.demo-card-title {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 800;
-font-size: 22px;
-text-transform: uppercase;
-letter-spacing: 0.04em;
-color: var(--white);
-margin-bottom: 6px;
-line-height: 1;
-}
-
-.demo-card-desc {
-font-size: 13px;
-color: var(--mist);
-line-height: 1.55;
-margin-bottom: 20px;
-}
-
-.demo-card-features {
-display: flex;
-flex-wrap: wrap;
-gap: 6px;
-margin-bottom: 20px;
-}
-
-.feature-pill {
-font-size: 11px;
-font-weight: 600;
-color: var(--mist);
-background: rgba(255,255,255,0.05);
-padding: 3px 9px;
-border-radius: 20px;
-border: 1px solid rgba(255,255,255,0.08);
-}
-
-.demo-card-footer {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding-top: 16px;
-border-top: 1px solid rgba(255,255,255,0.06);
-}
-
-.demo-link {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 700;
-font-size: 13px;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-color: var(--cut);
-display: flex;
-align-items: center;
-gap: 6px;
-}
-
-.demo-arrow {
-font-size: 16px;
-transition: transform 0.2s;
-}
-
+.demo-card-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--white); margin-bottom: 6px; line-height: 1; }
+.demo-card-desc { font-size: 13px; color: var(--mist); line-height: 1.55; margin-bottom: 20px; }
+.demo-card-features { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.feature-pill { font-size: 11px; font-weight: 600; color: var(--mist); background: rgba(255,255,255,0.05); padding: 3px 9px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); }
+.demo-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+.demo-link { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cut); display: flex; align-items: center; gap: 6px; }
+.demo-arrow { font-size: 16px; transition: transform 0.2s; }
 .demo-card:hover .demo-arrow { transform: translateX(4px); }
+.demo-card-status { font-size: 11px; color: var(--mist); font-weight: 500; }
+.demo-card.coming-soon { opacity: 0.5; pointer-events: none; }
 
-.demo-card-status {
-font-size: 11px;
-color: var(--mist);
-font-weight: 500;
-}
-
-.demo-card.coming-soon {
-opacity: 0.5;
-pointer-events: none;
-}
-
-.client-link-bar {
-margin-top: 40px;
-padding-top: 32px;
-border-top: 1px solid rgba(255,255,255,0.06);
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
-
-.client-link-bar p {
-font-size: 13px;
-color: var(--mist);
-}
-
-.client-link-bar a {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 700;
-font-size: 13px;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-color: var(--cut);
-text-decoration: none;
-display: flex;
-align-items: center;
-gap: 6px;
-transition: opacity 0.2s;
-}
-
+.client-link-bar { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
+.client-link-bar p { font-size: 13px; color: var(--mist); }
+.client-link-bar a { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cut); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
 .client-link-bar a:hover { opacity: 0.75; }
 
-.how-section {
-padding: 60px 48px;
-border-top: 1px solid rgba(255,255,255,0.06);
-}
+.how-section { padding: 60px 48px; border-top: 1px solid rgba(255,255,255,0.06); }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 40px; }
+.how-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 64px; color: var(--cut-dim); line-height: 1; margin-bottom: 12px; border-bottom: 2px solid var(--cut); display: inline-block; padding-bottom: 8px; }
+.how-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--white); margin-bottom: 10px; }
+.how-body { font-size: 13px; color: var(--mist); line-height: 1.6; }
 
-.how-grid {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 40px;
-margin-top: 40px;
-}
-
-.how-num {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 900;
-font-size: 64px;
-color: var(--cut-dim);
-line-height: 1;
-margin-bottom: 12px;
-border-bottom: 2px solid var(--cut);
-display: inline-block;
-padding-bottom: 8px;
-}
-
-.how-title {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 800;
-font-size: 20px;
-text-transform: uppercase;
-letter-spacing: 0.04em;
-color: var(--white);
-margin-bottom: 10px;
-}
-
-.how-body {
-font-size: 13px;
-color: var(--mist);
-line-height: 1.6;
-}
-
-footer {
-padding: 32px 48px;
-border-top: 1px solid rgba(255,255,255,0.06);
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
-
-.footer-brand {
-font-family: 'Barlow Condensed', sans-serif;
-font-weight: 700;
-font-size: 14px;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-color: var(--mist);
-}
-
+footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
+.footer-brand { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); }
 .footer-brand strong { color: var(--cut); }
-
-.footer-note {
-font-size: 12px;
-color: var(--steel);
-}
+.footer-note { font-size: 12px; color: var(--steel); }
 
 @media (max-width: 768px) {
 header, .hero, .demos-section, .how-section, footer { padding-left: 24px; padding-right: 24px; }
@@ -422,10 +102,7 @@ header, .hero, .demos-section, .how-section, footer { padding-left: 24px; paddin
 <header>
 <div class="logo">
 <div class="logo-mark">CC</div>
-<div class="logo-text">
-Cut to the Chase
-<span>Studio · Live Demos</span>
-</div>
+<div class="logo-text">Cut to the Chase<span>Studio · Live Demos</span></div>
 </div>
 <a href="mailto:hello@cuttothechase.co" class="header-cta">Work With Us</a>
 </header>
@@ -433,19 +110,16 @@ Cut to the Chase
 <div class="hero">
 <div class="hero-eyebrow">Live Dashboard Demos</div>
 <h1 class="hero-title">Your business.<br><em>Actually</em> visible.</h1>
-<p class="hero-body">
-We build <strong>custom command centers</strong> for small businesses — branded, live-synced, and built around how you actually operate. No spreadsheet chaos. No generic software that sort of fits. <strong>A dashboard that's yours.</strong>
-</p>
+<p class="hero-body">We build <strong>custom command centers</strong> for small businesses — branded, live-synced, and built around how you actually operate. No spreadsheet chaos. No generic software that sort of fits. <strong>A dashboard that's yours.</strong></p>
 </div>
 
 <div class="divider"></div>
 
 <div class="demos-section">
 <div class="section-label">Live Client Demos — Click to explore</div>
-
 <div class="demo-grid">
 
-<!-- Crest Water Co. — Anonymized -->
+<!-- Crest Water Co. -->
 <a href="crest-water/index.html" class="demo-card">
 <div class="demo-card-preview" style="background:linear-gradient(135deg,#111d33 0%,#1B2A4A 60%,#243660 100%)">
 <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
@@ -489,12 +163,7 @@ We build <strong>custom command centers</strong> for small businesses — brande
 <div class="demo-card-title">Crest Water Co.</div>
 <div class="demo-card-desc">Canned spring water startup. B2B canvassing operation with account tracking, route logging, production planning, and live margin calculations. All data is fictional.</div>
 <div class="demo-card-features">
-<span class="feature-pill">Sales & Revenue</span>
-<span class="feature-pill">Account CRM</span>
-<span class="feature-pill">Route Log</span>
-<span class="feature-pill">Inventory</span>
-<span class="feature-pill">Production</span>
-<span class="feature-pill">Margin Calc</span>
+<span class="feature-pill">Sales & Revenue</span><span class="feature-pill">Account CRM</span><span class="feature-pill">Route Log</span><span class="feature-pill">Inventory</span><span class="feature-pill">Production</span><span class="feature-pill">Margin Calc</span>
 </div>
 <div class="demo-card-footer">
 <span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
@@ -503,7 +172,7 @@ We build <strong>custom command centers</strong> for small businesses — brande
 </div>
 </a>
 
-<!-- Stone & Grain Bakery — Anonymized -->
+<!-- Stone & Grain Bakery -->
 <a href="sourdough/index.html" class="demo-card">
 <div class="demo-card-preview" style="background:linear-gradient(135deg,#2C2116 0%,#4a3520 60%,#2C2116 100%)">
 <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
@@ -541,12 +210,7 @@ We build <strong>custom command centers</strong> for small businesses — brande
 <div class="demo-card-title">Stone & Grain Bakery</div>
 <div class="demo-card-desc">Artisan sourdough baker at the farmers market. Tracks pricing, bake logs, market performance, revenue, regulars, and Instagram content prompts. All data is fictional.</div>
 <div class="demo-card-features">
-<span class="feature-pill">Pricing Calc</span>
-<span class="feature-pill">Market Tracker</span>
-<span class="feature-pill">Bake Log</span>
-<span class="feature-pill">Revenue</span>
-<span class="feature-pill">Regulars CRM</span>
-<span class="feature-pill">IG Prompts</span>
+<span class="feature-pill">Pricing Calc</span><span class="feature-pill">Market Tracker</span><span class="feature-pill">Bake Log</span><span class="feature-pill">Revenue</span><span class="feature-pill">Regulars CRM</span><span class="feature-pill">IG Prompts</span>
 </div>
 <div class="demo-card-footer">
 <span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
@@ -555,18 +219,17 @@ We build <strong>custom command centers</strong> for small businesses — brande
 </div>
 </a>
 
-<!-- Peak Moving Co. — Anonymized -->
+<!-- Peak Moving Co. -->
 <a href="peak-moving/index.html" class="demo-card">
 <div class="demo-card-preview" style="background:linear-gradient(135deg,#1a0a0a 0%,#2a1010 50%,#1a0a0a 100%)">
 <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
 <rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(229,40,42,0.3)" stroke-width="1"/>
 <rect x="16" y="16" width="308" height="28" rx="8" fill="#1a0a0a"/>
 <rect x="16" y="36" width="308" height="8" fill="#1a0a0a"/>
-<rect x="16" y="16" width="308" height="3" rx="0" fill="#E5282A" opacity="0.9"/>
+<rect x="16" y="16" width="308" height="3" fill="#E5282A" opacity="0.9"/>
 <rect x="24" y="22" width="28" height="12" rx="4" fill="#E5282A"/>
 <rect x="58" y="24" width="90" height="6" rx="2" fill="rgba(255,255,255,0.5)"/>
 <rect x="58" y="33" width="60" height="4" rx="1" fill="rgba(229,40,42,0.4)"/>
-<!-- Stat cards -->
 <rect x="24" y="54" width="64" height="34" rx="4" fill="rgba(229,40,42,0.15)" stroke="rgba(229,40,42,0.4)" stroke-width="1"/>
 <rect x="96" y="54" width="64" height="34" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
 <rect x="168" y="54" width="64" height="34" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
@@ -579,7 +242,6 @@ We build <strong>custom command centers</strong> for small businesses — brande
 <rect x="174" y="68" width="36" height="10" rx="2" fill="rgba(245,166,35,0.9)"/>
 <rect x="246" y="60" width="28" height="4" rx="1" fill="rgba(46,204,113,0.5)"/>
 <rect x="246" y="68" width="52" height="10" rx="2" fill="rgba(46,204,113,0.9)"/>
-<!-- Job table -->
 <rect x="24" y="98" width="288" height="56" rx="4" fill="rgba(255,255,255,0.02)" stroke="rgba(229,40,42,0.15)" stroke-width="0.5"/>
 <rect x="24" y="98" width="288" height="14" rx="4" fill="#2a1010"/>
 <rect x="30" y="102" width="25" height="6" rx="1" fill="rgba(229,40,42,0.5)"/>
@@ -594,7 +256,6 @@ We build <strong>custom command centers</strong> for small businesses — brande
 <rect x="80" y="131" width="55" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
 <rect x="150" y="130" width="36" height="7" rx="3" fill="rgba(46,204,113,0.3)"/>
 <rect x="230" y="131" width="40" height="5" rx="1" fill="rgba(255,255,255,0.25)"/>
-<!-- Truck icon area -->
 <text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(229,40,42,0.5)" text-anchor="middle" letter-spacing="3">PEAK MOVING CO.</text>
 </svg>
 </div>
@@ -603,12 +264,75 @@ We build <strong>custom command centers</strong> for small businesses — brande
 <div class="demo-card-title">Peak Moving Co.</div>
 <div class="demo-card-desc">Small but growing home moving company. Tracks jobs, crew scheduling, truck maintenance, customer CRM, and job-level margin so the owner always knows where money is being made — and lost.</div>
 <div class="demo-card-features">
-<span class="feature-pill">Job Board</span>
-<span class="feature-pill">Quote Builder</span>
-<span class="feature-pill">Crew Tracker</span>
-<span class="feature-pill">Truck Log</span>
-<span class="feature-pill">Customer CRM</span>
-<span class="feature-pill">Margin by Job</span>
+<span class="feature-pill">Job Board</span><span class="feature-pill">Quote Builder</span><span class="feature-pill">Crew Tracker</span><span class="feature-pill">Truck Log</span><span class="feature-pill">Customer CRM</span><span class="feature-pill">Margin by Job</span>
+</div>
+<div class="demo-card-footer">
+<span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
+<span class="demo-card-status">⚡ Sample Data</span>
+</div>
+</div>
+</a>
+
+<!-- Apex Auto Detail Co. -->
+<a href="apex-detail/index.html" class="demo-card">
+<div class="demo-card-preview" style="background:linear-gradient(135deg,#0A0B0D 0%,#13151A 50%,#1C1F26 100%)">
+<svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+<rect x="16" y="16" width="308" height="148" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(200,208,220,0.25)" stroke-width="1"/>
+<rect x="16" y="16" width="308" height="30" rx="8" fill="#13151A"/>
+<rect x="16" y="38" width="308" height="8" fill="#13151A"/>
+<rect x="16" y="16" width="308" height="2" rx="0" fill="url(#chromeGrad)" opacity="0.8"/>
+<defs>
+  <linearGradient id="chromeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:transparent"/>
+    <stop offset="30%" style="stop-color:#C8D0DC"/>
+    <stop offset="60%" style="stop-color:#4DA8DA"/>
+    <stop offset="100%" style="stop-color:transparent"/>
+  </linearGradient>
+</defs>
+<rect x="24" y="20" width="26" height="18" rx="5" fill="url(#chromeGrad)" opacity="0.9"/>
+<rect x="56" y="22" width="95" height="7" rx="2" fill="rgba(200,208,220,0.6)"/>
+<rect x="56" y="32" width="65" height="4" rx="1" fill="rgba(122,134,153,0.4)"/>
+<!-- stat cards -->
+<rect x="24" y="52" width="60" height="32" rx="4" fill="rgba(200,208,220,0.08)" stroke="rgba(200,208,220,0.2)" stroke-width="0.8"/>
+<rect x="92" y="52" width="60" height="32" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+<rect x="160" y="52" width="60" height="32" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+<rect x="228" y="52" width="74" height="32" rx="4" fill="rgba(46,204,113,0.08)" stroke="rgba(46,204,113,0.2)" stroke-width="0.5"/>
+<rect x="30" y="58" width="26" height="4" rx="1" fill="rgba(200,208,220,0.4)"/>
+<rect x="30" y="66" width="42" height="10" rx="2" fill="rgba(200,208,220,0.9)"/>
+<rect x="98" y="58" width="26" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="98" y="66" width="36" height="10" rx="2" fill="rgba(255,255,255,0.6)"/>
+<rect x="166" y="58" width="26" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="166" y="66" width="36" height="10" rx="2" fill="rgba(77,168,218,0.8)"/>
+<rect x="234" y="58" width="26" height="4" rx="1" fill="rgba(46,204,113,0.4)"/>
+<rect x="234" y="66" width="55" height="10" rx="2" fill="rgba(46,204,113,0.85)"/>
+<!-- booking table -->
+<rect x="24" y="94" width="288" height="58" rx="4" fill="rgba(255,255,255,0.02)" stroke="rgba(200,208,220,0.1)" stroke-width="0.5"/>
+<rect x="24" y="94" width="288" height="14" rx="4" fill="#1C1F26"/>
+<rect x="30" y="98" width="22" height="5" rx="1" fill="rgba(200,208,220,0.4)"/>
+<rect x="75" y="98" width="45" height="5" rx="1" fill="rgba(200,208,220,0.4)"/>
+<rect x="148" y="98" width="40" height="5" rx="1" fill="rgba(200,208,220,0.4)"/>
+<rect x="220" y="98" width="35" height="5" rx="1" fill="rgba(200,208,220,0.4)"/>
+<rect x="30" y="115" width="30" height="5" rx="1" fill="rgba(255,255,255,0.35)"/>
+<rect x="75" y="115" width="55" height="5" rx="1" fill="rgba(255,255,255,0.22)"/>
+<rect x="148" y="114" width="32" height="7" rx="3" fill="rgba(245,166,35,0.3)"/>
+<rect x="220" y="115" width="50" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
+<rect x="30" y="127" width="30" height="5" rx="1" fill="rgba(255,255,255,0.25)"/>
+<rect x="75" y="127" width="55" height="5" rx="1" fill="rgba(255,255,255,0.15)"/>
+<rect x="148" y="126" width="32" height="7" rx="3" fill="rgba(46,204,113,0.25)"/>
+<rect x="220" y="127" width="50" height="5" rx="1" fill="rgba(255,255,255,0.2)"/>
+<rect x="30" y="139" width="30" height="5" rx="1" fill="rgba(255,255,255,0.18)"/>
+<rect x="75" y="139" width="55" height="5" rx="1" fill="rgba(255,255,255,0.1)"/>
+<rect x="148" y="138" width="32" height="7" rx="3" fill="rgba(122,134,153,0.2)"/>
+<rect x="220" y="139" width="50" height="5" rx="1" fill="rgba(255,255,255,0.15)"/>
+<text x="170" y="174" font-family="Arial" font-size="9" fill="rgba(200,208,220,0.4)" text-anchor="middle" letter-spacing="3">APEX AUTO DETAIL CO.</text>
+</svg>
+</div>
+<div class="demo-card-body">
+<div class="demo-card-tag tag-detail">Auto Detailing · Anonymized</div>
+<div class="demo-card-title">Apex Auto Detail Co.</div>
+<div class="demo-card-desc">Mobile and shop detailing operation. Tracks bookings, no-shows, supply inventory, upsell conversion, fleet accounts, equipment maintenance, and margin by service — all in one place.</div>
+<div class="demo-card-features">
+<span class="feature-pill">Booking Board</span><span class="feature-pill">Quote Builder</span><span class="feature-pill">Supply Tracker</span><span class="feature-pill">Upsell Log</span><span class="feature-pill">Fleet Accounts</span><span class="feature-pill">Equipment Log</span>
 </div>
 <div class="demo-card-footer">
 <span class="demo-link">View Live Demo <span class="demo-arrow">→</span></span>
@@ -629,9 +353,7 @@ We build <strong>custom command centers</strong> for small businesses — brande
 <div class="demo-card-title">Your Industry Here</div>
 <div class="demo-card-desc">Every dashboard is custom built for your business. This slot is waiting for the next client.</div>
 <div class="demo-card-features">
-<span class="feature-pill">Custom Built</span>
-<span class="feature-pill">Your Branding</span>
-<span class="feature-pill">Your Metrics</span>
+<span class="feature-pill">Custom Built</span><span class="feature-pill">Your Branding</span><span class="feature-pill">Your Metrics</span>
 </div>
 <div class="demo-card-footer">
 <span class="demo-link" style="color:var(--mist)">In Development</span>
@@ -645,7 +367,6 @@ We build <strong>custom command centers</strong> for small businesses — brande
 <p>Want to see full branded client builds?</p>
 <a href="artofpossible/">View Client Showcases →</a>
 </div>
-
 </div>
 
 <div class="how-section">
@@ -670,9 +391,7 @@ We build <strong>custom command centers</strong> for small businesses — brande
 </div>
 
 <footer>
-<div class="footer-brand">
-<strong>Cut to the Chase</strong> Studio
-</div>
+<div class="footer-brand"><strong>Cut to the Chase</strong> Studio</div>
 <div class="footer-note">All demos use sample data. No real business information is displayed.</div>
 </footer>
 
