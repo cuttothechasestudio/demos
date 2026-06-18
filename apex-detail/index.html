@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apex Auto Detail Co. — Command Center</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
+
+:root {
+  --ink: #0A0B0D;
+  --ink-mid: #13151A;
+  --ink-light: #1C1F26;
+  --ink-card: #181B22;
+  --steel: #2A2D35;
+  --mist: #7A8699;
+  --white: #FFFFFF;
+  --chrome: #C8D0DC;
+  --chrome-dim: rgba(200,208,220,0.12);
+  --chrome-glow: rgba(200,208,220,0.2);
+  --silver: #8A95A3;
+  --blue: #4DA8DA;
+  --blue-dim: rgba(77,168,218,0.12);
+  --blue-glow: rgba(77,168,218,0.25);
+  --green: #2ECC71;
+  --yellow: #F5A623;
+  --red: #E5282A;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--ink);
+  color: var(--white);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 0 32px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ink-mid);
+  border-bottom: 1px solid rgba(200,208,220,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #8A95A3 0%, #C8D0DC 50%, #8A95A3 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(200,208,220,0.3);
+}
+
+.logo-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--chrome);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.logo-text span {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--mist);
+  margin-top: 3px;
+}
+
+.demo-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  background: rgba(245,166,35,0.1);
+  border: 1px solid rgba(245,166,35,0.25);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* ── CHROME STRIPE ── */
+.chrome-stripe {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--chrome) 30%, var(--blue) 60%, transparent 100%);
+  opacity: 0.6;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 32px;
+  background: var(--ink-mid);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  overflow-x: auto;
+}
+
+.tab {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mist);
+  padding: 13px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.tab:hover { color: var(--chrome); }
+.tab.active { color: var(--chrome); border-bottom-color: var(--chrome); }
+
+/* ── CONTENT ── */
+.content {
+  padding: 28px 32px;
+  max-width: 1500px;
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── STAT CARDS ── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--ink-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--chrome), transparent);
+  opacity: 0.3;
+}
+
+.stat-card.highlight {
+  border-color: rgba(200,208,220,0.2);
+  background: var(--chrome-dim);
+}
+
+.stat-card.highlight::before { opacity: 0.8; }
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 30px;
+  color: var(--white);
+  line-height: 1;
+}
+
+.stat-card.highlight .stat-value { color: var(--chrome); }
+
+.stat-sub {
+  font-size: 11px;
+  color: var(--mist);
+  margin-top: 5px;
+}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--chrome);
+}
+
+/* ── BUTTONS ── */
+.btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.btn-chrome {
+  background: linear-gradient(135deg, #7A8699, #C8D0DC, #7A8699);
+  color: var(--ink);
+}
+
+.btn-chrome:hover { opacity: 0.85; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--mist);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.btn-ghost:hover { color: var(--chrome); border-color: rgba(200,208,220,0.3); }
+
+/* ── TABLE ── */
+.table-wrap {
+  background: var(--ink-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+table { width: 100%; border-collapse: collapse; }
+
+thead { background: var(--ink-light); }
+
+th {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--silver);
+  padding: 11px 14px;
+  text-align: left;
+}
+
+td {
+  font-size: 13px;
+  color: var(--white);
+  padding: 12px 14px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ── BADGES ── */
+.badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.badge-green { background: rgba(46,204,113,0.15); color: #2ECC71; }
+.badge-yellow { background: rgba(245,166,35,0.15); color: #F5A623; }
+.badge-red { background: rgba(229,40,42,0.15); color: #E5282A; }
+.badge-blue { background: rgba(77,168,218,0.15); color: #4DA8DA; }
+.badge-chrome { background: rgba(200,208,220,0.12); color: #C8D0DC; }
+.badge-mist { background: rgba(122,134,153,0.15); color: #7A8699; }
+
+/* ── TWO/THREE COL ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.panel {
+  background: var(--ink-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.panel-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chrome);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ── FORM ── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+
+label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+input, select, textarea {
+  background: var(--ink-light);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  padding: 8px 11px;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+input:focus, select:focus { border-color: var(--chrome); }
+select option { background: #1C1F26; }
+
+/* ── QUOTE RESULT ── */
+.quote-result {
+  background: var(--chrome-dim);
+  border: 1px solid rgba(200,208,220,0.15);
+  border-radius: 10px;
+  padding: 18px;
+  margin-top: 14px;
+}
+
+.quote-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+  color: var(--mist);
+}
+
+.quote-result-row:last-child { border-bottom: none; }
+.quote-result-row span:last-child { color: var(--white); font-weight: 600; }
+.quote-result-row.total { font-weight: 700; color: var(--white); }
+.quote-result-row.total span { color: var(--chrome); font-family: 'Barlow Condensed', sans-serif; font-size: 24px; font-weight: 900; }
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--silver), var(--chrome));
+}
+
+.progress-bar.green { background: var(--green); }
+.progress-bar.yellow { background: var(--yellow); }
+.progress-bar.red { background: var(--red); }
+
+/* ── MARGIN ROWS ── */
+.margin-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.margin-label { font-size: 13px; color: var(--white); width: 180px; flex-shrink: 0; }
+.margin-bar-wrap { flex: 1; background: rgba(255,255,255,0.06); border-radius: 4px; height: 9px; overflow: hidden; }
+.margin-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--silver), var(--chrome)); }
+.margin-bar-fill.mid { background: var(--yellow); }
+.margin-bar-fill.low { background: var(--red); }
+.margin-pct { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 18px; width: 48px; text-align: right; }
+
+/* ── SUPPLY CARDS ── */
+.supply-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.supply-card {
+  background: var(--ink-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.supply-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.supply-category {
+  font-size: 10px;
+  color: var(--mist);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.supply-stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--mist);
+  padding: 4px 0;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.supply-stat span:last-child { color: var(--white); font-weight: 600; }
+
+/* ── EQUIPMENT CARDS ── */
+.equip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.equip-card {
+  background: var(--ink-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.equip-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 17px;
+  color: var(--chrome);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.equip-model { font-size: 11px; color: var(--mist); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.equip-stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--mist);
+  padding: 5px 0;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.equip-stat span:last-child { color: var(--white); font-weight: 600; }
+
+/* ── BAR CHART ── */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 110px;
+  margin-bottom: 8px;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, var(--chrome) 0%, var(--silver) 100%);
+  opacity: 0.5;
+  min-height: 4px;
+}
+
+.bar.current { opacity: 1; }
+.bar.low { background: var(--steel); opacity: 0.4; }
+
+.bar-label { font-size: 9px; color: var(--mist); text-align: center; }
+
+/* ── INSIGHT BOX ── */
+.insight {
+  background: var(--chrome-dim);
+  border: 1px solid rgba(200,208,220,0.15);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--mist);
+  line-height: 1.6;
+}
+
+.insight strong { color: var(--white); }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .content { padding: 16px; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  header, .tabs { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <div class="logo-text">
+      Apex Auto Detail Co.
+      <span>Command Center</span>
+    </div>
+  </div>
+  <div class="demo-badge">⚡ Demo Mode — Sample Data</div>
+</header>
+<div class="chrome-stripe"></div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('booking')">📋 Booking Board</div>
+  <div class="tab" onclick="showTab('quote')">💰 Quote Builder</div>
+  <div class="tab" onclick="showTab('crm')">🤝 Customer CRM</div>
+  <div class="tab" onclick="showTab('supply')">🧴 Supply Tracker</div>
+  <div class="tab" onclick="showTab('revenue')">📊 Revenue & Cash Flow</div>
+  <div class="tab" onclick="showTab('upsell')">⬆️ Upsell Log</div>
+  <div class="tab" onclick="showTab('fleet')">🚐 Fleet & Dealer</div>
+  <div class="tab" onclick="showTab('margin')">📈 Margin by Service</div>
+  <div class="tab" onclick="showTab('equipment')">🔧 Equipment Log</div>
+</div>
+
+<div class="content">
+
+  <!-- ── BOOKING BOARD ── -->
+  <div class="section active" id="booking">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Jobs Today</div>
+        <div class="stat-value">6</div>
+        <div class="stat-sub">3 mobile · 3 shop</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This Week</div>
+        <div class="stat-value">24</div>
+        <div class="stat-sub">vs. 19 last week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">No-Shows This Month</div>
+        <div class="stat-value">3</div>
+        <div class="stat-sub" style="color:var(--yellow)">2 deposits forfeited</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Open Slots Today</div>
+        <div class="stat-value">2</div>
+        <div class="stat-sub" style="color:var(--green)">Available to book</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Job Duration</div>
+        <div class="stat-value">2.8h</div>
+        <div class="stat-sub">Full detail: 4h · Express: 1.5h</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Today's Schedule — Jun 17</div>
+      <button class="btn btn-chrome">+ New Booking</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Customer</th>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Technician</th>
+            <th>Deposit</th>
+            <th>Status</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>8:00 AM</td>
+            <td>Harrison, W.</td>
+            <td>2023 BMW M4</td>
+            <td>Ceramic Coat</td>
+            <td><span class="badge badge-chrome">Shop</span></td>
+            <td>—</td>
+            <td>Marcus</td>
+            <td style="color:var(--green)">$200 ✓</td>
+            <td><span class="badge badge-yellow">In Progress</span></td>
+            <td>$1,400</td>
+          </tr>
+          <tr>
+            <td>8:30 AM</td>
+            <td>Chen, L.</td>
+            <td>2021 Tesla Model 3</td>
+            <td>Full Detail</td>
+            <td><span class="badge badge-blue">Mobile</span></td>
+            <td>Franklin, TN</td>
+            <td>Devon</td>
+            <td style="color:var(--green)">$75 ✓</td>
+            <td><span class="badge badge-yellow">In Progress</span></td>
+            <td>$280</td>
+          </tr>
+          <tr>
+            <td>10:00 AM</td>
+            <td>Martinez, A.</td>
+            <td>2020 Ford F-150</td>
+            <td>Express Wash + Interior</td>
+            <td><span class="badge badge-chrome">Shop</span></td>
+            <td>—</td>
+            <td>Jade</td>
+            <td style="color:var(--mist)">None</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$130</td>
+          </tr>
+          <tr>
+            <td>11:00 AM</td>
+            <td>Okafor, T.</td>
+            <td>2022 Range Rover</td>
+            <td>Full Detail + PPF</td>
+            <td><span class="badge badge-chrome">Shop</span></td>
+            <td>—</td>
+            <td>Marcus</td>
+            <td style="color:var(--green)">$300 ✓</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$2,100</td>
+          </tr>
+          <tr>
+            <td>1:00 PM</td>
+            <td>Sullivan, K.</td>
+            <td>2019 Honda Accord</td>
+            <td>Full Detail</td>
+            <td><span class="badge badge-blue">Mobile</span></td>
+            <td>Brentwood, TN</td>
+            <td>Devon</td>
+            <td style="color:var(--green)">$75 ✓</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$240</td>
+          </tr>
+          <tr>
+            <td>2:30 PM</td>
+            <td>Patel, R.</td>
+            <td>2024 Porsche 911</td>
+            <td>Paint Correction</td>
+            <td><span class="badge badge-chrome">Shop</span></td>
+            <td>—</td>
+            <td>Marcus</td>
+            <td style="color:var(--green)">$150 ✓</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$850</td>
+          </tr>
+          <tr>
+            <td>3:00 PM</td>
+            <td>Williams, J.</td>
+            <td>2018 Chevy Tahoe</td>
+            <td>Express Wash</td>
+            <td><span class="badge badge-blue">Mobile</span></td>
+            <td>Nashville, TN</td>
+            <td>Jade</td>
+            <td style="color:var(--mist)">None</td>
+            <td><span class="badge badge-mist">Scheduled</span></td>
+            <td>$85</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-header" style="margin-top:8px;">
+      <div class="section-title">No-Show Log</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Customer</th><th>Service</th><th>Value</th><th>Deposit Held</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jun 14</td><td>Brooks, D.</td><td>Full Detail</td><td>$260</td>
+            <td style="color:var(--green)">$75 kept</td>
+            <td>No call, no show. 2nd time.</td>
+          </tr>
+          <tr>
+            <td>Jun 10</td><td>Reed, M.</td><td>Ceramic Coat</td><td>$1,200</td>
+            <td style="color:var(--green)">$200 kept</td>
+            <td>Rescheduled 3 days prior — still no show.</td>
+          </tr>
+          <tr>
+            <td>Jun 5</td><td>Nguyen, P.</td><td>Express Wash</td><td>$85</td>
+            <td style="color:var(--red)">No deposit</td>
+            <td>Slot lost — no deposit policy needed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── QUOTE BUILDER ── -->
+  <div class="section" id="quote">
+    <div class="section-header">
+      <div class="section-title">Quote Builder</div>
+      <button class="btn btn-ghost" onclick="clearQuote()">Clear</button>
+    </div>
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">Job Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Service Type</label>
+            <select id="q-service" onchange="calcQuote()">
+              <option value="express">Express Wash</option>
+              <option value="interior">Interior Only</option>
+              <option value="full" selected>Full Detail</option>
+              <option value="paint">Paint Correction</option>
+              <option value="ceramic">Ceramic Coating</option>
+              <option value="ppf">PPF (Paint Protection Film)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Vehicle Size</label>
+            <select id="q-size" onchange="calcQuote()">
+              <option value="small">Small (Sedan/Coupe)</option>
+              <option value="mid" selected>Mid (SUV/Pickup)</option>
+              <option value="large">Large (3-Row SUV/Van)</option>
+              <option value="xl">XL (Sprinter/Commercial)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Labor Hours (Est.)</label>
+            <input type="number" id="q-hours" value="3.5" step="0.5" min="0.5" oninput="calcQuote()">
+          </div>
+          <div class="form-group">
+            <label>Technician Rate ($/hr)</label>
+            <input type="number" id="q-rate" value="22" min="10" oninput="calcQuote()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Cost ($)</label>
+            <input type="number" id="q-products" value="28" min="0" oninput="calcQuote()">
+          </div>
+          <div class="form-group">
+            <label>Mobile? Drive Miles (RT)</label>
+            <input type="number" id="q-miles" value="0" min="0" oninput="calcQuote()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Condition Surcharge ($)</label>
+            <input type="number" id="q-condition" value="0" min="0" oninput="calcQuote()" placeholder="Pet hair, heavy soil...">
+          </div>
+          <div class="form-group">
+            <label>Target Margin (%)</label>
+            <input type="number" id="q-margin" value="55" min="20" max="85" oninput="calcQuote()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label>Add-Ons</label>
+            <select id="q-addons" onchange="calcQuote()">
+              <option value="0">None</option>
+              <option value="80">Headlight Restoration (+$80)</option>
+              <option value="60">Odor Treatment (+$60)</option>
+              <option value="120">Engine Bay Clean (+$120)</option>
+              <option value="200">Ceramic Wheels (+$200)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Cost Breakdown & Suggested Price</div>
+        <div class="quote-result">
+          <div class="quote-result-row"><span>Labor Cost</span><span id="r-labor">—</span></div>
+          <div class="quote-result-row"><span>Product Cost</span><span id="r-products">—</span></div>
+          <div class="quote-result-row"><span>Drive Cost</span><span id="r-drive">—</span></div>
+          <div class="quote-result-row"><span>Condition Surcharge</span><span id="r-condition">—</span></div>
+          <div class="quote-result-row"><span>Add-On</span><span id="r-addon">—</span></div>
+          <div class="quote-result-row"><span>Overhead (8%)</span><span id="r-overhead">—</span></div>
+          <div class="quote-result-row" style="padding-top:8px;"><span style="color:var(--mist)">Your Real Cost</span><span id="r-cost">—</span></div>
+          <div class="quote-result-row total"><span>Suggested Quote</span><span id="r-quote">—</span></div>
+          <div class="quote-result-row"><span>Your Profit</span><span id="r-profit" style="color:var(--green)">—</span></div>
+        </div>
+        <div style="margin-top:12px; font-size:12px; color:var(--mist); line-height:1.6;">
+          💡 For ceramic coatings and PPF, always collect a 20–25% deposit at booking. These jobs tie up the bay for a full day.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CUSTOMER CRM ── -->
+  <div class="section" id="crm">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Total Clients</div>
+        <div class="stat-value">142</div>
+        <div class="stat-sub">Since opening</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">On Maintenance Plan</div>
+        <div class="stat-value">31</div>
+        <div class="stat-sub" style="color:var(--green)">Recurring monthly revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Repeat Rate</div>
+        <div class="stat-value">58%</div>
+        <div class="stat-sub">Industry avg: 35%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Follow-Ups Needed</div>
+        <div class="stat-value">8</div>
+        <div class="stat-sub" style="color:var(--yellow)">Don't let them go cold</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Lifetime Value</div>
+        <div class="stat-value">$740</div>
+        <div class="stat-sub">Per client</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Client Records</div>
+      <button class="btn btn-chrome">+ Add Client</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Vehicle(s)</th>
+            <th>Last Service</th>
+            <th>Services</th>
+            <th>Total Spent</th>
+            <th>Plan</th>
+            <th>Notes</th>
+            <th>Follow-Up</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Harrison, W.</td>
+            <td>2023 BMW M4</td>
+            <td>Jun 17</td>
+            <td>4</td>
+            <td>$3,840</td>
+            <td><span class="badge badge-green">Monthly</span></td>
+            <td>Prefers Marcus. Loves ceramic.</td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+          <tr>
+            <td>Okafor, T.</td>
+            <td>2022 Range Rover</td>
+            <td>Jun 17</td>
+            <td>2</td>
+            <td>$3,200</td>
+            <td><span class="badge badge-green">Quarterly</span></td>
+            <td>Very picky. Document pre-existing scratches.</td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+          <tr>
+            <td>Patel, R.</td>
+            <td>2024 Porsche 911, 2022 Audi Q8</td>
+            <td>Jun 17</td>
+            <td>6</td>
+            <td>$5,120</td>
+            <td><span class="badge badge-green">Monthly</span></td>
+            <td>Two vehicles. Always tips well. Refer to as Mr. Patel.</td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+          <tr>
+            <td>Chen, L.</td>
+            <td>2021 Tesla Model 3</td>
+            <td>Jun 17</td>
+            <td>3</td>
+            <td>$820</td>
+            <td><span class="badge badge-mist">One-Time</span></td>
+            <td>Interested in ceramic. Upsell next visit.</td>
+            <td><span class="badge badge-yellow">Ceramic Upsell</span></td>
+          </tr>
+          <tr>
+            <td>Sullivan, K.</td>
+            <td>2019 Honda Accord</td>
+            <td>Jun 10</td>
+            <td>5</td>
+            <td>$1,240</td>
+            <td><span class="badge badge-green">Monthly</span></td>
+            <td>Dog hair — always charge pet hair fee.</td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+          <tr>
+            <td>Brooks, D.</td>
+            <td>2020 Jeep Wrangler</td>
+            <td>Jun 14</td>
+            <td>1</td>
+            <td>$0</td>
+            <td><span class="badge badge-mist">None</span></td>
+            <td>No-show twice. Require deposit going forward.</td>
+            <td><span class="badge badge-red">No-Show Risk</span></td>
+          </tr>
+          <tr>
+            <td>Williams, J.</td>
+            <td>2018 Chevy Tahoe</td>
+            <td>May 28</td>
+            <td>2</td>
+            <td>$310</td>
+            <td><span class="badge badge-mist">One-Time</span></td>
+            <td>Works nearby. Good candidate for monthly plan.</td>
+            <td><span class="badge badge-yellow">Plan Pitch</span></td>
+          </tr>
+          <tr>
+            <td>Martinez, A.</td>
+            <td>2020 Ford F-150</td>
+            <td>Jun 5</td>
+            <td>3</td>
+            <td>$480</td>
+            <td><span class="badge badge-mist">One-Time</span></td>
+            <td>Interior only jobs. Smoker — use ozone treatment.</td>
+            <td><span class="badge badge-mist">None</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── SUPPLY TRACKER ── -->
+  <div class="section" id="supply">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Products Tracked</div>
+        <div class="stat-value">18</div>
+        <div class="stat-sub">Across all categories</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Low Stock Alerts</div>
+        <div class="stat-value">3</div>
+        <div class="stat-sub" style="color:var(--red)">Reorder needed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Supply Cost This Month</div>
+        <div class="stat-value">$840</div>
+        <div class="stat-sub">12% of revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cost Per Job (Avg)</div>
+        <div class="stat-value">$22</div>
+        <div class="stat-sub">Target: under $30</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Inventory by Product</div>
+      <button class="btn btn-chrome">+ Log Purchase</button>
+    </div>
+
+    <div class="supply-grid">
+      <div class="supply-card" style="border-color:rgba(229,40,42,0.3)">
+        <div class="supply-name">Ceramic Coat Pro</div>
+        <div class="supply-category">Premium Coating</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--red)">⚠️ 1 kit left</span></div>
+        <div class="supply-stat"><span>Cost/Kit</span><span>$140</span></div>
+        <div class="supply-stat"><span>Used/Month</span><span>4 kits</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>2 kits</span></div>
+      </div>
+      <div class="supply-card" style="border-color:rgba(229,40,42,0.3)">
+        <div class="supply-name">Microfiber Towels</div>
+        <div class="supply-category">Applicators</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--red)">⚠️ 14 remaining</span></div>
+        <div class="supply-stat"><span>Cost/Pack (12)</span><span>$28</span></div>
+        <div class="supply-stat"><span>Used/Week</span><span>~20</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>24</span></div>
+      </div>
+      <div class="supply-card" style="border-color:rgba(245,166,35,0.3)">
+        <div class="supply-name">PPF Film Roll</div>
+        <div class="supply-category">Paint Protection</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--yellow)">2 rolls</span></div>
+        <div class="supply-stat"><span>Cost/Roll</span><span>$220</span></div>
+        <div class="supply-stat"><span>Used/Month</span><span>3 rolls</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>2 rolls</span></div>
+      </div>
+      <div class="supply-card">
+        <div class="supply-name">Car Wash Soap</div>
+        <div class="supply-category">Exterior</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--green)">6 gallons</span></div>
+        <div class="supply-stat"><span>Cost/Gallon</span><span>$18</span></div>
+        <div class="supply-stat"><span>Used/Week</span><span>~1 gallon</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>2 gallons</span></div>
+      </div>
+      <div class="supply-card">
+        <div class="supply-name">Interior Cleaner</div>
+        <div class="supply-category">Interior</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--green)">8 bottles</span></div>
+        <div class="supply-stat"><span>Cost/Bottle</span><span>$14</span></div>
+        <div class="supply-stat"><span>Used/Week</span><span>~2 bottles</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>3 bottles</span></div>
+      </div>
+      <div class="supply-card">
+        <div class="supply-name">Carnauba Wax</div>
+        <div class="supply-category">Exterior</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--green)">5 tins</span></div>
+        <div class="supply-stat"><span>Cost/Tin</span><span>$32</span></div>
+        <div class="supply-stat"><span>Used/Month</span><span>3 tins</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>2 tins</span></div>
+      </div>
+      <div class="supply-card">
+        <div class="supply-name">Clay Bar Kit</div>
+        <div class="supply-category">Paint Prep</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--green)">9 kits</span></div>
+        <div class="supply-stat"><span>Cost/Kit</span><span>$12</span></div>
+        <div class="supply-stat"><span>Used/Month</span><span>5 kits</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>4 kits</span></div>
+      </div>
+      <div class="supply-card">
+        <div class="supply-name">Leather Conditioner</div>
+        <div class="supply-category">Interior</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--green)">6 bottles</span></div>
+        <div class="supply-stat"><span>Cost/Bottle</span><span>$22</span></div>
+        <div class="supply-stat"><span>Used/Month</span><span>4 bottles</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>2 bottles</span></div>
+      </div>
+      <div class="supply-card">
+        <div class="supply-name">Ozone Generator Tabs</div>
+        <div class="supply-category">Odor Treatment</div>
+        <div class="supply-stat"><span>Stock</span><span style="color:var(--green)">22 tabs</span></div>
+        <div class="supply-stat"><span>Cost/Tab</span><span>$4</span></div>
+        <div class="supply-stat"><span>Used/Month</span><span>~8 tabs</span></div>
+        <div class="supply-stat"><span>Reorder At</span><span>10 tabs</span></div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <strong>💡 Insight:</strong> Ceramic Coat Pro is at critical stock — one kit — and you have two ceramic jobs booked this week. Order today. Microfiber towels are also burning fast at 20/week with only 14 left. Bulk order of 120 from your supplier saves ~22% vs. single packs.
+    </div>
+  </div>
+
+  <!-- ── REVENUE & CASH FLOW ── -->
+  <div class="section" id="revenue">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Revenue This Month</div>
+        <div class="stat-value">$18,420</div>
+        <div class="stat-sub">vs. $14,880 last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Monthly Goal</div>
+        <div class="stat-value">$20,000</div>
+        <div class="stat-sub">$1,580 to go — 92%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Recurring Plan Revenue</div>
+        <div class="stat-value">$5,580</div>
+        <div class="stat-sub" style="color:var(--green)">31 plans × avg $180</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Outstanding</div>
+        <div class="stat-value">$1,840</div>
+        <div class="stat-sub" style="color:var(--yellow)">4 unpaid invoices</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cash Reserve</div>
+        <div class="stat-value">$6,200</div>
+        <div class="stat-sub" style="color:var(--green)">~6 wks slow season buffer</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">Monthly Revenue — Seasonal View</div>
+        <div class="bar-chart">
+          <div class="bar-col"><div class="bar low" style="height:28%"></div><div class="bar-label">Jan</div></div>
+          <div class="bar-col"><div class="bar low" style="height:32%"></div><div class="bar-label">Feb</div></div>
+          <div class="bar-col"><div class="bar" style="height:52%"></div><div class="bar-label">Mar</div></div>
+          <div class="bar-col"><div class="bar" style="height:75%"></div><div class="bar-label">Apr</div></div>
+          <div class="bar-col"><div class="bar" style="height:85%"></div><div class="bar-label">May</div></div>
+          <div class="bar-col"><div class="bar current" style="height:92%"></div><div class="bar-label">Jun</div></div>
+          <div class="bar-col"><div class="bar" style="height:0%;opacity:0.15;border:1px dashed #333;"></div><div class="bar-label">Jul</div></div>
+          <div class="bar-col"><div class="bar" style="height:0%;opacity:0.15;border:1px dashed #333;"></div><div class="bar-label">Aug</div></div>
+          <div class="bar-col"><div class="bar" style="height:0%;opacity:0.15;border:1px dashed #333;"></div><div class="bar-label">Sep</div></div>
+          <div class="bar-col"><div class="bar" style="height:0%;opacity:0.15;border:1px dashed #333;"></div><div class="bar-label">Oct</div></div>
+          <div class="bar-col"><div class="bar low" style="height:0%;opacity:0.15;border:1px dashed #333;"></div><div class="bar-label">Nov</div></div>
+          <div class="bar-col"><div class="bar low" style="height:0%;opacity:0.15;border:1px dashed #333;"></div><div class="bar-label">Dec</div></div>
+        </div>
+        <div style="font-size:11px;color:var(--mist);margin-top:4px;">⚠️ Jan–Feb historically 30–35% of peak. Target $12K cash reserve by Oct.</div>
+        <div style="margin-top:14px;">
+          <div style="font-size:10px;color:var(--mist);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Monthly Goal Progress</div>
+          <div class="progress-wrap" style="height:10px;"><div class="progress-bar green" style="width:92%"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:var(--mist);">
+            <span>$18,420 collected</span><span>$20,000 goal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Outstanding Invoices</div>
+        <div class="table-wrap" style="border:none;margin:0;">
+          <table>
+            <thead>
+              <tr><th>Invoice</th><th>Client</th><th>Service</th><th>Amount</th><th>Days Out</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>INV-204</td><td>Okafor, T.</td><td>Full Detail + PPF</td><td>$1,800</td><td style="color:var(--yellow)">3 days</td><td><span class="badge badge-yellow">Pending</span></td></tr>
+              <tr><td>INV-201</td><td>Fletcher, B.</td><td>Ceramic Coat</td><td>$1,200</td><td style="color:var(--yellow)">6 days</td><td><span class="badge badge-yellow">Pending</span></td></tr>
+              <tr><td>INV-198</td><td>Torres, G.</td><td>Paint Correction</td><td>$620</td><td style="color:var(--red)">11 days</td><td><span class="badge badge-red">Overdue</span></td></tr>
+              <tr><td>INV-195</td><td>Brooks, D.</td><td>Full Detail</td><td>$220</td><td style="color:var(--red)">14 days</td><td><span class="badge badge-red">Overdue</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="insight" style="margin-top:14px;">
+          <strong>💡 Cash Reserve Status:</strong> $6,200 on hand. Slow season (Jan–Feb) avg monthly cost is ~$4,800. You have roughly 6 weeks of runway. Target $12K by October.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── UPSELL LOG ── -->
+  <div class="section" id="upsell">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Upsell Revenue This Month</div>
+        <div class="stat-value">$2,840</div>
+        <div class="stat-sub">18% of total revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Upsell Conversion Rate</div>
+        <div class="stat-value">41%</div>
+        <div class="stat-sub">When offered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Top Upsell</div>
+        <div class="stat-value" style="font-size:18px;">Ceramic Coat</div>
+        <div class="stat-sub">$1,120 this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Upsells Offered But Declined</div>
+        <div class="stat-value">14</div>
+        <div class="stat-sub" style="color:var(--yellow)">$3,200 left on the table</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">Upsell Performance by Type</div>
+        <div class="margin-row">
+          <div class="margin-label">Ceramic Coating</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill" style="width:78%"></div></div>
+          <div class="margin-pct" style="color:var(--green)">78%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Headlight Restoration</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill" style="width:62%"></div></div>
+          <div class="margin-pct" style="color:var(--green)">62%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Engine Bay Clean</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill mid" style="width:44%"></div></div>
+          <div class="margin-pct" style="color:var(--yellow)">44%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Odor Treatment</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill mid" style="width:38%"></div></div>
+          <div class="margin-pct" style="color:var(--yellow)">38%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Ceramic Wheels</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill low" style="width:22%"></div></div>
+          <div class="margin-pct" style="color:var(--red)">22%</div>
+        </div>
+        <div class="insight">
+          <strong>💡 Insight:</strong> Ceramic coating has a 78% close rate when pitched — it's your best upsell. Ceramic wheels at 22% suggests the price point ($200) is the barrier. Try bundling it with full details at $150.
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Recent Upsell Log</div>
+        <div class="table-wrap" style="border:none;margin:0;">
+          <table>
+            <thead>
+              <tr><th>Date</th><th>Client</th><th>Upsell Offered</th><th>Result</th><th>Revenue</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Jun 17</td><td>Chen, L.</td><td>Ceramic Coat</td><td><span class="badge badge-yellow">Pending</span></td><td>—</td></tr>
+              <tr><td>Jun 15</td><td>Harrison, W.</td><td>Ceramic Wheels</td><td><span class="badge badge-green">Sold</span></td><td>$200</td></tr>
+              <tr><td>Jun 14</td><td>Sullivan, K.</td><td>Headlight Restore</td><td><span class="badge badge-green">Sold</span></td><td>$80</td></tr>
+              <tr><td>Jun 13</td><td>Torres, G.</td><td>Engine Bay</td><td><span class="badge badge-red">Declined</span></td><td>$0</td></tr>
+              <tr><td>Jun 12</td><td>Patel, R.</td><td>Odor Treatment</td><td><span class="badge badge-green">Sold</span></td><td>$60</td></tr>
+              <tr><td>Jun 11</td><td>Williams, J.</td><td>Ceramic Coat</td><td><span class="badge badge-red">Declined</span></td><td>$0</td></tr>
+              <tr><td>Jun 10</td><td>Martinez, A.</td><td>Odor Treatment</td><td><span class="badge badge-green">Sold</span></td><td>$60</td></tr>
+              <tr><td>Jun 9</td><td>Reed, M.</td><td>Headlight Restore</td><td><span class="badge badge-red">Declined</span></td><td>$0</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FLEET & DEALER ── -->
+  <div class="section" id="fleet">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">B2B Accounts</div>
+        <div class="stat-value">5</div>
+        <div class="stat-sub">Fleet & dealer clients</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">B2B Revenue This Month</div>
+        <div class="stat-value">$4,880</div>
+        <div class="stat-sub">27% of total revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Vehicles Serviced This Month</div>
+        <div class="stat-value">38</div>
+        <div class="stat-sub">Across all accounts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Per Vehicle</div>
+        <div class="stat-value">$128</div>
+        <div class="stat-sub">vs. $248 retail avg</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">B2B Accounts</div>
+      <button class="btn btn-chrome">+ Add Account</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Account</th>
+            <th>Type</th>
+            <th>Vehicles/Visit</th>
+            <th>Frequency</th>
+            <th>Rate/Vehicle</th>
+            <th>Monthly Value</th>
+            <th>Last Service</th>
+            <th>Next Due</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Brentwood BMW</td>
+            <td><span class="badge badge-blue">Dealership</span></td>
+            <td>8 vehicles</td>
+            <td>Weekly</td>
+            <td>$95</td>
+            <td>$3,040</td>
+            <td>Jun 14</td>
+            <td>Jun 21</td>
+            <td><span class="badge badge-green">Active</span></td>
+          </tr>
+          <tr>
+            <td>NashFleet Logistics</td>
+            <td><span class="badge badge-chrome">Fleet</span></td>
+            <td>12 vans</td>
+            <td>Monthly</td>
+            <td>$80</td>
+            <td>$960</td>
+            <td>Jun 1</td>
+            <td>Jul 1</td>
+            <td><span class="badge badge-green">Active</span></td>
+          </tr>
+          <tr>
+            <td>Hertz Car Rental</td>
+            <td><span class="badge badge-chrome">Fleet</span></td>
+            <td>6 cars</td>
+            <td>Bi-Weekly</td>
+            <td>$70</td>
+            <td>$840</td>
+            <td>Jun 10</td>
+            <td>Jun 24</td>
+            <td><span class="badge badge-green">Active</span></td>
+          </tr>
+          <tr>
+            <td>Franklin Ford</td>
+            <td><span class="badge badge-blue">Dealership</span></td>
+            <td>5 vehicles</td>
+            <td>Bi-Weekly</td>
+            <td>$90</td>
+            <td>$900</td>
+            <td>Jun 7</td>
+            <td>Jun 21</td>
+            <td><span class="badge badge-yellow">Due Soon</span></td>
+          </tr>
+          <tr>
+            <td>Music City Rideshare</td>
+            <td><span class="badge badge-chrome">Fleet</span></td>
+            <td>4 cars</td>
+            <td>Monthly</td>
+            <td>$85</td>
+            <td>$340</td>
+            <td>May 28</td>
+            <td>Jun 28</td>
+            <td><span class="badge badge-green">Active</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight">
+      <strong>💡 Fleet Strategy:</strong> Fleet accounts bill at 35–50% below retail rate but provide guaranteed, weather-independent revenue. Brentwood BMW alone is $3,040/month — that's your slow season anchor. Target 2 more dealership accounts before October to weatherproof your winter cash flow.
+    </div>
+  </div>
+
+  <!-- ── MARGIN BY SERVICE ── -->
+  <div class="section" id="margin">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Avg Margin — All Services</div>
+        <div class="stat-value">52%</div>
+        <div class="stat-sub">Target: 55%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Highest Margin</div>
+        <div class="stat-value" style="font-size:18px;">Ceramic Coat</div>
+        <div class="stat-sub" style="color:var(--green)">71% avg margin</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Lowest Margin</div>
+        <div class="stat-value" style="font-size:18px;">Express Wash</div>
+        <div class="stat-sub" style="color:var(--red)">28% avg margin</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Jobs Below Break-Even</div>
+        <div class="stat-value">2</div>
+        <div class="stat-sub" style="color:var(--red)">This month — review pricing</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">Margin by Service Type</div>
+        <div class="margin-row">
+          <div class="margin-label">Ceramic Coating</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill" style="width:71%"></div></div>
+          <div class="margin-pct" style="color:var(--green)">71%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">PPF</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill" style="width:64%"></div></div>
+          <div class="margin-pct" style="color:var(--green)">64%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Paint Correction</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill" style="width:60%"></div></div>
+          <div class="margin-pct" style="color:var(--green)">60%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Full Detail</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill mid" style="width:52%"></div></div>
+          <div class="margin-pct" style="color:var(--yellow)">52%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Interior Only</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill mid" style="width:44%"></div></div>
+          <div class="margin-pct" style="color:var(--yellow)">44%</div>
+        </div>
+        <div class="margin-row">
+          <div class="margin-label">Express Wash</div>
+          <div class="margin-bar-wrap"><div class="margin-bar-fill low" style="width:28%"></div></div>
+          <div class="margin-pct" style="color:var(--red)">28%</div>
+        </div>
+        <div class="insight">
+          <strong>💡 Insight:</strong> Express washes at 28% margin are barely worth the bay time. Consider a minimum $95 express price or limiting express slots to fill gaps between premium jobs — not as a standalone service line.
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Job-Level Margin — Recent Jobs</div>
+        <div class="table-wrap" style="border:none;margin:0;">
+          <table>
+            <thead>
+              <tr><th>Job</th><th>Service</th><th>Revenue</th><th>Cost</th><th>Margin</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Harrison, W.</td><td>Ceramic Coat</td><td>$1,400</td><td>$406</td><td style="color:var(--green);font-weight:700;">71%</td></tr>
+              <tr><td>Okafor, T.</td><td>Full Detail + PPF</td><td>$2,100</td><td>$756</td><td style="color:var(--green);font-weight:700;">64%</td></tr>
+              <tr><td>Patel, R.</td><td>Paint Correction</td><td>$850</td><td>$340</td><td style="color:var(--green);font-weight:700;">60%</td></tr>
+              <tr><td>Chen, L.</td><td>Full Detail</td><td>$280</td><td>$134</td><td style="color:var(--yellow);font-weight:700;">52%</td></tr>
+              <tr><td>Sullivan, K.</td><td>Full Detail</td><td>$240</td><td>$115</td><td style="color:var(--yellow);font-weight:700;">52%</td></tr>
+              <tr><td>Martinez, A.</td><td>Express + Interior</td><td>$130</td><td>$74</td><td style="color:var(--yellow);font-weight:700;">43%</td></tr>
+              <tr><td>Williams, J.</td><td>Express Wash</td><td>$85</td><td>$61</td><td style="color:var(--red);font-weight:700;">28%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EQUIPMENT LOG ── -->
+  <div class="section" id="equipment">
+    <div class="stat-row">
+      <div class="stat-card highlight">
+        <div class="stat-label">Equipment Tracked</div>
+        <div class="stat-value">8</div>
+        <div class="stat-sub">All tools logged</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Maintenance Due</div>
+        <div class="stat-value">2</div>
+        <div class="stat-sub" style="color:var(--yellow)">Service needed soon</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Equipment Value</div>
+        <div class="stat-value">$14,800</div>
+        <div class="stat-sub">Replacement cost</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Overdue</div>
+        <div class="stat-value">1</div>
+        <div class="stat-sub" style="color:var(--red)">Address immediately</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Equipment Overview</div>
+      <button class="btn btn-chrome">+ Log Service</button>
+    </div>
+
+    <div class="equip-grid">
+      <div class="equip-card" style="border-color:rgba(229,40,42,0.3);">
+        <div class="equip-name">⚠️ Pressure Washer</div>
+        <div class="equip-model">Karcher K7 Premium · 2021</div>
+        <div class="equip-stat"><span>Last Service</span><span>Feb 12</span></div>
+        <div class="equip-stat"><span>Next Due</span><span style="color:var(--red)">Overdue — 4 months</span></div>
+        <div class="equip-stat"><span>Hours Logged</span><span>620 hrs</span></div>
+        <div class="equip-stat"><span>Replace Value</span><span>$650</span></div>
+        <div class="equip-stat"><span>Notes</span><span>Pump making noise</span></div>
+      </div>
+      <div class="equip-card" style="border-color:rgba(245,166,35,0.3);">
+        <div class="equip-name">DA Polisher</div>
+        <div class="equip-model">Rupes LHR21 Mark III · 2022</div>
+        <div class="equip-stat"><span>Last Service</span><span>Apr 8</span></div>
+        <div class="equip-stat"><span>Next Due</span><span style="color:var(--yellow)">Jul 1 — Pad replacement</span></div>
+        <div class="equip-stat"><span>Hours Logged</span><span>380 hrs</span></div>
+        <div class="equip-stat"><span>Replace Value</span><span>$420</span></div>
+        <div class="equip-stat"><span>Notes</span><span>Pads worn — order 3 sets</span></div>
+      </div>
+      <div class="equip-card">
+        <div class="equip-name">Steam Cleaner</div>
+        <div class="equip-model">Dupray Neat · 2023</div>
+        <div class="equip-stat"><span>Last Service</span><span>May 20</span></div>
+        <div class="equip-stat"><span>Next Due</span><span style="color:var(--green)">Aug 20</span></div>
+        <div class="equip-stat"><span>Hours Logged</span><span>210 hrs</span></div>
+        <div class="equip-stat"><span>Replace Value</span><span>$480</span></div>
+        <div class="equip-stat"><span>Notes</span><span>Good condition</span></div>
+      </div>
+      <div class="equip-card">
+        <div class="equip-name">Wet/Dry Vacuum</div>
+        <div class="equip-model">Shop-Vac 16 Gal · 2022</div>
+        <div class="equip-stat"><span>Last Service</span><span>May 5</span></div>
+        <div class="equip-stat"><span>Next Due</span><span style="color:var(--green)">Aug 5</span></div>
+        <div class="equip-stat"><span>Hours Logged</span><span>490 hrs</span></div>
+        <div class="equip-stat"><span>Replace Value</span><span>$180</span></div>
+        <div class="equip-stat"><span>Notes</span><span>Filter cleaned last month</span></div>
+      </div>
+      <div class="equip-card">
+        <div class="equip-name">Foam Cannon</div>
+        <div class="equip-model">Chemical Guys ACC_326 · 2023</div>
+        <div class="equip-stat"><span>Last Service</span><span>Jun 1</span></div>
+        <div class="equip-stat"><span>Next Due</span><span style="color:var(--green)">Sep 1</span></div>
+        <div class="equip-stat"><span>Hours Logged</span><span>140 hrs</span></div>
+        <div class="equip-stat"><span>Replace Value</span><span>$90</span></div>
+        <div class="equip-stat"><span>Notes</span><span>Good condition</span></div>
+      </div>
+      <div class="equip-card">
+        <div class="equip-name">Ozone Generator</div>
+        <div class="equip-model">OdorStop OS2500UV · 2022</div>
+        <div class="equip-stat"><span>Last Service</span><span>Apr 14</span></div>
+        <div class="equip-stat"><span>Next Due</span><span style="color:var(--green)">Jul 14</span></div>
+        <div class="equip-stat"><span>Hours Logged</span><span>95 hrs</span></div>
+        <div class="equip-stat"><span>Replace Value</span><span>$220</span></div>
+        <div class="equip-stat"><span>Notes</span><span>UV bulb replaced Apr</span></div>
+      </div>
+      <div class="equip-card">
+        <div class="equip-name">Air Compressor</div>
+        <div class="equip-model">California Air Tools 20020C · 2021</div>
+        <div class="equip-stat"><span>Last Service</span><span>Mar 18</span></div>
+        <div class="equip-stat"><span>Next Due</span><span style="color:var(--green)">Sep 18</span></div>
+        <div class="equip-stat"><span>Hours Logged</span><span>340 hrs</span></div>
+        <div class="equip-stat"><span>Replace Value</span><span>$380</span></div>
+        <div class="equip-stat"><span>Notes</span><span>Drain tank weekly</span></div>
+      </div>
+      <div class="equip-card">
+        <div class="equip-name">Mobile Water Tank</div>
+        <div class="equip-model">35 Gal Poly Tank · 2022</div>
+        <div class="equip-stat"><span>Last Service</span><span>Jun 1</span></div>
+        <div class="equip-stat"><span>Next Due</span><span style="color:var(--green)">Sep 1</span></div>
+        <div class="equip-stat"><span>Hours Logged</span><span>—</span></div>
+        <div class="equip-stat"><span>Replace Value</span><span>$160</span></div>
+        <div class="equip-stat"><span>Notes</span><span>Sanitize quarterly</span></div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <strong>⚠️ Action Required:</strong> Pressure washer pump is making noise and is 4 months overdue for service. A failed pump mid-job costs $400–$800 in repairs and kills a full day of revenue. Schedule service this week — estimated cost $80–$120 for a professional flush and inspection.
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function calcQuote() {
+  const hours = parseFloat(document.getElementById('q-hours').value) || 0;
+  const rate = parseFloat(document.getElementById('q-rate').value) || 0;
+  const products = parseFloat(document.getElementById('q-products').value) || 0;
+  const miles = parseFloat(document.getElementById('q-miles').value) || 0;
+  const condition = parseFloat(document.getElementById('q-condition').value) || 0;
+  const margin = parseFloat(document.getElementById('q-margin').value) || 55;
+  const addon = parseFloat(document.getElementById('q-addons').value) || 0;
+
+  const labor = hours * rate;
+  const drive = miles * 0.67;
+  const overhead = (labor + products + drive) * 0.08;
+  const totalCost = labor + products + drive + condition + overhead;
+  const suggested = (totalCost / (1 - margin / 100)) + addon;
+  const profit = suggested - totalCost - addon;
+
+  const fmt = n => '$' + n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  document.getElementById('r-labor').textContent = fmt(labor);
+  document.getElementById('r-products').textContent = fmt(products);
+  document.getElementById('r-drive').textContent = miles > 0 ? fmt(drive) : '$0 (shop job)';
+  document.getElementById('r-condition').textContent = condition > 0 ? fmt(condition) : 'None';
+  document.getElementById('r-addon').textContent = addon > 0 ? fmt(addon) : 'None';
+  document.getElementById('r-overhead').textContent = fmt(overhead);
+  document.getElementById('r-cost').textContent = fmt(totalCost);
+  document.getElementById('r-quote').textContent = fmt(suggested);
+  document.getElementById('r-profit').textContent = fmt(profit) + ' profit (' + margin + '% margin)';
+}
+
+function clearQuote() {
+  document.getElementById('q-hours').value = 3.5;
+  document.getElementById('q-rate').value = 22;
+  document.getElementById('q-products').value = 28;
+  document.getElementById('q-miles').value = 0;
+  document.getElementById('q-condition').value = 0;
+  document.getElementById('q-margin').value = 55;
+  document.getElementById('q-addons').value = 0;
+  document.getElementById('q-service').value = 'full';
+  document.getElementById('q-size').value = 'mid';
+  calcQuote();
+}
+
+calcQuote();
+</script>
+</body>
+</html>
